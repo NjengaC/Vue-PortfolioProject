@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Leaflet JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../static/scripts/maps.js"></script>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <title>Track Parcel</title>
+</head>
+<body>
+    <h1>Track Parcel</h1>
+    <form method="post">
+        <input type="text" name="tracking_number" placeholder="Enter Tracking Number" required><br>
+        <button type="submit">Track</button>
+    </form>
+    <!-- Map container -->
+    <!-- Search form -->
+    <form id="searchForm">
+        <input type="text" id="searchInput" placeholder="Enter a location">
+        <button type="submit">Search</button>
+    </form>
+    <div id="map" style="height: 400px;"></div>
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Your custom JavaScript -->
+    <script src="../static/scripts/script.js"></script>
+    <script src="../static/scripts/maps.js"></script>
+</body>
+</html>

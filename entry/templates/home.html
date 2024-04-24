@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <section class="ship">
+                <!-- Background image will be set here -->
+                <h2>Ship your parcels with ease!</h2>
+                <p class="sign-up">Sign up now to get started.</p>
+                <div class="button-container">
+                    <!-- Add button(s) here -->
+                </div>
+                <div>
+                    <h2>Click Below to view available Riders</h2>
+                    <button id="view-riders" onclick="showRiders()">View Riders</button>
+                    <ul id="rider-list" style="display: none;">
+                        <!-- List of available riders will be displayed here -->
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+{% endblock%}
