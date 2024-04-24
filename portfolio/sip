@@ -1,0 +1,114 @@
+/* Header styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f0f0f0;
+}
+
+.logo img {
+    height: 50px; /* Adjust height as needed */
+}
+
+.note, .login, .notification {
+    margin-right: 20px;
+}
+
+/* Main content styles */
+main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.steps {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.step {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: #ccc; /* Default color for steps */
+    font-size: 16px;
+    color: #fff;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.step:before {
+    content: "";
+    position: absolute;
+    height: 50px; /* Adjust the length of the line */
+    width: 2px;
+    background-color: #ccc; /* Default color for lines */
+    top: 100%;
+    left: 50%;
+    transform: translateY(-50%);
+}
+
+.step:first-child:before {
+    display: none; /* Hide the line before the first step */
+}
+
+.step.completed {
+    background-color: #4CAF50; /* Color for completed steps */
+}
+
+.step.completed:before {
+    background-color: #4CAF50; /* Color for lines of completed steps */
+}
+
+.form {
+    width: 60%;
+}
+
+.switch, .settings {
+    margin-top: 20px;
+}
+
+/* Footer styles */
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+.footer-links a {
+    color: #fff;
+    margin-right: 10px;
+}
+
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.step-connector {
+    position: absolute;
+    height: 50px; /* Adjust the length of the line */
+    width: 2px;
+    background-color: #ccc; /* Default color for lines */
+    top: 50%;
+    left: calc(50% + 50px); /* Adjust the position of the line */
+    transform: translateY(-50%);
+}
+
+.step.completed {
+    background-color: #4CAF50; /* Color for completed steps */
+}
+
+.step.completed:before {
+    background-color: #4CAF50; /* Color for lines of completed steps */
+}
+

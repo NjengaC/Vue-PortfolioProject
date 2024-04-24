@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Pickup</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Leaflet JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../static/scripts/maps.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="../static/styles/ship.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='profiles.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="../static/images/logo.png" alt="Logo">
+        </div>
+        <div class="note">
+            <h2>Tell us about where you are requesting from.</h2>
+        </div>
+        <div class="login">
+            <a href="{{ url_for('login') }}">Log In</a>
+        </div>
+        <div class="notification">
+            <a>
+                <span>Inbox</span>
+                <span class="badge">3</span>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Steps section -->
+        <div class="steps">
+            <div class="step">Me</div>
+            <div class="step">ToWho</div>
+            <div class="step">Where</div>
+            <div class="step">Details</div>
+            <div class="step">Payment</div>
+            <div class="step">Review</div>
+        </div>
+
+        <!-- Form section -->
+        <div class="send_form">
+            <form id="parcelForm">
+                <div class="form-group">
+                    <label for="senderName">Sender's Name:</label>
+                    <input type="text" id="senderName" name="senderName">
+                </div>
+                <div class="form-group">
+                    <label for="senderEmail">Sender's Email:</label>
+                    <input type="email" id="senderEmail" name="senderEmail">
+                </div>
+                <div class="form-group">
+                    <label for="senderContact">Sender's Contact:</label>
+                    <input type="text" id="senderContact" name="senderContact">
+                </div>
+                <div class="form-group">
+                    <label for="receiverName">Receiver's Name:</label>
+                    <input type="text" id="receiverName" name="receiverName">
+                </div>
+                <div class="form-group">
+                    <label for="receiverContact">Receiver's Contact:</label>
+                    <input type="text" id="receiverContact" name="receiverContact">
+                </div>
+                <div class="form-group">
+                    <label for="pickupLocation">Pickup Location:</label>
+                    <input type="text" id="pickupLocation" name="pickupLocation">
+                </div>
+                <div class="form-group">
+                    <label for="deliveryLocation">Delivery Location:</label>
+                    <input type="text" id="deliveryLocation" name="deliveryLocation">
+                </div>
+                <div class="form-group">
+                    <label for="pickupTime">Pickup Time:</label>
+                    <input type="datetime-local" id="pickupTime" name="pickupTime">
+                </div>
+                <div class="form-group">
+                    <label for="currentLocation">Use current location as pickup location</label>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <div class="settings">Settings</div>
+    </main>
+
+    <div id="map" style="height: 400px;"></div>
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Your custom JavaScript -->
+    <script src="../static/scripts/script.js"></script>
+    <footer>
+        <div class="footer-links">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+        </div>
+        <div class="copyright">
+            &copy; 2024 Vue. All rights reserved.
+        </div>
+    </footer>
+</body>
+</html>
+
