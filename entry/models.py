@@ -1,7 +1,7 @@
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import json
 from datetime import datetime
-from portfolio import db, login_manager
+from entry import db, login_manager
 
 
 @login_manager.user_loader

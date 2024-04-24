@@ -2,10 +2,10 @@ from flask import render_template, flash, request, redirect, url_for, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
 import json
 import stripe
-from portfolio.forms import LoginRiderForm, RegistrationForm, LoginForm, UpdateAccountForm, RiderRegistrationForm, ParcelForm
-from portfolio.models import User, Rider, Parcel
+from entry.forms import LoginRiderForm, RegistrationForm, LoginForm, UpdateAccountForm, RiderRegistrationForm, ParcelForm
+from entry.models import User, Rider, Parcel
 import secrets
-from portfolio import app, db, bcrypt
+from entry import app, db, bcrypt
 from sqlalchemy.exc import IntegrityError
 #from here is where i started modifing 
 from flask import render_template
