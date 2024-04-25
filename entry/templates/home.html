@@ -4,22 +4,33 @@
     <div class="row">
         <div class="col-md-6">
             <section class="ship">
-                <!-- Background image will be set here -->
+                <img src="/home/kaymagiri/Vue-PortfolioProject/entry/static/images/shipparcel.jpeg" alt="Parcel Delivery" class="ship-image">
                 <h2>Ship your parcels with ease!</h2>
                 <p class="sign-up">Sign up now to get started.</p>
                 <div class="button-container">
-                    <!-- Add button(s) here -->
+                    <button class="btn btn-primary">Sign Up</button>
                 </div>
                 <div>
                     <h2>Click Below to view available Riders</h2>
                     <button id="view-riders" onclick="showRiders()">View Riders</button>
                     <ul id="rider-list" style="display: none;">
+                        <li>Rider 1</li>
+                        <li>Rider 2</li>
                         <!-- List of available riders will be displayed here -->
                     </ul>
                 </div>
             </section>
         </div>
+        <div class="col-md-6">
+            <section class="deliver">
+                <img src="/home/kaymagiri/Vue-PortfolioProject/entry/static/images/home/kaymagiri/Vue-PortfolioProject/entry/static/images/fast.jpeg" alt="Parcel Delivery" class="deliver-image">
+                <h2>Fast and Reliable Parcel Delivery</h2>
+                <p>Track your parcels in real-time and ensure safe delivery.</p>
+                <div class="button-container">
+                    <button class="btn btn-secondary">Track Parcel</button>
+                </div>
+            </section>
+        </div>
     </div>
 </div>
-<script src="{{ url_for('static', filename='script.js') }}"></script>
 {% endblock%}
