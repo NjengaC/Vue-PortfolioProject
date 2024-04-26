@@ -165,31 +165,41 @@ def request_pickup():
         )
         db.session.add(parcel)
         db.session.commit()
-        return redirect(url_for('payment'))
+        #Allocate parcel to the nearest unoccupied rider
+        allocation_result = allocate_parcel(parcel)
+        if allocation_result['success']:
+            return jsonify({'message': 'Parcel allocated to the nearest rider. Please wait for confirmation.'})
+        else:
+            return jsonify({'message': 'Allocation in progress. Please wait for a rider to be assigned.'})
     return render_template('request_pickup.html', form=form)
 
-@app.route('/allocate_parcel', methods=['GET'])
 def allocate_parcel():
     """
     Allocates a parcel delivery to a rider
     """
-    parcel_id = request.args.get('parcel_id')
-    parcel = Parcel.query.filter_by(id=parcel_id).first()
-    if not parcel:
-        return jsonify({'error': 'Parcel npt found'})
     pickup_location = parcel.pickup_location
-    available_drivers = Deliver.query.all()
-    closest_driver = None
+    available_riders = Rider.query.filter_by(status='available').all()
+    closest_rider = None
     min_distance = float('inf')
+
     for driver in available_drivers:
-        distance = calculate_distance(pickup_location, driver.current_location)
+        distance = calculate_distance(pickup_location, rider.current_location)
         if distance < min_distance:
             closest_driver = driver
             min_distance = distance
     if closest_driver:
-        allocate_parcel_to_driver(closest_driver, parcel)
-    return jsonify({'message': 'Parcel allocated to the closest driver'})
-
+        parcel.status = 'allocated'
+        parcel.rider_id = closest_rider.id
+        db.session.commit()
+        return {
+            'success': True,
+            'rider_id': closest_rider.id,
+            'rider_name': closest_rider.name,
+            'vehicle_type': closest_rider.vehicle_type,
+            'vehicle_registration': closest_rider.vehicle_registration,
+        }
+    else:
+        return {'success': False, 'message': 'Allocation in progress. Please wait for a rider to be assigned.'}
 
 def calculate_distance(location1, location2):
     """
@@ -207,3 +217,23 @@ def allocate_parcel_to_driver(driver, parcel):
     parcel.status = 'allocated'
     parcel.driver_id = driver.id
     db.session.commit()
+
+
+@app.route('/rider_accept_request', methods=['POST'])
+def rider_accept_request():
+    data = request.json
+    rider_id = data.get('rider_id')
+    parcel_id = data.get('parcel_id')
+
+    rider = Rider.query.get(rider_id)
+    parcel = Parcel.query.get(parcel_id)
+
+    if rider and parcel:
+        if rider.status == 'available':
+            parcel.status = 'accepted'
+            db.session.commit()
+            return jsonify({'message': 'Rider accepted the request. Parcel is on the way!'})
+        else:
+            return jsonify({'error': 'Rider is no longer available'})
+    else:
+        return jsonify({'error': 'Invalid rider or parcel'})

@@ -31,6 +31,7 @@ class Rider(db.Model, UserMixin):
     availability = db.Column(db.Boolean, default=True)
     password = db.Column(db.String(60), nullable=False)
     role = db.Column(db.String(20), nullable=False)
+    status = db.Column(db.String(20), default='available')
 
     def __repr__(self):
         return f"Rider('{self.name}', '{self.contact_number}', '{self.vehicle_type}', '{self.area_of_operation}', '{self.availability}')"
