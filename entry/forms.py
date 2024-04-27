@@ -54,6 +54,9 @@ class RiderRegistrationForm(FlaskForm):
                                     Length(min=2, max=100)])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    current_location = StringField('Current Location',
+                                   validators=[DataRequired(),
+                                   Length(min=5, max=100)])
     submit = SubmitField('Register')
 
 class LoginRiderForm(FlaskForm):
@@ -69,7 +72,4 @@ class ParcelForm(FlaskForm):
     receiver_contact = StringField('Receiver\'s Contact', validators=[Length(max=20)])
     pickup_location = StringField('Pickup Location', validators=[DataRequired(), Length(max=255)])
     delivery_location = StringField('Delivery Location', validators=[DataRequired(), Length(max=255)])
-    category = SelectField('Category', choices=[('Electronics', 'Electronics'), ('Clothing', 'Clothing'), ('Books', 'Books')])
-    pickup_time = DateTimeField('Pickup Time', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired(), Length(max=400)])
-    parcel_weight = SelectField('Approximate Weight', choices=[('Under 1kg', 'Under 1kg'), ('1-5kg', '1-5kg'), ('5-10kg', '5-10kg')])
