@@ -10,6 +10,7 @@ from sqlalchemy.exc import IntegrityError
 #from here is where i started modifing 
 from flask import render_template
 from geopy.distance import geodesic
+from geopy.geocoders import Nominatim
 
 @app.route('/')
 @app.route('/home')
@@ -78,7 +79,6 @@ def edit_profile():
             return render_template('home.html', title='Home', user=current_user)
     return render_template('edit_profile.html', title='Edit Profile', form=form, user=current_user)
 
-<<<<<<< HEAD
 @app.route('/send_parcel')
 def send_parcel():
     # Implement the functionality for sending parcels here
@@ -88,8 +88,6 @@ def send_parcel():
 @app.route('/view_shipping_providers')
 def view_shipping_providers():
     return render_template('view_shipping_providers.html')
-=======
->>>>>>> 5d31a886d4e8c9a0870aea13ceec146e4ea33885
 
 @app.route('/update_profile')
 def update():
@@ -114,6 +112,7 @@ def register_rider():
             vehicle_registration=form.vehicle_registration.data,
             area_of_operation=form.area_of_operation.data,
             password=hashed_password,
+            current_location=form.current_location.data,
             role='rider'
         )
         db.session.add(new_rider)
@@ -165,8 +164,10 @@ def request_pickup():
         allocation_result = allocate_parcel(parcel)
         if allocation_result['success']:
             flash('Parcel allocated to the nearest rider. Please wait for confirmation.')
+            return render_template('payment.html')
         else:
             flash('Allocation in progress. Please wait for a rider to be assigned.')
+            return render_template('home.html')
     return render_template('request_pickup.html', form=form)
 
 def allocate_parcel(parcel):
@@ -202,18 +203,15 @@ def calculate_distance(location1, location2):
     Implements distance calculation logic
     It uses the location format: (latitude, longitude)
     """
-    distance = geodesic(location1, location2).kilometers
+    geolocator = Nominatim(user_agent='myapplication')
+    location1 = geolocator.geocode(location1)
+    location2 = geolocator.geocode(location2)
+
+    current = location1.latitude, location1.longitude
+    pickup_location = location2.latitude, location2.longitude
+
+    distance = geodesic(pickup_location, current).kilometers
     return distance
-
-
-def allocate_parcel_to_driver(rider, parcel):
-    """
-    Implements parcel allocation logic
-    """
-    parcel.status = 'allocated'
-    parcel.rider_id = rider.id
-    db.session.commit()
-
 
 @app.route('/rider_accept_request', methods=['POST'])
 def rider_accept_request():
