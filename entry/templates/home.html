@@ -1,25 +1,83 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <section class="ship">
-                <!-- Background image will be set here -->
-                <h2>Ship your parcels with ease!</h2>
-                <p class="sign-up">Sign up now to get started.</p>
-                <div class="button-container">
-                    <!-- Add button(s) here -->
-                </div>
-                <div>
-                    <h2>Click Below to view available Riders</h2>
-                    <button id="view-riders" onclick="showRiders()">View Riders</button>
-                    <ul id="rider-list" style="display: none;">
-                        <!-- List of available riders will be displayed here -->
-                    </ul>
-                </div>
-            </section>
+  <div class="row">
+    <div class="col-md-12 d-flex flex-wrap justify-content-between align-items-center">
+      <section class="ship mr-3">
+        <img src="/home/kaymagiri/Vue-PortfolioProject/entry/static/images/shipparcel.jpeg" alt="Parcel Delivery" class="ship-image img-fluid">
+        <h2>Ship your parcels with ease!</h2>
+        <p class="sign-up">Sign up now to get started.</p>
+        <div class="button-container">
+          <a class="btn btn-primary" href="{{ url_for('register_rider') }}">Sign Up</a>
         </div>
+        <div class="rider-list">
+          <h2>Available Riders</h2>
+          <button id="view-riders" class="btn btn-light">View Riders</button>
+          <ul id="rider-list" style="display: none;">
+            <li>Rider 1</li>
+            <li>Rider 2</li>
+            </ul>
+        </div>
+      </section>
+      <section class="deliver">
+        <img src="/home/kaymagiri/Vue-PortfolioProject/entry/static/images/home/kaymagiri/Vue-PortfolioProject/entry/static/semantic-filename.jpg" alt="Parcel Delivery" class="deliver-image img-fluid">
+        <h2>Fast and Reliable Parcel Delivery</h2>
+        <p>Track your parcels in real-time and ensure safe delivery.</p>
+        <div class="button-container">
+          <button class="btn btn-info" onclick="location.href='{{ url_for('track_parcel') }}'">Track Parcel</button>
+        </div>
+      </section>
     </div>
+  </div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 d-flex flex-wrap justify-content-between align-items-center">
+      <section class="hero">
+        <h1 class="display-4">Fast, Reliable Delivery Services Made Easy</h1>
+        <p class="lead">Get your parcels delivered quickly and securely, anywhere, anytime.</p>
+        <div class="button-container d-flex justify-content-between">
+          <a class="btn btn-primary btn-lg" href="{{ url_for('register_rider') }}">Become a Rider</a>
+          <a class="btn btn-outline-primary btn-lg" href="{{ url_for('get_quote') }}">Get a Quote</a>
+        </div>
+      </section>
+      <section class="services">
+        <h2>What We Do</h2>
+        <p>We are a leading delivery company dedicated to providing efficient and reliable parcel delivery solutions. Whether you're an individual sending a package across town or a business needing fast and secure freight transportation, we have the expertise and resources to meet your needs.</p>
+        <ul class="list-group">
+          <li class="list-group-item">Same-day and Next-day Delivery Options</li>
+          <li class="list-group-item">Real-time Tracking and Traceability</li>
+          <li class="group-item">Competitive Rates and Flexible Pricing Plans</li>
+          <li class="list-group-item">Secure Handling and On-time Deliveries</li>
+          <li class="list-group-item">Nationwide Coverage with Local Expertise</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <div class="col-md-6">
+      <section class="box">
+        <h2>Delivery Boxes for Every Need</h2>
+        <p>We offer a variety of shipping boxes to ensure your package arrives safely and securely. Choose from a range of sizes and materials to fit your specific needs.</p>
+        <img src="/images/boxes.jpg" alt="Delivery Boxes" class="img-fluid">
+        <div class="button-container">
+          <a class="btn btn-info" href="{{ url_for('box_information') }}">Learn More</a>
+        </div>
+      </section>
+    </div>
+    <div class="col-md-6">
+      <section class="deliver">
+        <h2>Track Your Parcel with Ease</h2>
+        <p>Track your shipment's progress in real-time with our user-friendly tracking system. Get peace of mind knowing exactly where your package is and when it will arrive.</p>
+        <form class="form-inline">
+          <div class="form-group mb-2 mr-sm-2">
+            <label for="trackingNumber" class="sr-only">Tracking Number</label>
+            <input type="text" class="form-control" id="trackingNumber" placeholder="Enter Tracking Number">
+          </div>
+          <button type="submit" class="btn btn-primary mb-2">Track Now</button>
+        </form>
+      </section>
+    </div>
+  </div>
 </div>
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+</div>
 {% endblock%}

@@ -172,3 +172,45 @@ form {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+/* Add custom styles here */
+/*this is for the  home page*/
+.container {
+	  margin-top: 50px;
+  }
+
+  .ship {
+	    text-align: center;
+	      padding: 20px;
+	        background-color: #f8f9fa;
+		  border-radius: 10px;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	    }
+
+	    .sign-up {
+		      font-size: 18px;
+		        margin-bottom: 20px;
+		}
+
+		.button-container {
+			  margin-bottom: 20px;
+		  }
+
+		  #view-riders {
+			    background-color: #007bff;
+			      color: #fff;
+			        border: none;
+				  padding: 10px 20px;
+				    border-radius: 5px;
+				      cursor: pointer;
+			      }
+
+			      #view-riders:hover {
+				        background-color: #0056b3;
+				}
+
+				#rider-list {
+					  list-style: none;
+				  }
+
+				  /* Add more styles as needed */
+

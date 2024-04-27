@@ -218,3 +218,19 @@ def allocate_parcel_to_rider(rider, parcel):
     parcel.status = 'allocated'
     parcel.rider_id = rider.id
     db.session.commit()
+@app.route('/track_parcel.html')
+def track_parcel():
+        return render_template('track_parcel.html')
+from flask import render_template
+
+@app.route('/get_quote')
+def get_quote():
+      # Your logic to handle getting a quote
+        return render_template('quote.html')
+from flask import render_template
+
+@app.route('/box_information')
+def box_information():
+      # Your logic to display information about boxes
+        return render_template('box_information.html')
+
