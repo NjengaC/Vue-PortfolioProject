@@ -3,35 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <!-- Leaflet JavaScript -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="../static/scripts/maps.js"></script>
-
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-    <title>Track Parcel</title>
+    <title>Parcel Tracking</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Track Parcel</h1>
-    <form method="post">
-        <input type="text" name="tracking_number" placeholder="Enter Tracking Number" required><br>
-        <button type="submit">Track</button>
-    </form>
-    <!-- Map container -->
-    <!-- Search form -->
-    <form id="searchForm">
-        <input type="text" id="searchInput" placeholder="Enter a location">
-        <button type="submit">Search</button>
-    </form>
-    <div id="map" style="height: 400px;"></div>
+    <!-- Navigation menu -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Parcel Tracking</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <!-- Leaflet JavaScript -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <!-- Your custom JavaScript -->
-    <script src="../static/scripts/script.js"></script>
-    <script src="../static/scripts/maps.js"></script>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+<li class="nav-item">
+    <a class="nav-link" href="#" id="showHistoryLink">History</a>
+</li>
+
+<div id="historyContainer" class="mt-5" style="display: none;">
+    <!-- Delivery history will be inserted here -->
+</div>
+
+    <!-- Delivery history will be inserted here -->
+</div>
+               
+    	<!-- Delivery history will be inserted here -->
+	</div>
+                </li>
+                <!-- Add more menu items as needed -->
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Search bar -->
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Enter Tracking Number">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button">Track</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tracking progress bar -->
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25% Complete</div>
+                </div>
+                <p class="mt-2">Estimated Delivery Date: January 30, 2024</p>
+                <!-- Add more tracking details as needed -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto py-3 text-center">
+        <div class="container">
+            <span class="text-muted">&copy; 2024 Parcel Tracking. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 </html>

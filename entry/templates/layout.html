@@ -70,26 +70,7 @@
                 {% endwith %}
                 {% block content %}{% endblock %}
             </div>
-            <div class="col-md-4">
-                <div class="content-section">
-                    <h3>Sidebars</h3>
-                    <p class='text-muted'>Need Some Help?</p>
-                    <ul class="list-group">
-                        <li class="list-group-item"><a href="{{ url_for('register') }}">History</a></li>
-                        <li class="list-group-item"><a href="{{ url_for('register_rider') }}">Settings</a></li>
-                        <li class="list-group-item dropdown">
-                            <a class="dropdown-toggle" href="#" role="button" id="riderPanelDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {% if current_user.is_authenticated %}
-                                    {% if user.role == 'rider' %}
-                                        Dashboard
-                                    {% else %}
-                                        My Parcels
-                                    {% endif %}
-                                {% else %}
-                                    Rider's Panel
-                                {% endif %}
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="riderPanelDropdown">
+            <div class="dropdown-menu" aria-labelledby="riderPanelDropdown">
     {% if current_user.is_authenticated %}
         {% if current_user.role.name == 'user' %}
             <!-- Dropdown content for rider -->
