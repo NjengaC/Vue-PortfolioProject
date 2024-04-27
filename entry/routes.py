@@ -18,10 +18,6 @@ def home():
         return render_template('home_authenticated.html', title='Home', user=current_user)
     return render_template('home.html', title='Home')
 
-@app.route('/companies')
-def view_companies():
-    # Render the companies template with the list of available companies
-    return jsonify(companies)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -82,19 +78,10 @@ def edit_profile():
             return render_template('home.html', title='Home', user=current_user)
     return render_template('edit_profile.html', title='Edit Profile', form=form, user=current_user)
 
-@app.route('/send_parcel')
-def send_parcel():
-    # Implement the functionality for sending parcels here
-    return render_template('track_parcel.html')
-
-
-@app.route('/view_shipping_providers')
-def view_shipping_providers():
-    return render_template('view_shipping_providers.html')
 
 @app.route('/update_profile')
 def update():
-    return render_template('home_authenticated.html')
+    return render_template('update_profile.html')
 
 @app.route('/about')
 def about():
@@ -158,10 +145,7 @@ def request_pickup():
             receiver_contact=form.receiver_contact.data,
             pickup_location=form.pickup_location.data,
             delivery_location=form.delivery_location.data,
-            category=form.category.data,
-            pickup_time=form.pickup_time.data,
             description=form.description.data,
-            parcel_weight=form.parcel_weight.data
         )
         db.session.add(parcel)
         db.session.commit()
