@@ -7,9 +7,10 @@ from entry.models import User, Rider, Parcel
 import secrets
 from entry import app, db, bcrypt
 from sqlalchemy.exc import IntegrityError
-#from here is where i started modifing 
+import requests
 from flask import render_template
 from geopy.distance import geodesic
+from geopy.geocoders import Nominatim
 
 @app.route('/')
 @app.route('/home')
@@ -158,38 +159,48 @@ def request_pickup():
             receiver_contact=form.receiver_contact.data,
             pickup_location=form.pickup_location.data,
             delivery_location=form.delivery_location.data,
-            category=form.category.data,
-            pickup_time=form.pickup_time.data,
-            description=form.description.data,
-            parcel_weight=form.parcel_weight.data
+            description=form.description.data
         )
         db.session.add(parcel)
         db.session.commit()
-        return redirect(url_for('payment'))
+
+        pickup_location = geocode_location(parcel.pickup_location)
+        if pickup_location:
+            available_riders = Rider.query.all()
+            closest_rider = None
+            min_distance = float('inf')
+            for rider in available_riders:
+                distance = calculate_distance(pickup_location, rider.current_location)
+                if distance < min_distance:
+                    closest_rider = rider
+                    min_distance = distance
+            if closest_rider:
+                allocate_parcel_to_rider(closest_rider, parcel)
+                return jsonify({'message': 'Parcel allocated to the closest rider'})
+            else:
+                return jsonify({'message': 'No rider found'})
+        else:
+            return jsonify({'message': 'Error geocoding pickup location'})
+
     return render_template('request_pickup.html', form=form)
 
-@app.route('/allocate_parcel', methods=['GET'])
-def allocate_parcel():
+def geocode_location(location):
     """
-    Allocates a parcel delivery to a rider
+    Geocode the location string to latitude and longitude using Nominatim API
     """
-    parcel_id = request.args.get('parcel_id')
-    parcel = Parcel.query.filter_by(id=parcel_id).first()
-    if not parcel:
-        return jsonify({'error': 'Parcel npt found'})
-    pickup_location = parcel.pickup_location
-    available_drivers = Deliver.query.all()
-    closest_driver = None
-    min_distance = float('inf')
-    for driver in available_drivers:
-        distance = calculate_distance(pickup_location, driver.current_location)
-        if distance < min_distance:
-            closest_driver = driver
-            min_distance = distance
-    if closest_driver:
-        allocate_parcel_to_driver(closest_driver, parcel)
-    return jsonify({'message': 'Parcel allocated to the closest driver'})
-
+    url = 'https://nominatim.openstreetmap.org/search'
+    params = {
+        'q': location,
+        'format': 'json',
+    }
+    response = requests.get(url, params=params)
+    data = response.json()
+    if data:
+        latitude = float(data[0]['lat'])
+        longitude = float(data[0]['lon'])
+        return (latitude, longitude)
+    else:
+        return None
 
 def calculate_distance(location1, location2):
     """
@@ -200,10 +211,10 @@ def calculate_distance(location1, location2):
     return distance
 
 
-def allocate_parcel_to_driver(driver, parcel):
+def allocate_parcel_to_rider(rider, parcel):
     """
     Implements parcel allocation logic
     """
     parcel.status = 'allocated'
-    parcel.driver_id = driver.id
+    parcel.rider_id = rider.id
     db.session.commit()
