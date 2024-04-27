@@ -29,6 +29,7 @@ class Rider(db.Model, UserMixin):
     vehicle_registration = db.Column(db.String(50), unique=True, nullable=False)
     area_of_operation = db.Column(db.String(100), nullable=False)
     availability = db.Column(db.Boolean, default=True)
+    current_location = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(60), nullable=False)
     role = db.Column(db.String(20), nullable=False)
     status = db.Column(db.String(20), default='available')
@@ -46,12 +47,11 @@ class Parcel(db.Model):
     receiver_contact = db.Column(db.String(20))
     pickup_location = db.Column(db.String(255), nullable=False)
     delivery_location = db.Column(db.String(255), nullable=False)
-    category = db.Column(db.String(60))
-    pickup_time = db.Column(db.TIMESTAMP)
-    delivery_time = db.Column(db.TIMESTAMP)
     description = db.Column(db.String(400), nullable=False)
-    parcel_weight = db.Column(db.String(60))
+    rider_id = db.Column(db.Integer, db.ForeignKey('rider.id'))
     status = db.Column(db.String(20), default='pending')
+
+    rider = db.relationship('Rider', backref=db.backref('parcels', lazy=True))
     def __repr__(self):
         return f"Parcel('{self.parcel_name}', '{self.sender_name}', '{self.receiver_name}', '{self.status}')"
 

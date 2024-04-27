@@ -10,7 +10,11 @@ from sqlalchemy.exc import IntegrityError
 #from here is where i started modifing 
 from flask import render_template
 from geopy.distance import geodesic
+<<<<<<< HEAD
 from flask_mail import Message
+=======
+from geopy.geocoders import Nominatim
+>>>>>>> master
 
 @app.route('/')
 @app.route('/home')
@@ -19,10 +23,6 @@ def home():
         return render_template('home_authenticated.html', title='Home', user=current_user)
     return render_template('home.html', title='Home')
 
-@app.route('/companies')
-def view_companies():
-    # Render the companies template with the list of available companies
-    return jsonify(companies)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -86,7 +86,7 @@ def edit_profile():
 @app.route('/send_parcel')
 def send_parcel():
     # Implement the functionality for sending parcels here
-    return render_template('track_parcel.html')
+    return render_template('request_pickup.html')
 
 
 @app.route('/view_shipping_providers')
@@ -95,7 +95,7 @@ def view_shipping_providers():
 
 @app.route('/update_profile')
 def update():
-    return render_template('home_authenticated.html')
+    return render_template('update_profile.html')
 
 @app.route('/about')
 def about():
@@ -116,6 +116,7 @@ def register_rider():
             vehicle_registration=form.vehicle_registration.data,
             area_of_operation=form.area_of_operation.data,
             password=hashed_password,
+            current_location=form.current_location.data,
             role='rider'
         )
         db.session.add(new_rider)
@@ -159,22 +160,21 @@ def request_pickup():
             receiver_contact=form.receiver_contact.data,
             pickup_location=form.pickup_location.data,
             delivery_location=form.delivery_location.data,
-            category=form.category.data,
-            pickup_time=form.pickup_time.data,
-            description=form.description.data,
-            parcel_weight=form.parcel_weight.data
+            description=form.description.data
         )
         db.session.add(parcel)
         db.session.commit()
         #Allocate parcel to the nearest unoccupied rider
         allocation_result = allocate_parcel(parcel)
         if allocation_result['success']:
-            return jsonify({'message': 'Parcel allocated to the nearest rider. Please wait for confirmation.'})
+            flash('Parcel allocated to the nearest rider. Please wait for confirmation.')
+            return render_template('payment.html')
         else:
-            return jsonify({'message': 'Allocation in progress. Please wait for a rider to be assigned.'})
+            flash('Allocation in progress. Please wait for a rider to be assigned.')
+            return render_template('home.html')
     return render_template('request_pickup.html', form=form)
 
-def allocate_parcel():
+def allocate_parcel(parcel):
     """
     Allocates a parcel delivery to a rider
     """
@@ -183,12 +183,12 @@ def allocate_parcel():
     closest_rider = None
     min_distance = float('inf')
 
-    for driver in available_drivers:
+    for rider in available_riders:
         distance = calculate_distance(pickup_location, rider.current_location)
         if distance < min_distance:
-            closest_driver = driver
+            closest_rider = rider
             min_distance = distance
-    if closest_driver:
+    if closest_rider:
         parcel.status = 'allocated'
         parcel.rider_id = closest_rider.id
         db.session.commit()
@@ -207,34 +207,36 @@ def calculate_distance(location1, location2):
     Implements distance calculation logic
     It uses the location format: (latitude, longitude)
     """
-    distance = geodesic(location1, location2).kilometers
+    geolocator = Nominatim(user_agent='myapplication')
+    location1 = geolocator.geocode(location1)
+    location2 = geolocator.geocode(location2)
+
+    current = location1.latitude, location1.longitude
+    pickup_location = location2.latitude, location2.longitude
+
+    distance = geodesic(pickup_location, current).kilometers
     return distance
 
-
-def allocate_parcel_to_driver(driver, parcel):
-    """
-    Implements parcel allocation logic
-    """
-    parcel.status = 'allocated'
-    parcel.driver_id = driver.id
-    db.session.commit()
-
-
-@app.route('/rider_accept_request', methods=['POST'])
-def rider_accept_request():
-    data = request.json
-    rider_id = data.get('rider_id')
-    parcel_id = data.get('parcel_id')
-
-    rider = Rider.query.get(rider_id)
-    parcel = Parcel.query.get(parcel_id)
-
-    if rider and parcel:
-        if rider.status == 'available':
-            parcel.status = 'accepted'
+@app.route('/view_assignments', methods=['GET', 'POST'])
+def view_assignments():
+    if request.method = 'GET':
+        pending_assignements = Parcel.query.filter_by(rider_id=current_user.id, status='pending').all()
+        return render_template('view_assignment.html', assignments=pending_assignments)
+    elif request.method == 'POST':
+        parcel_id = request.form.get('parcel_id')
+        action = request.form.get('action')
+        assignment = Parcel.query.get(parcel_id)
+        if assignment:
+            if action == 'accept':
+                assignment.status = 'accepted'
+                flash('You have accepted the delivery assignment.', 'success')
+            elif action == 'deny':
+                assignment.status = 'pending'
+                assignment.rider_id = None
+                flash('You have denied the delivery assignment. Parcel will be re-allocated.', 'info')
             db.session.commit()
-            return jsonify({'message': 'Rider accepted the request. Parcel is on the way!'})
         else:
+<<<<<<< HEAD
             return jsonify({'error': 'Rider is no longer available'})
     else:
         return jsonify({'error': 'Invalid rider or parcel'})
@@ -247,3 +249,7 @@ def notify_rider_new_assignment(rider_email, parcel_details):
     msg = Message('New Delivery Assignment', receipts=[rider_email])
     msg.body = f'Hey, you have a new delivery assignment:\n\n{parcel_details}\n\nClick here to view and accept: http://vue.com/view_assignments'
     mail.send(msg)
+=======
+            flash('Delivery assignment not found.', 'error')
+        return redirect(url_for('view_assignments'))
+>>>>>>> master
