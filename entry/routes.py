@@ -10,6 +10,7 @@ from sqlalchemy.exc import IntegrityError
 #from here is where i started modifing 
 from flask import render_template
 from geopy.distance import geodesic
+from flask_mail import Message
 from geopy.geocoders import Nominatim
 
 @app.route('/')
@@ -232,5 +233,17 @@ def view_assignments():
                 flash('You have denied the delivery assignment. Parcel will be re-allocated.', 'info')
             db.session.commit()
         else:
+            return jsonify({'error': 'Rider is no longer available'})
+    else:
+        return jsonify({'error': 'Invalid rider or parcel'})
+
+
+def notify_rider_new_assignment(rider_email, parcel_details):
+    """
+    Trigger notification when assigning a parcel to a rider
+    """
+    msg = Message('New Delivery Assignment', receipts=[rider_email])
+    msg.body = f'Hey, you have a new delivery assignment:\n\n{parcel_details}\n\nClick here to view and accept: http://vue.com/view_assignments'
+    mail.send(msg)
             flash('Delivery assignment not found.', 'error')
         return redirect(url_for('view_assignments'))
