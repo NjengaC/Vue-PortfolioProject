@@ -85,7 +85,7 @@ def edit_profile():
 @app.route('/send_parcel')
 def send_parcel():
     # Implement the functionality for sending parcels here
-    return render_template('track_parcel.html')
+    return render_template('request_pickup.html')
 
 
 @app.route('/view_shipping_providers')
@@ -168,12 +168,12 @@ def request_pickup():
         #Allocate parcel to the nearest unoccupied rider
         allocation_result = allocate_parcel(parcel)
         if allocation_result['success']:
-            return jsonify({'message': 'Parcel allocated to the nearest rider. Please wait for confirmation.'})
+            flash('Parcel allocated to the nearest rider. Please wait for confirmation.')
         else:
-            return jsonify({'message': 'Allocation in progress. Please wait for a rider to be assigned.'})
+            flash('Allocation in progress. Please wait for a rider to be assigned.')
     return render_template('request_pickup.html', form=form)
 
-def allocate_parcel():
+def allocate_parcel(parcel):
     """
     Allocates a parcel delivery to a rider
     """
@@ -182,12 +182,12 @@ def allocate_parcel():
     closest_rider = None
     min_distance = float('inf')
 
-    for driver in available_drivers:
+    for rider in available_riders:
         distance = calculate_distance(pickup_location, rider.current_location)
         if distance < min_distance:
-            closest_driver = driver
+            closest_rider = rider
             min_distance = distance
-    if closest_driver:
+    if closest_rider:
         parcel.status = 'allocated'
         parcel.rider_id = closest_rider.id
         db.session.commit()
@@ -210,12 +210,12 @@ def calculate_distance(location1, location2):
     return distance
 
 
-def allocate_parcel_to_driver(driver, parcel):
+def allocate_parcel_to_driver(rider, parcel):
     """
     Implements parcel allocation logic
     """
     parcel.status = 'allocated'
-    parcel.driver_id = driver.id
+    parcel.rider_id = rider.id
     db.session.commit()
 
 
