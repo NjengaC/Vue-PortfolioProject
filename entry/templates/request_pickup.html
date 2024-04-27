@@ -54,91 +54,83 @@
         <!-- Form section -->
         <div class="send_form">
             <form id="parcelForm" method="POST" action="">
-                {{ form.csrf_token }}
                 {{ form.hidden_tag() }}
                 <div class="form-group">
                     <div class="row">
                         <div class="col">
-                            {{ form.sender_name.label }}
+                            <label for="sender_name">Sender's Name</label>
                             {{ form.sender_name(class="form-control") }}
-                            {{ form.sender_name.errors }}
+                            {% for error in form.sender_name.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
                         </div>
                         <div class="col">
-                            {{ form.sender_email.label }}
+                            <label for="sender_email">Sender's Email</label>
                             {{ form.sender_email(class="form-control") }}
-                            {{ form.sender_email.errors }}
+                            {% for error in form.sender_email.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="row">
                         <div class="col">
-                            {{ form.sender_contact.label }}
+                            <label for="sender_contact">Sender's Contact</label>
                             {{ form.sender_contact(class="form-control") }}
-                            {{ form.sender_contact.errors }}
+                            {% for error in form.sender_contact.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
                         </div>
                         <div class="col">
-                            {{ form.receiver_name.label }}
+                            <label for="receiver_name">Receiver's Name</label>
                             {{ form.receiver_name(class="form-control") }}
-                            {{ form.receiver_name.errors }}
+                            {% for error in form.receiver_name.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="row">
                         <div class="col">
-                            {{ form.receiver_contact.label }}
+                            <label for="receiver_contact">Receiver's Contact</label>
                             {{ form.receiver_contact(class="form-control") }}
-                            {{ form.receiver_contact.errors }}
+                            {% for error in form.receiver_contact.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
                         </div>
                         <div class="col">
-                            {{ form.pickup_location.label }}
+                            <label for="pickup_location">Pickup Location</label>
                             {{ form.pickup_location(class="form-control") }}
-                            {{ form.pickup_location.errors }}
+                            {% for error in form.pickup_location.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="row">
                         <div class="col">
-                            {{ form.delivery_location.label }}
+                            <label for="delivery_location">Delivery Location</label>
                             {{ form.delivery_location(class="form-control") }}
-                            {{ form.delivery_location.errors }}
+                            {% for error in form.delivery_location.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
                         </div>
                         <div class="col">
-                            {{ form.description.label }}
+                            <label for="description">Description</label>
                             {{ form.description(class="form-control") }}
-                            {{ form.description.errors }}
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col">
-                            {{ form.category.label }}
-                            {{ form.category(class="form-control") }}
-                            {{ form.category.errors }}
-                        </div>
-                        <div class="col">
-                            {{ form.parcel_weight.label }}
-                            {{ form.parcel_weight(class="form-control") }}
-                            {{ form.parcel_weight.errors }}
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col">
-                            {{ form.pickup_time.label }}
-                            {{ form.pickup_time(class="form-control") }}
-                            {{ form.pickup_time.errors }}
+                            {% for error in form.description.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
-        
+
         <!-- Map section -->
         <div id="map" style="width: 600px; height: 400px;"></div>
 
@@ -147,9 +139,6 @@
 
     <!-- Leaflet JavaScript -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <!-- Your custom JavaScript -->
-    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
-    <script src="../static/scripts/maps.js"></script>
     <footer>
         <div class="footer-links">
             <a href="#">Link 1</a>
