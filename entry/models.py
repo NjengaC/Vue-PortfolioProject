@@ -46,11 +46,7 @@ class Parcel(db.Model):
     receiver_contact = db.Column(db.String(20))
     pickup_location = db.Column(db.String(255), nullable=False)
     delivery_location = db.Column(db.String(255), nullable=False)
-    category = db.Column(db.String(60))
-    pickup_time = db.Column(db.TIMESTAMP)
-    delivery_time = db.Column(db.TIMESTAMP)
     description = db.Column(db.String(400), nullable=False)
-    parcel_weight = db.Column(db.String(60))
     status = db.Column(db.String(20), default='pending')
     def __repr__(self):
         return f"Parcel('{self.parcel_name}', '{self.sender_name}', '{self.receiver_name}', '{self.status}')"
