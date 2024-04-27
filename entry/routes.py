@@ -213,21 +213,24 @@ def calculate_distance(location1, location2):
     distance = geodesic(pickup_location, current).kilometers
     return distance
 
-@app.route('/rider_accept_request', methods=['POST'])
-def rider_accept_request():
-    data = request.json
-    rider_id = data.get('rider_id')
-    parcel_id = data.get('parcel_id')
-
-    rider = Rider.query.get(rider_id)
-    parcel = Parcel.query.get(parcel_id)
-
-    if rider and parcel:
-        if rider.status == 'available':
-            parcel.status = 'accepted'
+@app.route('/view_assignments', methods=['GET', 'POST'])
+def view_assignments():
+    if request.method = 'GET':
+        pending_assignements = Parcel.query.filter_by(rider_id=current_user.id, status='pending').all()
+        return render_template('view_assignment.html', assignments=pending_assignments)
+    elif request.method == 'POST':
+        parcel_id = request.form.get('parcel_id')
+        action = request.form.get('action')
+        assignment = Parcel.query.get(parcel_id)
+        if assignment:
+            if action == 'accept':
+                assignment.status = 'accepted'
+                flash('You have accepted the delivery assignment.', 'success')
+            elif action == 'deny':
+                assignment.status = 'pending'
+                assignment.rider_id = None
+                flash('You have denied the delivery assignment. Parcel will be re-allocated.', 'info')
             db.session.commit()
-            return jsonify({'message': 'Rider accepted the request. Parcel is on the way!'})
         else:
-            return jsonify({'error': 'Rider is no longer available'})
-    else:
-        return jsonify({'error': 'Invalid rider or parcel'})
+            flash('Delivery assignment not found.', 'error')
+        return redirect(url_for('view_assignments'))
