@@ -10,6 +10,7 @@ from sqlalchemy.exc import IntegrityError
 #from here is where i started modifing 
 from flask import render_template
 from geopy.distance import geodesic
+from geopy.geocoders import Nominatim
 
 @app.route('/')
 @app.route('/home')
@@ -111,6 +112,7 @@ def register_rider():
             vehicle_registration=form.vehicle_registration.data,
             area_of_operation=form.area_of_operation.data,
             password=hashed_password,
+            current_location=form.current_location.data,
             role='rider'
         )
         db.session.add(new_rider)
@@ -162,8 +164,10 @@ def request_pickup():
         allocation_result = allocate_parcel(parcel)
         if allocation_result['success']:
             flash('Parcel allocated to the nearest rider. Please wait for confirmation.')
+            return render_template('payment.html')
         else:
             flash('Allocation in progress. Please wait for a rider to be assigned.')
+            return render_template('home.html')
     return render_template('request_pickup.html', form=form)
 
 def allocate_parcel(parcel):
@@ -199,18 +203,15 @@ def calculate_distance(location1, location2):
     Implements distance calculation logic
     It uses the location format: (latitude, longitude)
     """
-    distance = geodesic(location1, location2).kilometers
+    geolocator = Nominatim(user_agent='myapplication')
+    location1 = geolocator.geocode(location1)
+    location2 = geolocator.geocode(location2)
+
+    current = location1.latitude, location1.longitude
+    pickup_location = location2.latitude, location2.longitude
+
+    distance = geodesic(pickup_location, current).kilometers
     return distance
-
-
-def allocate_parcel_to_driver(rider, parcel):
-    """
-    Implements parcel allocation logic
-    """
-    parcel.status = 'allocated'
-    parcel.rider_id = rider.id
-    db.session.commit()
-
 
 @app.route('/rider_accept_request', methods=['POST'])
 def rider_accept_request():
