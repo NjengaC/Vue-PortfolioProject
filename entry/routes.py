@@ -78,7 +78,6 @@ def edit_profile():
             return render_template('home.html', title='Home', user=current_user)
     return render_template('edit_profile.html', title='Edit Profile', form=form, user=current_user)
 
-<<<<<<< HEAD
 @app.route('/send_parcel')
 def send_parcel():
     # Implement the functionality for sending parcels here
@@ -88,8 +87,6 @@ def send_parcel():
 @app.route('/view_shipping_providers')
 def view_shipping_providers():
     return render_template('view_shipping_providers.html')
-=======
->>>>>>> 5d31a886d4e8c9a0870aea13ceec146e4ea33885
 
 @app.route('/update_profile')
 def update():
@@ -157,7 +154,7 @@ def request_pickup():
             receiver_contact=form.receiver_contact.data,
             pickup_location=form.pickup_location.data,
             delivery_location=form.delivery_location.data,
-            description=form.description.data,
+            description=form.description.data
         )
         db.session.add(parcel)
         db.session.commit()
