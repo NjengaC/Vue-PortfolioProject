@@ -10,6 +10,7 @@ from sqlalchemy.exc import IntegrityError
 #from here is where i started modifing 
 from flask import render_template
 from geopy.distance import geodesic
+from flask_mail import Message
 from geopy.geocoders import Nominatim
 
 @app.route('/')
@@ -156,7 +157,7 @@ def request_pickup():
             receiver_contact=form.receiver_contact.data,
             pickup_location=form.pickup_location.data,
             delivery_location=form.delivery_location.data,
-            description=form.description.data,
+            description=form.description.data
         )
         db.session.add(parcel)
         db.session.commit()
@@ -213,21 +214,36 @@ def calculate_distance(location1, location2):
     distance = geodesic(pickup_location, current).kilometers
     return distance
 
-@app.route('/rider_accept_request', methods=['POST'])
-def rider_accept_request():
-    data = request.json
-    rider_id = data.get('rider_id')
-    parcel_id = data.get('parcel_id')
-
-    rider = Rider.query.get(rider_id)
-    parcel = Parcel.query.get(parcel_id)
-
-    if rider and parcel:
-        if rider.status == 'available':
-            parcel.status = 'accepted'
+@app.route('/view_assignments', methods=['GET', 'POST'])
+def view_assignments():
+    if request.method = 'GET':
+        pending_assignements = Parcel.query.filter_by(rider_id=current_user.id, status='pending').all()
+        return render_template('view_assignment.html', assignments=pending_assignments)
+    elif request.method == 'POST':
+        parcel_id = request.form.get('parcel_id')
+        action = request.form.get('action')
+        assignment = Parcel.query.get(parcel_id)
+        if assignment:
+            if action == 'accept':
+                assignment.status = 'accepted'
+                flash('You have accepted the delivery assignment.', 'success')
+            elif action == 'deny':
+                assignment.status = 'pending'
+                assignment.rider_id = None
+                flash('You have denied the delivery assignment. Parcel will be re-allocated.', 'info')
             db.session.commit()
-            return jsonify({'message': 'Rider accepted the request. Parcel is on the way!'})
         else:
             return jsonify({'error': 'Rider is no longer available'})
     else:
         return jsonify({'error': 'Invalid rider or parcel'})
+
+
+def notify_rider_new_assignment(rider_email, parcel_details):
+    """
+    Trigger notification when assigning a parcel to a rider
+    """
+    msg = Message('New Delivery Assignment', receipts=[rider_email])
+    msg.body = f'Hey, you have a new delivery assignment:\n\n{parcel_details}\n\nClick here to view and accept: http://vue.com/view_assignments'
+    mail.send(msg)
+            flash('Delivery assignment not found.', 'error')
+        return redirect(url_for('view_assignments'))
