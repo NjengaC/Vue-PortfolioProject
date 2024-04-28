@@ -13,14 +13,11 @@ h1 {
   width: 100%;
   height: 100%;
   margin: auto;
-  padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background-color: grey;
-  margin: 50px auto;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   align-items: center;
   text-align: center;
   align: center;
@@ -28,11 +25,14 @@ h1 {
 header {
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  margin: auto;
+  background-color: grey;
+  align-items: center;
+  text-align: center;
+  align: center;
 }
 
-nav ul {
-  list-style-type: none;
-}
 
 nav ul li {
   display: flex;
@@ -98,7 +98,7 @@ section.companies {
 
 #reg a{
   padding: 10px 20px;
-  color: black;
+  color: #333;
   cursor: pointer;
   margin: 10px;
   background-color: #ffcc99;
@@ -107,6 +107,9 @@ section.companies {
 #reg a:hover {
   background-color: #333;
   color: #fff;
+}
+#reg {
+  background-color: black;
 }
 #companies:hover {
   background-color: #333;
@@ -174,43 +177,39 @@ form {
 }
 /* Add custom styles here */
 /*this is for the  home page*/
-.container {
-	  margin-top: 50px;
-  }
+.ship {
+	text-align: center;
+	padding: 20px;
+	background-color: #f8f9fa;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-  .ship {
-	    text-align: center;
-	      padding: 20px;
-	        background-color: #f8f9fa;
-		  border-radius: 10px;
-		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	    }
+.sign-up {
+	font-size: 18px;
+	margin-bottom: 20px;
+}
 
-	    .sign-up {
-		      font-size: 18px;
-		        margin-bottom: 20px;
-		}
+.button-container {
+	margin-bottom: 20px;
+}
 
-		.button-container {
-			  margin-bottom: 20px;
-		  }
+#view-riders {
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+}
 
-		  #view-riders {
-			    background-color: #007bff;
-			      color: #fff;
-			        border: none;
-				  padding: 10px 20px;
-				    border-radius: 5px;
-				      cursor: pointer;
-			      }
+#view-riders:hover {
+	background-color: #0056b3;
+}
 
-			      #view-riders:hover {
-				        background-color: #0056b3;
-				}
+#rider-list {
+	list-style: none;
+}
 
-				#rider-list {
-					  list-style: none;
-				  }
-
-				  /* Add more styles as needed */
+/* Add more styles as needed */
 

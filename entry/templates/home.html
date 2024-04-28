@@ -1,31 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Delivery Company Name</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" integrity="sha384-gH2yIJ3lnkV9MmETfDJEzPJ9q2lf8RW3UzMT4iVRAkY4zQp3sfO8gTWDVH/SLjtQv" crossorigin="anonymous">
-</head>
-<body style="background-image: url('/images/background.jpg'); background-size: cover; background-position: center;">
-
-  <header class="container py-3">
-    <div class="d-flex align-items-center justify-content-between">
-      <a class="navbar-brand" href="#">
-        <img src="../static/images/logo.png" alt="Company Logo" width="150" height="50">
-      </a>
-      <nav class="nav">
-        <a class="nav-link text-light" href="#">Home</a>
-        <a class="nav-link text-light" href="#">Services</a>
-        <a class="nav-link text-light" href="#">Contact Us</a>
-        <a class="nav-link btn btn-primary" href="{{ url_for('register_rider') }}">Become a Rider</a>
-	<a class="nav-link btn btn-primary btn-lg mx-2" href="{{ url_for('get_quote') }}">Get a Quote</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container mt-5">
+  <div class="container md-5">
     <section class="hero mb-5">
       <h1 class="display-4 text-center text-light">Fast, Reliable Delivery Services Made Easy</h1>
       <p class="lead text-center text-light">Get your parcels delivered quickly and securely, anywhere, anytime.</p>
@@ -62,9 +37,6 @@
         <img src="/images/boxes.jpg" alt="Delivery Boxes" class="img-fluid">
       </div>
     </section>
-  </main>
+  </div>
 
-  <footer class="container py-3 text-center text-light">
-    <p>&copy; {{ year }} Your Delivery Company Name. All Rights Reserved.</p>
-  </footer>
 {% endblock%}
