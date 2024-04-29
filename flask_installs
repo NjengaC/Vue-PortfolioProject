@@ -12,3 +12,5 @@ pip install psycopg2-binary Flask-SQLAlchemy
 pip install flask_sslify
 pip install geopy
 pip install Flask-Mail
+pip install twilio
+pip install retrying

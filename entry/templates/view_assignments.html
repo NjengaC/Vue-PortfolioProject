@@ -5,13 +5,20 @@
 
         {% if assignments %}
             <ul>
-                {% for assignment in assignments %}
+                {% for assignment, rider in assignments %}
                     <li>
-                        <p>Sender: {{ assignment.sender_name }}</p>
-                        <p>Delivery Location: {{ assignment.delivery_location }}</p>
-                        <p>Description: {{ assignment.description }}</p>
-                        <!-- Include button or link to view assignment -->
-                        <a href="{{ url_for('view_assignment', id=assignment.id) }}">View Assignment</a>
+                        <p>Sender: {{ assignment[0].sender_name }}</p>
+                        <p>Delivery Location: {{ assignment[0].delivery_location }}</p>
+                        <p>Description: {{ assignment[0].description }}</p>
+			<form action="{{ url_for('track_assignment', parcel_id=assignment[0].id) }}" method="GET">
+                        	<button type="submit" class="btn btn-primary">Track</button>
+                    	</form>
+                        <form method="POST" action="{{ url_for('view_assignments') }}">
+                            <input type="hidden" name="id" value="{{ assignment.id }}">
+			    <input type="hidden" name="rider_id" value="{{ rider.id }}">
+                            <button type="submit" name="action" value="accept">Accept</button>
+                            <button type="submit" name="action" value="deny">Deny</button>
+                        </form>
                     </li>
                 {% endfor %}
             </ul>

@@ -10,11 +10,14 @@ from sqlalchemy.exc import IntegrityError
 #from here is where i started modifing 
 from flask import render_template, abort
 from geopy.distance import geodesic
-from flask_mail import Message
+from flask_mail import Message, Mail
 from geopy.geocoders import Nominatim
 from flask_login import current_user
 from functools import wraps
 from flask_login import current_user
+from entry import mail
+import retrying
+import geopy.exc
 
 
 @app.route('/')
@@ -140,13 +143,23 @@ def login_rider():
             if bcrypt.check_password_hash(rider.password, form.password.data):
                 login_user(rider)
                 flash('Rider login successful!', 'success')
-                return render_template('rider_dashboard.html', title='Rider\'s dashboard', user=rider)
+                return render_template('view_assignments.html', title='Rider\'s dashboard', user=rider)
             else:
                 flash('Invalid password. Please try again.', 'danger')
         else:
             flash('Rider not found. Please check your contact number.', 'danger')
 
     return render_template('login_rider.html', title='Rider Login', form=form)
+
+
+def login_required(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        if not current_user.is_authenticated:
+            flash('You need to log in to access this page.', 'warning')
+            return redirect(url_for('login'))
+        return func(*args, **kwargs)
+    return decorated_view
 
 
 @app.route('/request_pickup', methods=['GET', 'POST'])
@@ -193,6 +206,7 @@ def allocate_parcel(parcel):
         parcel.status = 'allocated'
         parcel.rider_id = closest_rider.id
         db.session.commit()
+        notify_rider_new_assignment(closest_rider.email, parcel)
         return {
             'success': True,
             'rider_id': closest_rider.id,
@@ -203,6 +217,15 @@ def allocate_parcel(parcel):
     else:
         return {'success': False, 'message': 'Allocation in progress. Please wait for a rider to be assigned.'}
 
+
+@retrying.retry(wait_exponential_multiplier=1000, wait_exponential_max=10000)
+def geocode_with_retry(geolocator, location):
+    """
+    retrying decorator incase the nominatim encouters challenges while loading
+    """
+    return geolocator.geocode(location)
+
+
 def calculate_distance(location1, location2):
     """
     Implements distance calculation logic
@@ -211,7 +234,6 @@ def calculate_distance(location1, location2):
     geolocator = Nominatim(user_agent='myapplication')
     location1 = geolocator.geocode(location1)
     location2 = geolocator.geocode(location2)
-
     current = location1.latitude, location1.longitude
     pickup_location = location2.latitude, location2.longitude
 
@@ -232,15 +254,19 @@ def view_assignments():
     if current_user.is_authenticated:
         if current_user.role == 'rider':
             if request.method == 'GET':
-                pending_assignements = Parcel.query.filter_by(rider_id=current_user.id, status='pending').all()
-                return render_template('view_assignments.html', assignments=pending_assignments)
+                pending_assignments = db.session.query(Parcel, Rider).join(Rider).filter(Parcel.rider_id == current_user.id, Parcel.status == 'pending').all()
+                in_progress_assignments = db.session.query(Parcel, Rider).join(Rider).filter(Parcel.rider_id == current_user.id, Parcel.status == 'in-progress').all()
+                return render_template('view_assignments.html', pending_assignments=pending_assignments, in_progress_assignments=in_progress_assignments)
             elif request.method == 'POST':
-                parcel_id = request.form.get('parcel_id')
+                parcel_id = request.form.get('id')
                 action = request.form.get('action')
                 assignment = Parcel.query.get(parcel_id)
                 if assignment:
                     if action == 'accept':
-                        assignment.status = 'accepted'
+                        assignment.status = 'in_progress'
+                        lifecycle_entry = ParcelLifecycle(parcel_id=assignment.id, status='in-progress')
+                        db.session.add(lifecycle_entry)
+                        db.session.commit()
                         flash('You have accepted the delivery assignment.', 'success')
                     elif action == 'deny':
                         assignment.status = 'pending'
@@ -255,10 +281,22 @@ def view_assignments():
     return redirect(url_for('home'))
 
 
-def notify_rider_new_assignment(rider_email, parcel_details):
+@app.route('/track_assignment/<int:id>')
+@rider_required
+def track_assignment(id):
+    assignment = Parcel.query.get(id)
+    if assignment and assignment.rider_id == current_user.id:
+        lifecycle_entries = ParcelLifecycle.query.filter_by(parcel_id=id).order_by(ParcelLifecycle.timestamp.desc()).all()
+        return render_template('track_assignment.html', assignment=assignment, lifecycle_entries=lifecycle_entries)
+    else:
+        flash('Assignment not found or not assigned to you.', 'error')
+        return redirect(url_for('home'))
+
+
+def notify_rider_new_assignment(rider_email, parcel):
     """
     Trigger notification when assigning a parcel to a rider
     """
-    msg = Message('New Delivery Assignment', receipts=[rider_email])
-    msg.body = f'Hey, you have a new delivery assignment:\n\n{parcel_details}\n\nClick here to view and accept: http://vue.com/view_assignments'
+    msg = Message('New Delivery Assignment', recipients=[rider_email])
+    msg.body = f'Hey, you have a new delivery assignment:\n\n{parcel}\n\nClick here to view and accept: http://vue.com/view_assignments'
     mail.send(msg)
