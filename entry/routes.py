@@ -8,10 +8,14 @@ import secrets
 from entry import app, db, bcrypt
 from sqlalchemy.exc import IntegrityError
 #from here is where i started modifing 
-from flask import render_template
+from flask import render_template, abort
 from geopy.distance import geodesic
 from flask_mail import Message
 from geopy.geocoders import Nominatim
+from flask_login import current_user
+from functools import wraps
+from flask_login import current_user
+
 
 @app.route('/')
 @app.route('/home')
@@ -214,28 +218,41 @@ def calculate_distance(location1, location2):
     distance = geodesic(pickup_location, current).kilometers
     return distance
 
+def rider_required(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        if not current_user.is_authenticated or current_user.role != 'rider':
+            return redirect(url_for('login_rider'))
+        return func(*args, **kwargs)
+    return decorated_view
+
 @app.route('/view_assignments', methods=['GET', 'POST'])
+@rider_required
 def view_assignments():
-    if request.method = 'GET':
-        pending_assignements = Parcel.query.filter_by(rider_id=current_user.id, status='pending').all()
-        return render_template('view_assignment.html', assignments=pending_assignments)
-    elif request.method == 'POST':
-        parcel_id = request.form.get('parcel_id')
-        action = request.form.get('action')
-        assignment = Parcel.query.get(parcel_id)
-        if assignment:
-            if action == 'accept':
-                assignment.status = 'accepted'
-                flash('You have accepted the delivery assignment.', 'success')
-            elif action == 'deny':
-                assignment.status = 'pending'
-                assignment.rider_id = None
-                flash('You have denied the delivery assignment. Parcel will be re-allocated.', 'info')
-            db.session.commit()
+    if current_user.is_authenticated:
+        if current_user.role == 'rider':
+            if request.method == 'GET':
+                pending_assignements = Parcel.query.filter_by(rider_id=current_user.id, status='pending').all()
+                return render_template('view_assignments.html', assignments=pending_assignments)
+            elif request.method == 'POST':
+                parcel_id = request.form.get('parcel_id')
+                action = request.form.get('action')
+                assignment = Parcel.query.get(parcel_id)
+                if assignment:
+                    if action == 'accept':
+                        assignment.status = 'accepted'
+                        flash('You have accepted the delivery assignment.', 'success')
+                    elif action == 'deny':
+                        assignment.status = 'pending'
+                        assignment.rider_id = None
+                        flash('You have denied the delivery assignment. Parcel will be re-allocated.', 'info')
+                    db.session.commit()
+                else:
+                    flash('Delivery assignment not found.', 'error')
+            return redirect(url_for('view_assignments'))
         else:
-            return jsonify({'error': 'Rider is no longer available'})
-    else:
-        return jsonify({'error': 'Invalid rider or parcel'})
+            flash('You are not authorized to view this page.', 'danger')
+    return redirect(url_for('home'))
 
 
 def notify_rider_new_assignment(rider_email, parcel_details):
@@ -245,5 +262,3 @@ def notify_rider_new_assignment(rider_email, parcel_details):
     msg = Message('New Delivery Assignment', receipts=[rider_email])
     msg.body = f'Hey, you have a new delivery assignment:\n\n{parcel_details}\n\nClick here to view and accept: http://vue.com/view_assignments'
     mail.send(msg)
-            flash('Delivery assignment not found.', 'error')
-        return redirect(url_for('view_assignments'))

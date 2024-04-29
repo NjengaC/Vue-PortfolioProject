@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container">
+        <h1>Pending Delivery Assignments</h1>
+
+        {% if assignments %}
+            <ul>
+                {% for assignment in assignments %}
+                    <li>
+                        <p>Sender: {{ assignment.sender_name }}</p>
+                        <p>Delivery Location: {{ assignment.delivery_location }}</p>
+                        <p>Description: {{ assignment.description }}</p>
+                        <!-- Include button or link to view assignment -->
+                        <a href="{{ url_for('view_assignment', id=assignment.id) }}">View Assignment</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No pending assignments.</p>
+        {% endif %}
+    </div>
+{% endblock %}
