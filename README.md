@@ -1,5 +1,6 @@
 Vue Parcel Sending Service
-Welcome to the Parcel Sending Service App! This application provides a convenient platform for users to send parcels and for parcel service companies to manage pickup requests and deliveries.
+Welcome to the Parcel Sending Service App! This application provides a convenient platform for users to send parcels and for Riders
+ to manage pickup requests and deliveries.
 
 Features
 Homepage
