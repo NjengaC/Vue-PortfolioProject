@@ -3,6 +3,7 @@ Welcome to the Parcel Sending Service App! This application provides a convenien
  to manage pickup requests and deliveries.
 
 Features
+
 Homepage
 The homepage serves as the first impression of the app, providing an overview of the services offered. Users can navigate to other sections of the app from here.
 
