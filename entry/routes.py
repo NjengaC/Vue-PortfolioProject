@@ -216,7 +216,7 @@ def calculate_distance(location1, location2):
 
 @app.route('/view_assignments', methods=['GET', 'POST'])
 def view_assignments():
-    if request.method = 'GET':
+    if request.method == 'GET':
         pending_assignements = Parcel.query.filter_by(rider_id=current_user.id, status='pending').all()
         return render_template('view_assignment.html', assignments=pending_assignments)
     elif request.method == 'POST':
@@ -245,5 +245,5 @@ def notify_rider_new_assignment(rider_email, parcel_details):
     msg = Message('New Delivery Assignment', receipts=[rider_email])
     msg.body = f'Hey, you have a new delivery assignment:\n\n{parcel_details}\n\nClick here to view and accept: http://vue.com/view_assignments'
     mail.send(msg)
-            flash('Delivery assignment not found.', 'error')
-        return redirect(url_for('view_assignments'))
+    flash('Delivery assignment not found.', 'error')
+    return redirect(url_for('view_assignments'))
