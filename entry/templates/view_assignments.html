@@ -7,12 +7,10 @@
             <ul>
                 {% for assignment, rider in assignments %}
                     <li>
-                        <p>Sender: {{ assignment[0].sender_name }}</p>
-                        <p>Delivery Location: {{ assignment[0].delivery_location }}</p>
-                        <p>Description: {{ assignment[0].description }}</p>
-			<form action="{{ url_for('track_assignment', parcel_id=assignment[0].id) }}" method="GET">
-                        	<button type="submit" class="btn btn-primary">Track</button>
-                    	</form>
+                        <p>Sender: {{ assignment.sender_name }}</p>
+			<p>Pickup Location: {{ assignment.pickup_location }}</p>
+                        <p>Delivery Location: {{ assignment.delivery_location }}</p>
+                        <p>Description: {{ assignment.description }}</p>
                         <form method="POST" action="{{ url_for('view_assignments') }}">
                             <input type="hidden" name="id" value="{{ assignment.id }}">
 			    <input type="hidden" name="rider_id" value="{{ rider.id }}">
