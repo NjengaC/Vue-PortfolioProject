@@ -1,70 +1,50 @@
 {% extends "layout.html" %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Delivery Company Name</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" integrity="sha384-gH2yIJ3lnkV9MmETfDJEzPJ9q2lf8RW3UzMT4iVRAkY4zQp3sfO8gTWDVH/SLjtQv" crossorigin="anonymous">
-</head>
-<body style="background-image: url('/images/background.jpg'); background-size: cover; background-position: center;">
+  <main>
+    <section class="hero">
+      <h1>Get Anything, Delivered Fast!</h1>
+      <p>ZipZap delivers food, groceries, packages, and more right to your door.</p>
+      <a href="{{ url_for('register') }}" class="btn">Get Started</a>
+    </section>
 
-  <header class="container py-3">
-    <div class="d-flex align-items-center justify-content-between">
-      <a class="navbar-brand" href="#">
-        <img src="../static/images/logo.png" alt="Company Logo" width="150" height="50">
-      </a>
-      <nav class="nav">
-        <a class="nav-link text-light" href="#">Home</a>
-        <a class="nav-link text-light" href="#">Services</a>
-        <a class="nav-link text-light" href="#">Contact Us</a>
-        <a class="nav-link btn btn-primary" href="{{ url_for('register_rider') }}">Become a Rider</a>
-	<a class="nav-link btn btn-primary btn-lg mx-2" href="{{ url_for('get_quote') }}">Get a Quote</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container mt-5">
-    <section class="hero mb-5">
-      <h1 class="display-4 text-center text-light">Fast, Reliable Delivery Services Made Easy</h1>
-      <p class="lead text-center text-light">Get your parcels delivered quickly and securely, anywhere, anytime.</p>
-      <div class="button-container d-flex justify-content-center">
-        <a class="btn btn-primary btn-lg mx-2" href="{{ url_for('get_quote') }}">Get a Quote</a>
-        <a class="btn btn-outline-primary btn-lg mx-2" href="{{ url_for('track_parcel') }}">Track Parcel</a>
+    <section class="how-it-works">
+      <h2>How it Works</h2>
+      <div class="step">
+        <h3>1. Place Your Order</h3>
+        <p>Choose from a wide variety of restaurants, stores, and more.</p>
+      </div>
+      <div class="step">
+        <h3>2. Track Your Delivery</h3>
+        <p>Follow your order in real-time on our map.</p>
+      </div>
+      <div class="step">
+        <h3>3. Receive Your Delivery</h3>
+        <p>Sit back and relax - your order will be delivered directly to you.</p>
       </div>
     </section>
 
-    <section class="services row">
-      <div class="col-md-6">
-        <h2>What We Do</h2>
-        <p>We are a leading delivery company dedicated to providing efficient and reliable parcel delivery solutions. Whether you're an individual sending a package across town or a business needing fast and secure freight transportation, we have the expertise and resources to meet your needs.</p>
-        <ul class="list-group">
-          <li class="list-group-item">Same-day and Next-day Delivery Options</li>
-          <li class="list-group-item">Real-time Tracking and Traceability</li>
-          <li class="group-item">Competitive Rates and Flexible Pricing Plans</li>
-          <li class="list-group-item">Secure Handling and On-time Deliveries</li>
-          <li class="list-group-item">Nationwide Coverage with Local Expertise</li>
-        </ul>
-      </div>
-      <div class="col-md-6">
-        <img src="/images/delivery-process.jpg" alt="Delivery Process" class="img-fluid">
-      </div>
+    <section class="benefits">
+      <h2>Benefits of ZipZap Delivery</h2>
+      <ul>
+        <li><img src="icons/fast-delivery.svg" alt="Fast Delivery"> Fast & Reliable Delivery</li>
+        <li><img src="icons/variety.svg" alt="Variety"> Wide Variety of Options</li>
+        <li><img src="icons/tracking.svg" alt="Tracking"> Real-time Tracking</li>
+        <li><img src="icons/payment.svg" alt="Payment"> Secure Payment Methods</li>
+        <li><img src="icons/rates.svg" alt="Rates"> Competitive Rates</li>
+      </ul>
     </section>
 
-    <section class="box row mt-5">
-      <div class="col-md-6">
-        <h2>Delivery Boxes for Every Need</h2>
-        <p>We offer a variety of shipping boxes to ensure your package arrives safely and securely. Choose from a range of sizes and materials to fit your specific needs.</p>
-        <a class="btn btn-info" href="{{ url_for('box_information') }}">Learn More</a>
-      </div>
-      <div class="col-md-6">
-        <img src="/images/boxes.jpg" alt="Delivery Boxes" class="img-fluid">
-      </div>
+    <section class="featured-partners">
+      <h2>Featured Partners</h2>
+      <img src="logos/partner1.png" alt="Partner Logo 1">
+      <img src="logos/partner2.png" alt="Partner Logo 2">
+      <img src="logos/partner3.png" alt="Partner Logo 3">
+    </section>
+
+    <section class="testimonials">
+      <h2>What People Are Saying</h2>
+      <blockquote>"ZipZap is my go-to for fast and convenient delivery. The app is easy to use and the tracking is great." - John Smith</blockquote>
+      <blockquote>"I love the variety of options available on ZipZap. I can get anything I need delivered right to my door." - Jane Doe</blockquote>
     </section>
   </main>
-
-  <footer class="container py-3 text-center text-light">
-    <p>&copy; {{ year }} Your Delivery Company Name. All Rights Reserved.</p>
-  </footer>
 {% endblock%}

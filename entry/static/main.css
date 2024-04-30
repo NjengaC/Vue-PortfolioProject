@@ -82,3 +82,13 @@ a.article-title:hover {
 .siderbars {
   position: fixed;
 }
+body {
+	  margin: 0;
+	    padding: 0;
+    }
+.logo {
+            float: left; /* Align the logo to the left */
+            margin-right: 20px; /* Add some space between the logo and other elements */
+            width: 50px; /* Set the width of the logo */
+            height: auto; /* Automatically adjust height while maintaining aspect ratio */
+        }

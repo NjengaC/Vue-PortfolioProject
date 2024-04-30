@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vue Delivery</title>
+    <title>Vue</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='../static/style.css') }}">
 </head>
 <body>
     <header>
@@ -85,4 +85,8 @@
         <a class="dropdown-item" href="{{ url_for('login_rider') }}">Login</a>
         <a class="dropdown-item" href="{{ url_for('register_rider') }}">Register</a>
     {% endif %}
+
 </div>
+<footer>
+   <p>&copy; 2024 ZipZap Delivery. All rights reserved.</p>
+</footer>
