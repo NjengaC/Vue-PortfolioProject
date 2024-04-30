@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Install Flask and related packages
+sudo apt install postgresql
 pip install Flask
 pip install Flask-WTF
 pip install Flask-Login
