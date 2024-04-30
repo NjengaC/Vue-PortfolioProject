@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<<<<<<< HEAD
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vue</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename='../static/style.css') }}">
+     {% if title %}
+        <title>Vue - {{ title }}</title>
+        {% else %}
+        <title>Vue</title>
+        {% endif %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/profiles.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
 </head>
 <body>
     <header>
@@ -55,47 +61,6 @@
                     {% endif %}
                 </ul>
             </div>
-=======
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-        {% if title %}
-        <title>Vue - {{ title }}</title>
-        {% else %}
-        <title>Vue</title>
-        {% endif %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles/profiles.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
-    </head>
-    <body>
-        <nav id="reg">
-            <ul>
-                <li id="spacer"><a href="{{ url_for('home') }}">Home</a></li>
-                <li id="spacer"><a href="{{ url_for('about') }}">Support</a></li>
-                {% if current_user.is_authenticated %}
-                {% if user.role == 'user' %}
-                <h1> Welcome {{ current_user.username }} </h1>
-                <li id="spacer"><a href="{{ url_for('request_pickup') }}">Request</a></li>
-                {% else %}
-                <h1> Welcome {{ current_user.name }} </h1>
-                <li id="spacer"><a href="#">Activate</a></li>
-                <li id="spacer"><a href="#">Deactivate</a></li>
-                {% endif %}
-                <li id="spacer"><a href="{{ url_for('logout') }}">Logout</a></li>
-                <li id="spacer"><a href="{{ url_for('edit_profile') }}">Profile</a></li>
-                {% else %}
-                <h1 >Welcome to Vue</h1>
-                <li id="spacer"><a href="{{ url_for('login') }}">Login</a></li>
-                <li id="spacer"><a href="{{ url_for('register') }}">Register</a></li>
-                <li id="spacer"><a href="{{ url_for('request_pickup') }}">Request</a></li>
-            </ul>
-            {% endif %}
->>>>>>> 336ef3965b318cb97dc531451010b6886242deed
         </nav>
         <div class="row">
             <div class="col-md-8">
@@ -111,7 +76,6 @@
 
                 {% block content %}{% endblock %}
             </div>
-<<<<<<< HEAD
             <div class="dropdown-menu" aria-labelledby="riderPanelDropdown">
     {% if current_user.is_authenticated %}
         {% if current_user.role.name == 'user' %}
@@ -129,10 +93,6 @@
     {% endif %}
 
 </div>
-<footer>
-   <p>&copy; 2024 ZipZap Delivery. All rights reserved.</p>
-</footer>
-=======
             <div class="col-md-4" class="sidebars">
                 <div class="content-section">
                     <h3>Sidebars</h3>
@@ -179,6 +139,7 @@
             <button onclick="location.href='{{ url_for('about') }}'">Who we are</button>
             <button onclick="location.href='{{ url_for('about') }}'">What we do</button>
             <button onclick="location.href='{{ url_for('about') }}'">Contacts</button>
+<p>&copy; 2024 Vue Delivery. All rights reserved.</p>
         </footer>
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -187,4 +148,3 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     </body>
 </html>
->>>>>>> 336ef3965b318cb97dc531451010b6886242deed
