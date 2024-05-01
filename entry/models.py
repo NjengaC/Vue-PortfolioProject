@@ -21,6 +21,8 @@ class User(db.Model, UserMixin):
 
 
 class Rider(db.Model, UserMixin):
+    __tablename__ = 'rider'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     contact_number = db.Column(db.String(20), unique=True, nullable=False)
@@ -34,11 +36,14 @@ class Rider(db.Model, UserMixin):
     role = db.Column(db.String(20), nullable=False)
     status = db.Column(db.String(20), default='available')
 
+    assigned_parcels = db.relationship('Parcel', back_populates='assigned_rider')
+
     def __repr__(self):
         return f"Rider('{self.name}', '{self.contact_number}', '{self.vehicle_type}', '{self.area_of_operation}', '{self.availability}')"
 
 
 class Parcel(db.Model):
+    __tablename__ = 'parcel'
     id = db.Column(db.Integer, primary_key=True)
     sender_name = db.Column(db.String(100), nullable=False)
     sender_email = db.Column(db.String(100), nullable=False)
@@ -48,12 +53,21 @@ class Parcel(db.Model):
     pickup_location = db.Column(db.String(255), nullable=False)
     delivery_location = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(400), nullable=False)
-    rider_id = db.Column(db.Integer, db.ForeignKey('rider.id'))
+    rider_id = db.Column(db.Integer, db.ForeignKey('rider.id'), nullable=True)
     status = db.Column(db.String(20), default='pending')
 
-    rider = db.relationship('Rider', backref=db.backref('parcels', lazy=True))
+    assigned_rider = db.relationship('Rider', back_populates='assigned_parcels', overlaps='rider')
+    lifecycle = db.relationship('ParcelLifecycle', backref='parcel', lazy=True)
+
     def __repr__(self):
-        return f"Parcel('{self.parcel_name}', '{self.sender_name}', '{self.receiver_name}', '{self.status}')"
+        return f"Parcel('{self.id}', '{self.sender_name}', '{self.receiver_name}', '{self.status}')"
+
+
+class ParcelLifecycle(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    parcel_id = db.Column(db.Integer, db.ForeignKey('parcel.id'), nullable=False)
+    status = db.Column(db.String(20), nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 
 class Admin(db.Model, UserMixin):

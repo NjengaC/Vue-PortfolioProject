@@ -37,13 +37,10 @@ To run the app in development mode, follow these steps:
 
 Ensure you have Python 3 installed on your system.
 Install the required dependencies by running:
-Copy code
-pip install -r requirements.txt
+sudo ./flask_installs
 Navigate to the project's root directory.
 Run the following command:
-arduino
-Copy code
+
 python3 run.py
 Access the app in your web browser at http://localhost:5000.
-Legal and Regulatory Considerations
-Before operating the parcel sending service, ensure compliance with any legal or regulatory requirements for operating in Kenya.
+No Legal and Regulatory Considerations in until deployment!
