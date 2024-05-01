@@ -24,7 +24,7 @@ import geopy.exc
 @app.route('/home')
 def home():
     if current_user.is_authenticated:
-        return render_template('home_authenticated.html', title='Home', user=current_user)
+        logout()
     return render_template('home.html', title='Home')
 
 
@@ -143,7 +143,8 @@ def login_rider():
             if bcrypt.check_password_hash(rider.password, form.password.data):
                 login_user(rider)
                 flash('Rider login successful!', 'success')
-                return render_template('rider_dashboard.html', title='Rider\'s dashboard', user=rider)
+                pending_assignments = Parcel.query.filter(Parcel.status == 'allocated', Parcel.rider_id==rider.id).first()
+                return render_template('view_assignments.html', title='Rider\'s dashboard', user=rider, assignment=pending_assignments)
             else:
                 flash('Invalid password. Please try again.', 'danger')
         else:
@@ -240,44 +241,30 @@ def calculate_distance(location1, location2):
     distance = geodesic(pickup_location, current).kilometers
     return distance
 
-def rider_required(func):
-    @wraps(func)
-    def decorated_view(*args, **kwargs):
-        if not current_user.is_authenticated or current_user.role != 'rider':
-            return redirect(url_for('login_rider'))
-        return func(*args, **kwargs)
-    return decorated_view
+@app.route('/update_assignment', methods=['POST'])
+def update_assignment():
+    data = request.json
+    parcel_id = data.get('parcel_id')
+    action = data.get('action')
 
-@app.route('/view_assignments', methods=['GET', 'POST'])
-@login_required
-def view_assignments():
-    if current_user.is_authenticated:
-        if current_user.role == 'rider':
-            pending_assignments = Parcel.query.filter(Parcel.status == 'allocated').all()
-            if request.method == 'POST':
-                parcel_id = request.form.get('id')
-                action = request.form.get('action')
-                assignment = Parcel.query.filter(Parcel.id==parcel_id).first()
-                if assignment:
-                    if action == 'accept':
-                        assignment.status = 'in_progress'
-                        db.session.commit()
-                        flash('You have accepted the delivery assignment.', 'success')
-                    elif action == 'deny':
-                        assignment.status = 'pending'
-                        assignment.rider_id = None
-                        flash('You have denied the delivery assignment. Parcel will be re-allocated.', 'info')
-                    db.session.commit()
-                else:
-                    flash('Delivery assignment not found.', 'error')
-            return redirect(url_for('rider_dashboard'))
+    assignment = Parcel.query.filter_by(id=parcel_id, status='allocated').first()
+
+    if assignment:
+        if action == 'accept':
+            assignment.status = 'in_progress'
+            db.session.commit()
+            return jsonify({'success': True})
+        elif action == 'deny':
+            assignment.status = 'pending'
+            assignment.rider_id = None
+            db.session.commit()
+            return jsonify({'success': True})
         else:
-            return redirect(url_for('rider_login'))
-    return render_template('view_assignments.html')
-
+            return jsonify({'error': 'Invalid action'}), 400
+    else:
+        return jsonify({'error': 'Assignment not found or already accepted/denied'}), 404
 
 @app.route('/track_assignment/<int:id>')
-@rider_required
 def track_assignment(id):
     assignment = Parcel.query.get(id)
     if assignment and assignment.rider_id == current_user.id:
