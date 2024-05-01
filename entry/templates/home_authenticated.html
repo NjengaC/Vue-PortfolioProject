@@ -1,20 +1,57 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="contain">
-        <main>
-            <!-- Main content for authenticated users -->
-            <section class="authenticated-content">
-                <h2>Authenticated User Section</h2>
-                <p>This section contains content specific to authenticated users.</p>
-                
-                <!-- Buttons/Links for user actions -->
-                <div class="user-actions">
-                    <button onclick="location.href='{{ url_for('send_parcel') }}'">Send Parcel</button>
+    <main>
+        <!-- Main content for authenticated users -->
+        <section class="authenticated-content">
+            <h3>Welcome to our parcel pickup/delivery service. Here you can easily manage your parcel deliveries and shipments.</h3>
+
+            <!-- User Actions -->
+            <div class="user-actions">
+                <!-- Send Parcel -->
+                <div class="action-item">
+                    <h3>Send Parcel</h3>
+                    <p>Need to send a parcel? Click below to initiate a new parcel delivery request.</p>
+                    <button onclick="location.href='{{ url_for('request_pickup') }}'">Send Parcel</button>
+                </div>
+
+                <!-- View Shipping Providers -->
+                <div class="action-item">
+                    <h3>View Available Riders Here</h3>
+                    <p>Explore our list of shipping providers and their services.</p>
                     <button onclick="location.href='{{ url_for('view_shipping_providers') }}'">View Shipping Providers</button>
+                </div>
+
+                <!-- Track Parcel -->
+                <div class="action-item">
+                    <h3>Track Parcel</h3>
+                    <p>Track the status of your parcels in real-time.</p>
+                    <button onclick="location.href='{{ url_for('track_parcel') }}'">Track Parcel</button>
+                </div>
+
+                <!-- Edit Profile -->
+                <div class="action-item">
+                    <h3>Edit Profile</h3>
+                    <p>Update your profile information, including contact details and preferences.</p>
                     <button onclick="location.href='{{ url_for('edit_profile') }}'">Edit Profile</button>
                 </div>
-            </section>
-            <!-- Additional sections can be added here as needed -->
-        </main>
+
+                <!-- Request Pickup -->
+                <div class="action-item">
+                    <h3>Request Pickup</h3>
+                    <p>Schedule a pickup for your parcels at your convenience.</p>
+                    <button onclick="location.href='{{ url_for('request_pickup') }}'">Request Pickup</button>
+                </div>
+
+                <!-- View Order History -->
+                <div class="action-item">
+                    <h3>View Order History</h3>
+                    <p>Review your past parcel delivery and shipment orders.</p>
+                    <button onclick="location.href='{{ url_for('track_parcel') }}'">View Order History</button>
+                </div>
+            </div>
+        </section>
+        <!-- Additional sections can be added here as needed -->
+    </main>
 </div>
 {% endblock content %}

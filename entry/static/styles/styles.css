@@ -56,6 +56,11 @@ nav ul li a:hover {
   background-color: #333;
   color: #fff;
 }
+.btn-outline-primary {
+  color: #007bff; /* Blue color */
+  border-color: #007bff; /* Blue color */
+  background-color: transparent;
+}
 main {
   display:inline-block;
   justify-content: space-between;
@@ -65,7 +70,7 @@ main {
 }
 
 footer {
-  display:inline-block;
+  display:block;
   justify-content: space-between;
   align-items: center;
   margin: auto;
@@ -98,10 +103,8 @@ section.companies {
 
 #reg a{
   padding: 10px 20px;
-  color: #333;
   cursor: pointer;
   margin: 10px;
-  background-color: #ffcc99;
 }
 
 #reg a:hover {
@@ -109,7 +112,7 @@ section.companies {
   color: #fff;
 }
 #reg {
-  background-color: black;
+  background-color: skyblue;
 }
 #companies:hover {
   background-color: #333;
