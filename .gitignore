@@ -1,2 +1,6 @@
 entry/__pycache__/*.pyc
 entry/__pycache__/__init__.cpython-38.pyc
+entry/__pycache__/__init__.cpython-38.pyc
+entry/__pycache__/forms.cpython-38.pyc
+entry/__pycache__/models.cpython-38.pyc
+entry/__pycache__/routes.cpython-38.pyc
