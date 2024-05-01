@@ -32,12 +32,15 @@ header {
   text-align: center;
   align: center;
 }
-
+nav ul {
+list-style-type: none;
+margin: 0;
+padding: 0;
+}
 
 nav ul li {
-  display: flex;
-  margin-right: 10px;
-  float: right;
+  display: inline-block;
+  margin-right: 20px;
 }
 
 nav ul li a {
@@ -50,7 +53,7 @@ nav ul li a {
 }
 
 .list-group ul li a {
-	color: lightblue;
+	color: navy;
 }
 nav ul li a:hover {
   background-color: #333;
@@ -100,20 +103,23 @@ footer {
 section.companies {
   text-align: center;
 }
+#reg {
+  padding: 20px; /* Adjust padding for better spacing */
+  background-color: #007bff; /* Change to a blue color */
+  color: #fff; /* Set text color to white */
+}
 
-#reg a{
+#reg a {
   padding: 10px 20px;
   cursor: pointer;
   margin: 10px;
+  color: #fff; /* Set link text color to white */
 }
 
 #reg a:hover {
-  background-color: #333;
-  color: #fff;
+  background-color: #0056b3; /* Darken the background color on hover */
 }
-#reg {
-  background-color: skyblue;
-}
+
 #companies:hover {
   background-color: #333;
   color: #fff;
