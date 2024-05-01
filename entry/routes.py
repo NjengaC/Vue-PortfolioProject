@@ -272,7 +272,7 @@ def view_assignments():
                     flash('Delivery assignment not found.', 'error')
             return redirect(url_for('rider_dashboard'))
         else:
-            return redirect(url_for('rider_login'))
+            return redirect(url_for('login_rider'))
     return render_template('view_assignments.html')
 
 
