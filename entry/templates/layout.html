@@ -16,6 +16,8 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='styles/profiles.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/dashboard.css') }}">
     </head>
     <body class="container">
         <header>
@@ -25,7 +27,7 @@
                         <li id="spacer"><a href="{{ url_for('home') }}">Home</a></li>
                         <li id="spacer"><a href="{{ url_for('about') }}">Support</a></li>
                         {% if current_user.is_authenticated %}
-			    {% if user.role == 'user' %}
+			    {% if current_user.role == 'user' %}
                         <h1> Welcome {{ current_user.username }} </h1>
 			<li id="spacer"><a href="{{ url_for('request_pickup') }}">Request</a></li>
 			    {% else %}
@@ -68,7 +70,7 @@
                         <li class="list-group-item list-group-item-light dropdown">
                             <a class="dropdown-toggle" href="#" role="button" id="riderPanelDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {% if current_user.is_authenticated %}
-		        {% if user.role == 'rider' %}
+		        {% if current_user.role == 'rider' %}
 			    Dashboard
 			{% else %}
 			    My Parcels

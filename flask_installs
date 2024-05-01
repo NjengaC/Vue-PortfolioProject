@@ -13,3 +13,6 @@ pip install flask_sslify
 pip install flask_mail
 pip install geopy
 pip install geoalchemy2
+pip install Flask-Mail
+pip install twilio
+pip install retrying
