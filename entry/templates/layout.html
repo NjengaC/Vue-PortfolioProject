@@ -25,59 +25,10 @@
         <nav id="reg">
 	    <section id="mySidenav" class="sidenav">
 	        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-		<a href="#">About</a>
-		<a href="#">Services</a>
-		<a href="#">Clients</a>
-		<a href="#">Contact</a>
-	    </section>
-
-            <ul>
-                <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
-                <li id="spacer"><a href="{{ url_for('home') }}">Home</a></li>
-                <li id="spacer"><a href="{{ url_for('about') }}">Support</a></li>
-                {% if current_user.is_authenticated %}
-                {% if user.role == 'user' %}
-                <h1> Welcome {{ current_user.username }} </h1>
-                <li id="spacer"><a href="{{ url_for('request_pickup') }}">Request</a></li>
-                {% else %}
-                <h1> Welcome {{ current_user.name }} </h1>
-                <li id="spacer"><a href="#">Activate</a></li>
-                <li id="spacer"><a href="#">Deactivate</a></li>
-                {% endif %}
-                <li id="spacer"><a href="{{ url_for('logout') }}">Logout</a></li>
-                <li id="spacer"><a href="{{ url_for('edit_profile') }}">Profile</a></li>
-                {% else %}
-                <h1 >Welcome to Vue</h1>
-                <li id="spacer"><a href="{{ url_for('login') }}">Login</a></li>
-                <li id="spacer"><a href="{{ url_for('register') }}">Register</a></li>
-                <li id="spacer"><a href="{{ url_for('request_pickup') }}">Request</a></li>
-		<a class="btn btn-outline-primary btn-lg mx-2" href="{{ url_for('track_parcel') }}">Track Parcel</a>
-            </ul>
-
-            {% endif %}
-        </nav>
-        <div class="row">
-            <div class="col-md-8">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">
-                    {{ message }}
-                </div>
-                {% endfor %}
-                {% endif %}
-                {% endwith %}
-
-                {% block content %}{% endblock %}
-            </div>
-            <div id="sidebar" class="col-md-4">
-                <div class="content-section">
                     <h3>Sidebars</h3>
                     <p class='text-muted'>Need Some Help?</p>
-                    <ul class="list-group">
-                        <li class="list-group-item list-group-item-light"><a href="{{ url_for('register') }}">History</a></li>
-                        <li class="list-group-item list-group-item-light"><a href="{{ url_for('register_rider') }}">Settings</a></li>
-                        <li class="list-group-item list-group-item-light dropdown">
+                        <a href="{{ url_for('register') }}">History</a>
+                        <a href="{{ url_for('register_rider') }}">Settings</a>
                             <a class="dropdown-toggle" href="#" role="button" id="riderPanelDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {% if current_user.is_authenticated %}
                                 {% if user.role == 'rider' %}
@@ -105,17 +56,54 @@
                                 <a class="dropdown-item" href="{{ url_for('register_rider') }}">Register</a>
                                 {% endif %}
                             </div>
-                        </li>
-                        <li class="list-group-item list-group-item-light"><a href="{{ url_for('register_rider') }}">Notifications</a></li>
-                    </ul>
-                    </p>
+                        <a href="{{ url_for('register_rider') }}">Notifications</a>
+	    </section>
+
+            <ul>
+                <span style="font-size:40px;cursor:pointer;margin:0 30px" onclick="openNav()">&#9776; </span>
+                <li id="spacer"><a href="{{ url_for('home') }}">Home</a></li>
+                <li id="spacer"><a href="{{ url_for('about') }}">Support</a></li>
+                {% if current_user.is_authenticated %}
+                {% if user.role == 'user' %}
+                <h1> Welcome {{ current_user.username }} </h1>
+                <li id="spacer"><a href="{{ url_for('request_pickup') }}">Request</a></li>
+                {% else %}
+                <h1> Welcome {{ current_user.name }} </h1>
+                <li id="spacer"><a href="#">Activate</a></li>
+                <li id="spacer"><a href="#">Deactivate</a></li>
+                {% endif %}
+                <li id="spacer"><a href="{{ url_for('logout') }}">Logout</a></li>
+                <li id="spacer"><a href="{{ url_for('edit_profile') }}">Profile</a></li>
+                {% else %}
+                <h1 >Welcome to Vue</h1>
+                <li id="spacer"><a href="{{ url_for('login') }}">Login</a></li>
+                <li id="spacer"><a href="{{ url_for('register') }}">Register</a></li>
+                <li id="spacer"><a href="{{ url_for('request_pickup') }}">Request</a></li>
+		<a class="btn btn-outline-primary btn-lg mx-2" href="{{ url_for('track_parcel') }}">Track Parcel</a>
+            </ul>
+
+            {% endif %}
+        </nav>
+        <div class="row">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
                 </div>
-            </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
         </div>
+	<div>
+                {% block content %}{% endblock %}
+	</div>
         <footer>
             <button onclick="location.href='{{ url_for('about') }}'">Who we are</button>
             <button onclick="location.href='{{ url_for('about') }}'">What we do</button>
             <button onclick="location.href='{{ url_for('about') }}'">Contacts</button>
+	     <p>&copy; 2024 Vue HomePage. All rights reserved.</p>
         </footer>
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->

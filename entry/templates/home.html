@@ -4,10 +4,6 @@
     <section class="hero mb-5">
       <h1 class="display-4 text-center text-light">Fast, Reliable Delivery Services Made Easy</h1>
       <p class="lead text-center text-light">Get your parcels delivered quickly and securely, anywhere, anytime.</p>
-      <div class="button-container d-flex justify-content-center">
-        <a class="btn btn-primary btn-lg mx-2" href="{{ url_for('get_quote') }}">Get a Quote</a>
-        <a class="btn btn-outline-primary btn-lg mx-2" href="{{ url_for('track_parcel') }}">Track Parcel</a>
-      </div>
     </section>
 
     <section class="services row">
@@ -37,6 +33,9 @@
         <img src="/images/boxes.jpg" alt="Delivery Boxes" class="img-fluid">
       </div>
     </section>
+      <div class="button-container d-flex justify-content-center">
+        <a class="btn btn-primary btn-lg mx-2" href="{{ url_for('register_rider') }}">Get Started as a Rider</a>
+      </div>
   </div>
 
 {% endblock%}
