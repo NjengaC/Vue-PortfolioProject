@@ -143,7 +143,7 @@ def login_rider():
             if bcrypt.check_password_hash(rider.password, form.password.data):
                 login_user(rider)
                 flash('Rider login successful!', 'success')
-                return render_template('view_assignments.html', title='Rider\'s dashboard', user=rider)
+                return render_template('rider_dashboard.html', title='Rider\'s dashboard', user=rider)
             else:
                 flash('Invalid password. Please try again.', 'danger')
         else:
@@ -249,23 +249,18 @@ def rider_required(func):
     return decorated_view
 
 @app.route('/view_assignments', methods=['GET', 'POST'])
-@rider_required
+@login_required
 def view_assignments():
     if current_user.is_authenticated:
         if current_user.role == 'rider':
-            if request.method == 'GET':
-                pending_assignments = db.session.query(Parcel, Rider).join(Rider).filter(Parcel.rider_id == current_user.id, Parcel.status == 'pending').all()
-                in_progress_assignments = db.session.query(Parcel, Rider).join(Rider).filter(Parcel.rider_id == current_user.id, Parcel.status == 'in-progress').all()
-                return render_template('view_assignments.html', pending_assignments=pending_assignments, in_progress_assignments=in_progress_assignments)
-            elif request.method == 'POST':
+            pending_assignments = Parcel.query.filter(Parcel.status == 'allocated').all()
+            if request.method == 'POST':
                 parcel_id = request.form.get('id')
                 action = request.form.get('action')
-                assignment = Parcel.query.get(parcel_id)
+                assignment = Parcel.query.filter(Parcel.id==parcel_id).first()
                 if assignment:
                     if action == 'accept':
                         assignment.status = 'in_progress'
-                        lifecycle_entry = ParcelLifecycle(parcel_id=assignment.id, status='in-progress')
-                        db.session.add(lifecycle_entry)
                         db.session.commit()
                         flash('You have accepted the delivery assignment.', 'success')
                     elif action == 'deny':
@@ -275,10 +270,10 @@ def view_assignments():
                     db.session.commit()
                 else:
                     flash('Delivery assignment not found.', 'error')
-            return redirect(url_for('view_assignments'))
+            return redirect(url_for('rider_dashboard'))
         else:
-            flash('You are not authorized to view this page.', 'danger')
-    return redirect(url_for('home'))
+            return redirect(url_for('rider_login'))
+    return render_template('view_assignments.html')
 
 
 @app.route('/track_assignment/<int:id>')
@@ -298,5 +293,5 @@ def notify_rider_new_assignment(rider_email, parcel):
     Trigger notification when assigning a parcel to a rider
     """
     msg = Message('New Delivery Assignment', recipients=[rider_email])
-    msg.body = f'Hey, you have a new delivery assignment:\n\n{parcel}\n\nClick here to view and accept: http://vue.com/view_assignments'
+    msg.body = f'Hey, you have a new delivery assignment:\n\n{parcel}\n\nClick here to view and accept: http://127.0.0.1:5000/view_assignments'
     mail.send(msg)
