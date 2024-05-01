@@ -282,5 +282,3 @@ def notify_rider_new_assignment(rider_email, parcel):
     msg = Message('New Delivery Assignment', recipients=[rider_email])
     msg.body = f'Hey, you have a new delivery assignment:\n\n{parcel}\n\nClick here to view and accept: http://127.0.0.1:5000/view_assignments'
     mail.send(msg)
-    flash('Delivery assignment not found.', 'error')
-    return redirect(url_for('view_assignments'))
