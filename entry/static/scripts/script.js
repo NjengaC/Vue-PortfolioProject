@@ -84,4 +84,9 @@ function showRiders() {
 				        riderList.style.display = 'none';
  }
 }
+<script>
+	    document.getElementById("login").addEventListener("click", function() {
+		            window.location.href = "{{ url_for('login_rider') }}";
+		        });
+</script>
 
