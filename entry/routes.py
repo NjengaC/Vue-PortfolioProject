@@ -144,7 +144,7 @@ def login_rider():
                 login_user(rider)
                 flash('Rider login successful!', 'success')
                 pending_assignments = Parcel.query.filter(Parcel.status == 'allocated', Parcel.rider_id==rider.id).first()
-                return render_template('view_assignments.html', title='Rider\'s dashboard', user=rider, assignment=pending_assignments)
+                return render_template('view_assignments.html', title='Rider\'s dashboard', user=current_user, assignment=pending_assignments, rider=current_user)
             else:
                 flash('Invalid password. Please try again.', 'danger')
         else:
@@ -217,6 +217,26 @@ def allocate_parcel(parcel):
         }
     else:
         return {'success': False, 'message': 'Allocation in progress. Please wait for a rider to be assigned.'}
+
+def toggle_rider_status(rider_id):
+    """
+    Toggles the status of the rider between available and unavailable
+    """
+    rider = Rider.query.get(rider_id)
+    if rider:
+        if rider.status == 'available':
+            rider.status = 'unavailable'
+        else:
+            rider.status = 'available'
+        db.session.commit()
+        return jsonify({'status': rider.status})
+
+@app.route('/toggle_rider_status/<int:rider_id>', methods=['POST'])
+def toggle_rider_status_route(rider_id):
+    """
+    Route to handle the AJAX request for toggling rider status
+    """
+    return toggle_rider_status(rider_id)
 
 
 @retrying.retry(wait_exponential_multiplier=1000, wait_exponential_max=10000)
