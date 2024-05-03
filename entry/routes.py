@@ -88,6 +88,9 @@ def send_parcel():
     # Implement the functionality for sending parcels here
     return render_template('track_parcel.html')
 
+@app.route('/sendparcel')
+def sendparcel():
+            return render_template('sendparcel.html')
 
 @app.route('/view_shipping_providers')
 def view_shipping_providers():
@@ -101,6 +104,17 @@ def update():
 def about():
     # Implement the functionality for sending parcels here
     return render_template('about.html')
+@app.route('/viewavailableriders')
+def viewavailableriders():
+        return render_template('viewavailableriders.html')
+
+@app.route('/requestpickup')
+def requestpickup():
+    return render_template('requestpickup.html')
+
+@app.route('/vieworderhistory')
+def vieworderhistory():
+    return render_template('vieworderhistory.html')
 
 
 @app.route('/register_rider', methods=['GET', 'POST'])

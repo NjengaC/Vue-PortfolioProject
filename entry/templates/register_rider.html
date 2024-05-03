@@ -1,72 +1,126 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rider Registration</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">
+    <!-- Custom CSS (if any) -->
+    <link rel="stylesheet" href="path/to/your/custom.css">
 
-{% block content %}
-<div class="content-section">
-    <h2>Rider Registration</h2>
-    <form method="POST">
-        {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Register as a Rider</legend>
-            <div class="form-group">
-                {{ form.name.label(class="form-control-label") }}
-                {{ form.name(class="form-control form-control-lg") }}
-                {% for error in form.name.errors %}
-                <span class="text-danger">{{ error }}</span>
-                {% endfor %}
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Bootstrap Bundle (includes Popper.js) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <!-- Your Custom JavaScript File -->
+    <script src="path/to/your/custom.js"></script>
+</head>
+<body>
+<div class="container-fluid" id="grad1">
+    <div class="row justify-content-center mt-0">
+        <div class="col-11 col-sm-9 col-md-7 col-lg-6 text-center p-0 mt-3 mb-2">
+            <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
+                <h2><strong>Rider Registration</strong></h2>
+                <p>Fill all form fields to complete registration</p>
+                <div class="row">
+                    <div class="col-md-12 mx-0">
+                        <form method="POST">
+                            {{ form.hidden_tag() }}
+                            <!-- progressbar -->
+                            <ul id="progressbar">
+                                <li class="active" id="account"><strong>Account</strong></li>
+                                <li id="personal"><strong>Personal</strong></li>
+                                <li id="payment"><strong>Payment</strong></li>
+                                <li id="confirm"><strong>Finish</strong></li>
+                            </ul>
+                            <!-- fieldsets -->
+                            <fieldset>
+                                <div class="form-card">
+                                    <h2 class="fs-title">Account Information</h2>
+                                    <div class="form-group">
+                                        {{ form.email(class="form-control", placeholder="Email Id") }}
+                                        {% for error in form.email.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.password(class="form-control", placeholder="Password") }}
+                                        {% for error in form.password.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.confirm_password(class="form-control", placeholder="Confirm Password") }}
+                                        {% for error in form.confirm_password.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <input type="button" name="next" class="next action-button" value="Next Step"/>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-card">
+                                    <h2 class="fs-title">Personal Information</h2>
+                                    <div class="form-group">
+                                        {{ form.name(class="form-control", placeholder="Full Name") }}
+                                        {% for error in form.name.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.contact_number(class="form-control", placeholder="Contact Number") }}
+                                        {% for error in form.contact_number.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <!-- Include additional personal info fields as needed -->
+                                </div>
+                                <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
+                                <input type="button" name="next" class="next action-button" value="Next Step"/>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-card">
+                                    <h2 class="fs-title">Vehicle Information</h2>
+                                    <div class="form-group">
+                                        {{ form.vehicle_type(class="form-control", placeholder="Vehicle Type") }}
+                                        {% for error in form.vehicle_type.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.vehicle_registration(class="form-control", placeholder="Vehicle Registration") }}
+                                        {% for error in form.vehicle_registration.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <!-- Include additional vehicle info fields as needed -->
+                                </div>
+                                <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
+                                <input type="button" name="next" class="next action-button" value="Next Step"/>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-card">
+                                    <h2 class="fs-title">Finish Registration</h2>
+                                    <div class="form-group">
+                                        {{ form.area_of_operation(class="form-control", placeholder="Area of Operation") }}
+                                        {% for error in form.area_of_operation.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <!-- Include additional fields as needed -->
+                                </div>
+                                <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
+                                <input type="submit" class="btn btn-outline-info" value="Submit"/>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                {{ form.contact_number.label(class="form-control-label") }}
-                {{ form.contact_number(class="form-control form-control-lg") }}
-                {% for error in form.contact_number.errors %}
-                <span class="text-danger">{{ error }}</span>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                {{ form.email.label(class="form-control-label") }}
-                {{ form.email(class="form-control form-control-lg") }}
-                {% for error in form.email.errors %}
-                <span class="text-danger">{{ error }}</span>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                {{ form.vehicle_type.label(class="form-control-label") }}
-                {{ form.vehicle_type(class="form-control form-control-lg") }}
-                {% for error in form.vehicle_type.errors %}
-                <span class="text-danger">{{ error }}</span>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                {{ form.vehicle_registration.label(class="form-control-label") }}
-                {{ form.vehicle_registration(class="form-control form-control-lg") }}
-                {% for error in form.vehicle_registration.errors %}
-                <span class="text-danger">{{ error }}</span>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                {{ form.area_of_operation.label(class="form-control-label") }}
-                {{ form.area_of_operation(class="form-control form-control-lg") }}
-                {% for error in form.area_of_operation.errors %}
-                <span class="text-danger">{{ error }}</span>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                {{ form.password.label(class="form-control-label") }}
-                {{ form.password(class="form-control form-control-lg") }}
-                {% for error in form.password.errors %}
-                <span class="text-danger">{{ error }}</span>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                {{ form.confirm_password.label(class="form-control-label") }}
-                {{ form.confirm_password(class="form-control form-control-lg") }}
-                {% for error in form.confirm_password.errors %}
-                <span class="text-danger">{{ error }}</span>
-                {% endfor %}
-            </div>
-        </fieldset>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info") }}
         </div>
-    </form>
+    </div>
 </div>
-{% endblock %}
+</body>
+</html>
