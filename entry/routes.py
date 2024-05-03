@@ -127,10 +127,11 @@ def register_rider():
         try:
             db.session.commit()
             flash('Rider registration successful!', 'success')
+            return redirect(url_for('login_rider'))
         except IntegrityError:
             db.session.rollback()
             flash('User with details provided already exists. Please check Name, contact or Vehicle Registration', 'danger')
-            return redirect(url_for('login_rider'))
+            return render_template('register_rider.html', title='Register Rider', form=form)
     return render_template('register_rider.html', title='Register Rider', form=form)
 
 @app.route('/login_rider', methods=['GET', 'POST'])
