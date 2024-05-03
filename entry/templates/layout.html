@@ -18,6 +18,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
 
         <link rel="stylesheet" href="{{ url_for('static', filename='styles/dashboard.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='scripts/dashboard.js') }}">
     </head>
     <body class="container">
         <header>
@@ -32,6 +33,19 @@
 			<li id="spacer"><a href="{{ url_for('request_pickup') }}">Request</a></li>
 			    {% else %}
 			     <h1> Welcome {{ current_user.name }} </h1>
+<<<<<<< HEAD
+                    		<label class="toggle-switch">
+					<input class="toggle-switch-check" type="checkbox" onclick="toggleRiderStatus({{ rider.id }})" />
+                        		<span class="toggle-switch-label">Available</span>
+					<span aria-hidden="true" class="toggle-switch-bar">
+						<span class="toggle-switch-handle" data-label-off="Available" data-label-on="Unavailable"></span>
+					</span>
+                    		</label>
+            		{% endif %}
+            		<li id="spacer"><a href="{{ url_for('logout') }}">Logout</a></li>
+            		<li id="spacer"><a href="{{ url_for('edit_profile') }}">Profile</a></li>
+        	{% else %}
+=======
 			     <div class="toggle-switch">
 			         <input type="checkbox" id="toggle" class="toggle-input" data-rider-id="{{ current_user.id }}" {% if status %} checked {% endif %} onchange="updateRiderStatus()"> 
                                <label for="toggle" class="toggle-label"></label>
@@ -40,6 +54,7 @@
                         <li id="spacer"><a href="{{ url_for('logout') }}">Logout</a></li>
                         <li id="spacer"><a href="{{ url_for('edit_profile') }}">Profile</a></li>
                         {% else %}
+>>>>>>> 319c29311d7d4b5ce8883d48b4b471cf62e2e189
                         <h1 >Welcome to Vue</h1>
                         <li id="spacer"><a href="{{ url_for('login') }}">Login</a></li>
                         <li id="spacer"><a href="{{ url_for('register') }}">Register</a></li>

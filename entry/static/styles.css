@@ -172,3 +172,63 @@ form {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+
+/* Custom styles for the toggle switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.toggle-switch-check {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-switch-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-switch-check:checked + .toggle-switch-label {
+    background-color: #2196F3;
+}
+
+.toggle-switch-bar {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: calc(50% - 2px);
+    bottom: 2px;
+    background-color: white;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+.toggle-switch-check:checked + .toggle-switch-label .toggle-switch-bar {
+    transform: translateX(100%);
+}
+
+.toggle-switch-handle {
+    position: absolute;
+    top: 2px;
+    left: calc(50% - 13px);
+    width: 22px;
+    height: 22px;
+    background-color: white;
+    border-radius: 50%;
+    transition: left 0.3s ease;
+}
+
+.toggle-switch-check:checked + .toggle-switch-label .toggle-switch-handle {
+    left: calc(100% - 2px);
+}
