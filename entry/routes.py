@@ -127,16 +127,16 @@ def register_rider():
         try:
             db.session.commit()
             flash('Rider registration successful!', 'success')
-            return redirect(url_for('login_rider'))
         except IntegrityError:
             db.session.rollback()
-            flash('Username already exists. Please choose a different username.', 'danger')
-            return redirect(url_for('register_rider'))
+            flash('User with details provided already exists. Please check Name, contact or Vehicle Registration', 'danger')
+            return redirect(url_for('login_rider'))
     return render_template('register_rider.html', title='Register Rider', form=form)
 
 @app.route('/login_rider', methods=['GET', 'POST'])
 def login_rider():
     form = LoginRiderForm()
+    status = None
     if form.validate_on_submit():
         rider = Rider.query.filter_by(contact_number=form.contact_number.data).first()
         if rider:
@@ -144,7 +144,13 @@ def login_rider():
                 login_user(rider)
                 flash('Rider login successful!', 'success')
                 pending_assignments = Parcel.query.filter(Parcel.status == 'allocated', Parcel.rider_id==rider.id).first()
+<<<<<<< HEAD
                 return render_template('view_assignments.html', title='Rider\'s dashboard', user=current_user, assignment=pending_assignments, rider=current_user)
+=======
+                if rider.status == 'available':
+                    status = 'available'
+                return render_template('view_assignments.html', title='Rider\'s dashboard', user=rider, assignment=pending_assignments, status=status)
+>>>>>>> 319c29311d7d4b5ce8883d48b4b471cf62e2e189
             else:
                 flash('Invalid password. Please try again.', 'danger')
         else:
@@ -247,7 +253,8 @@ def calculate_distance(location1, location2):
     Implements distance calculation logic
     It uses the location format: (latitude, longitude)
     """
-    geolocator = Nominatim(user_agent='myapplication')
+    user_agent = 'MyGeocodingApp/1.0 (victorcyrus01@gmail.com)'
+    geolocator = Nominatim(user_agent=user_agent)
     location1 = geolocator.geocode(location1)
     location2 = geolocator.geocode(location2)
     current = location1.latitude, location1.longitude
@@ -278,6 +285,22 @@ def update_assignment():
             return jsonify({'error': 'Invalid action'}), 400
     else:
         return jsonify({'error': 'Assignment not found or already accepted/denied'}), 404
+
+
+@app.route('/update_rider_status', methods=['POST'])
+def update_rider_status():
+    data = request.json
+    rider_id = data.get('rider_id')
+    status = data.get('status')
+
+    rider = Rider.query.filter_by(id=rider_id).first()
+    if rider:
+        rider.status = status
+        db.session.commit()
+        return jsonify({'success': True})
+    else:
+        return jsonify({'error': 'Rider not found'}), 404
+
 
 @app.route('/track_assignment/<int:id>')
 def track_assignment(id):
