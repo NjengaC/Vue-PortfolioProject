@@ -218,11 +218,13 @@ def allocate_parcel(parcel):
     else:
         return {'success': False, 'message': 'Allocation in progress. Please wait for a rider to be assigned.'}
 
+
+@app.route('/toggle_rider_status/<int:rider_id>', methods=['POST'])
 def toggle_rider_status(rider_id):
     """
     Toggles the status of the rider between available and unavailable
     """
-    rider = Rider.query.get(rider_id)
+    rider = Rider.query.filter(rider_id).first()
     if rider:
         if rider.status == 'available':
             rider.status = 'unavailable'
@@ -230,13 +232,6 @@ def toggle_rider_status(rider_id):
             rider.status = 'available'
         db.session.commit()
         return jsonify({'status': rider.status})
-
-@app.route('/toggle_rider_status/<int:rider_id>', methods=['POST'])
-def toggle_rider_status_route(rider_id):
-    """
-    Route to handle the AJAX request for toggling rider status
-    """
-    return toggle_rider_status(rider_id)
 
 
 @retrying.retry(wait_exponential_multiplier=1000, wait_exponential_max=10000)

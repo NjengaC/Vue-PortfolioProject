@@ -18,6 +18,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
 
         <link rel="stylesheet" href="{{ url_for('static', filename='styles/dashboard.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='scripts/dashboard.js') }}">
     </head>
     <body class="container">
         <header>
@@ -34,9 +35,9 @@
 			     <h1> Welcome {{ current_user.name }} </h1>
                     		<label class="toggle-switch">
 					<input class="toggle-switch-check" type="checkbox" onclick="toggleRiderStatus({{ rider.id }})" />
-                        		<span class="toggle-switch-label">Rider Availability</span>
+                        		<span class="toggle-switch-label">Available</span>
 					<span aria-hidden="true" class="toggle-switch-bar">
-						<span class="toggle-switch-handle" data-label-off="Unavailable" data-label-on="Available"></span>
+						<span class="toggle-switch-handle" data-label-off="Available" data-label-on="Unavailable"></span>
 					</span>
                     		</label>
             		{% endif %}
@@ -113,25 +114,6 @@
                 <button onclick="location.href='{{ url_for('about') }}'">What we do</button>
                 <button onclick="location.href='{{ url_for('about') }}'">Contacts</button>
             </div>
-	    	<script>
-    			function toggleRiderStatus(riderId) {
-        			fetch(`/toggle_rider_status/${riderId}`, {
-            				method: 'POST',
-            				headers: {
-                				'Content-Type': 'application/json',
-                				'X-CSRFToken': '{{ csrf_token() }}'  // Include CSRF token for security
-            				}
-        			})
-        			.then(response => response.json())
-			        .then(data => {
-					// Update the UI or perform any other action based on the returned status
-            				console.log('Rider status updated:', data.status);
-        			})
-			        .catch(error => {
-					console.error('Error toggling rider status:', error);
-			        });
-			}
-		</script>
         </footer>
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
