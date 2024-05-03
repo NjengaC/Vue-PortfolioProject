@@ -32,8 +32,10 @@
 			<li id="spacer"><a href="{{ url_for('request_pickup') }}">Request</a></li>
 			    {% else %}
 			     <h1> Welcome {{ current_user.name }} </h1>
-			     <li id="spacer"><a href="#">Activate</a></li>
-			     <li id="spacer"><a href="#">Deactivate</a></li>
+			     <div class="toggle-switch">
+			         <input type="checkbox" id="toggle" class="toggle-input" data-rider-id="{{ current_user.id }}" {% if status %} checked {% endif %} onchange="updateRiderStatus()"> 
+                               <label for="toggle" class="toggle-label"></label>
+                             </div> 
 			     {% endif %}
                         <li id="spacer"><a href="{{ url_for('logout') }}">Logout</a></li>
                         <li id="spacer"><a href="{{ url_for('edit_profile') }}">Profile</a></li>
@@ -109,6 +111,7 @@
                 <button onclick="location.href='{{ url_for('about') }}'">Contacts</button>
             </div>
         </footer>
+        <script src="../static/scripts/dashboard.js"></script>
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

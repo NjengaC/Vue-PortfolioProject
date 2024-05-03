@@ -137,6 +137,7 @@ def register_rider():
 @app.route('/login_rider', methods=['GET', 'POST'])
 def login_rider():
     form = LoginRiderForm()
+    status = None
     if form.validate_on_submit():
         rider = Rider.query.filter_by(contact_number=form.contact_number.data).first()
         if rider:
@@ -144,7 +145,9 @@ def login_rider():
                 login_user(rider)
                 flash('Rider login successful!', 'success')
                 pending_assignments = Parcel.query.filter(Parcel.status == 'allocated', Parcel.rider_id==rider.id).first()
-                return render_template('view_assignments.html', title='Rider\'s dashboard', user=rider, assignment=pending_assignments)
+                if rider.status == 'available':
+                    status = 'available'
+                return render_template('view_assignments.html', title='Rider\'s dashboard', user=rider, assignment=pending_assignments, status=status)
             else:
                 flash('Invalid password. Please try again.', 'danger')
         else:
@@ -263,6 +266,22 @@ def update_assignment():
             return jsonify({'error': 'Invalid action'}), 400
     else:
         return jsonify({'error': 'Assignment not found or already accepted/denied'}), 404
+
+
+@app.route('/update_rider_status', methods=['POST'])
+def update_rider_status():
+    data = request.json
+    rider_id = data.get('rider_id')
+    status = data.get('status')
+
+    rider = Rider.query.filter_by(id=rider_id).first()
+    if rider:
+        rider.status = status
+        db.session.commit()
+        return jsonify({'success': True})
+    else:
+        return jsonify({'error': 'Rider not found'}), 404
+
 
 @app.route('/track_assignment/<int:id>')
 def track_assignment(id):

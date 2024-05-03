@@ -73,3 +73,35 @@
 	font-style: italic;
 	color: #888;
 }
+.toggle-switch {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  background-color: #ccc;
+  border-radius: 15px;
+}
+
+.toggle-input {
+  display: none;
+}
+
+.toggle-label {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.toggle-input:checked + .toggle-label {
+  left: 30px;
+}
+
+.toggle-input:checked + .toggle-label {
+  background-color: #4caf50;
+}
