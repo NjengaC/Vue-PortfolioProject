@@ -1,20 +1,3 @@
-<<<<<<< HEAD
-function toggleRiderStatus(riderId) {
-	fetch(`/toggle_rider_status/${riderId}`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		}
-	})
-		.then(response => response.json())
-		.then(data => {
-			// Update the UI or perform any other action based on the returned status
-			console.log('Rider status updated:', data.status);
-		})
-		.catch(error => {
-			console.error('Error toggling rider status:', error);
-		});
-=======
 // Get the toggle switch element
 var toggle = document.getElementById('toggle');
 
@@ -55,5 +38,4 @@ function updateRiderStatus() {
     console.error('There was a problem with the fetch operation:', error);
     // Handle error here
   });
->>>>>>> 319c29311d7d4b5ce8883d48b4b471cf62e2e189
 }

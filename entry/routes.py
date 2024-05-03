@@ -144,13 +144,9 @@ def login_rider():
                 login_user(rider)
                 flash('Rider login successful!', 'success')
                 pending_assignments = Parcel.query.filter(Parcel.status == 'allocated', Parcel.rider_id==rider.id).first()
-<<<<<<< HEAD
-                return render_template('view_assignments.html', title='Rider\'s dashboard', user=current_user, assignment=pending_assignments, rider=current_user)
-=======
                 if rider.status == 'available':
                     status = 'available'
                 return render_template('view_assignments.html', title='Rider\'s dashboard', user=rider, assignment=pending_assignments, status=status)
->>>>>>> 319c29311d7d4b5ce8883d48b4b471cf62e2e189
             else:
                 flash('Invalid password. Please try again.', 'danger')
         else:
