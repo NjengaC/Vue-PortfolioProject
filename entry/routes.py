@@ -127,11 +127,10 @@ def register_rider():
         try:
             db.session.commit()
             flash('Rider registration successful!', 'success')
-            return redirect(url_for('login_rider'))
         except IntegrityError:
             db.session.rollback()
-            flash('Username already exists. Please choose a different username.', 'danger')
-            return redirect(url_for('register_rider'))
+            flash('User with details provided already exists. Please check Name, contact or Vehicle Registration', 'danger')
+            return redirect(url_for('login_rider'))
     return render_template('register_rider.html', title='Register Rider', form=form)
 
 @app.route('/login_rider', methods=['GET', 'POST'])
@@ -235,7 +234,8 @@ def calculate_distance(location1, location2):
     Implements distance calculation logic
     It uses the location format: (latitude, longitude)
     """
-    geolocator = Nominatim(user_agent='myapplication')
+    user_agent = 'MyGeocodingApp/1.0 (victorcyrus01@gmail.com)'
+    geolocator = Nominatim(user_agent=user_agent)
     location1 = geolocator.geocode(location1)
     location2 = geolocator.geocode(location2)
     current = location1.latitude, location1.longitude
