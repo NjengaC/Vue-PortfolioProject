@@ -3,6 +3,9 @@ import json
 from datetime import datetime
 from entry import db, login_manager
 from geoalchemy2 import Geometry
+import random
+import string
+from datetime import datetime, timedelta
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -48,9 +51,24 @@ class Parcel(db.Model):
     description = db.Column(db.String(400), nullable=False)
     status = db.Column(db.String(20), nullable=False, default='pending')
     rider_id = db.Column(db.Integer, db.ForeignKey('rider.id'))
+    tracking_number = db.Column(db.String(10), nullable=False,  unique=True)
+    expected_arrival = db.Column(db.DateTime)
+    def __init__(self, *args, **kwargs):
+        super(Parcel, self).__init__(*args, **kwargs)
+        self.tracking_number = self.generate_tracking_number()
+        self.set_expected_arrival()
+
+    def generate_tracking_number(self):
+        # Generate a unique 7-character tracking number
+        return ''.join(random.choices(string.ascii_uppercase + string.digits, k=7))
+
+    def set_expected_arrival(self):
+        # Set expected arrival as current time plus one day
+        self.expected_arrival = datetime.now() + timedelta(days=1)
 
     def __repr__(self):
         return f"Parcel('{self.sender_name}', '{self.sender_email}', '{self.receiver_name}', '{self.status}')"
+
 
 class Admin(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
