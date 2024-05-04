@@ -63,13 +63,6 @@ class Parcel(db.Model):
         return f"Parcel('{self.id}', '{self.sender_name}', '{self.receiver_name}', '{self.status}')"
 
 
-class ParcelLifecycle(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    parcel_id = db.Column(db.Integer, db.ForeignKey('parcel.id'), nullable=False)
-    status = db.Column(db.String(20), nullable=False)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-
-
 class Admin(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
