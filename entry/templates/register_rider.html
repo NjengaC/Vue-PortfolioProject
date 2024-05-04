@@ -18,6 +18,9 @@
             <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
                 <h2><strong>Rider Registration</strong></h2>
                 <p>Fill all form fields to complete registration</p>
+		<div class="row">
+                    <div class="col-md-12 mx-0">
+			<form id="msform">
                 <!-- progressbar -->
                 <ul id="progressbar">
                     <li class="active" id="account"><strong>Account</strong></li>
@@ -25,8 +28,6 @@
                     <li id="payment"><strong>Payment</strong></li>
                     <li id="confirm"><strong>Finish</strong></li>
                 </ul>
-                <div class="row">
-                    <div class="col-md-12 mx-0">
                         <form method="POST">
                             {{ form.hidden_tag() }}
                             <!-- fieldsets -->
