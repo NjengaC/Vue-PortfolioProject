@@ -113,9 +113,9 @@ def about():
 def viewavailableriders():
         return render_template('viewavailableriders.html')
 
-@app.route('/requestpickup')
-def requestpickup():
-    return render_template('requestpickup.html')
+#@app.route('/requestpickup')
+#def requestpickup():
+   # return render_template('requestpickup.html')
 
 @app.route('/vieworderhistory')
 def vieworderhistory():

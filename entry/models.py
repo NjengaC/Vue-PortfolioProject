@@ -2,10 +2,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 import json
 from datetime import datetime
 from entry import db, login_manager
-from geoalchemy2 import Geometry
-import random
-import string
-from datetime import datetime, timedelta
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -24,6 +21,8 @@ class User(db.Model, UserMixin):
 
 
 class Rider(db.Model, UserMixin):
+    __tablename__ = 'rider'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     contact_number = db.Column(db.String(20), unique=True, nullable=False)
@@ -32,14 +31,19 @@ class Rider(db.Model, UserMixin):
     vehicle_registration = db.Column(db.String(50), unique=True, nullable=False)
     area_of_operation = db.Column(db.String(100), nullable=False)
     availability = db.Column(db.Boolean, default=True)
+    current_location = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    current_location = db.Column(Geometry(geometry_type='POINT', srid=4326))
     role = db.Column(db.String(20), nullable=False)
+    status = db.Column(db.String(20), default='available')
+
+    assigned_parcels = db.relationship('Parcel', back_populates='assigned_rider')
 
     def __repr__(self):
         return f"Rider('{self.name}', '{self.contact_number}', '{self.vehicle_type}', '{self.area_of_operation}', '{self.availability}')"
 
+
 class Parcel(db.Model):
+    __tablename__ = 'parcel'
     id = db.Column(db.Integer, primary_key=True)
     sender_name = db.Column(db.String(100), nullable=False)
     sender_email = db.Column(db.String(100), nullable=False)
@@ -49,25 +53,13 @@ class Parcel(db.Model):
     pickup_location = db.Column(db.String(255), nullable=False)
     delivery_location = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(400), nullable=False)
-    status = db.Column(db.String(20), nullable=False, default='pending')
-    rider_id = db.Column(db.Integer, db.ForeignKey('rider.id'))
-    tracking_number = db.Column(db.String(10), nullable=False,  unique=True)
-    expected_arrival = db.Column(db.DateTime)
-    def __init__(self, *args, **kwargs):
-        super(Parcel, self).__init__(*args, **kwargs)
-        self.tracking_number = self.generate_tracking_number()
-        self.set_expected_arrival()
+    rider_id = db.Column(db.Integer, db.ForeignKey('rider.id'), nullable=True)
+    status = db.Column(db.String(20), default='pending')
 
-    def generate_tracking_number(self):
-        # Generate a unique 7-character tracking number
-        return ''.join(random.choices(string.ascii_uppercase + string.digits, k=7))
-
-    def set_expected_arrival(self):
-        # Set expected arrival as current time plus one day
-        self.expected_arrival = datetime.now() + timedelta(days=1)
+    assigned_rider = db.relationship('Rider', back_populates='assigned_parcels', overlaps='rider')
 
     def __repr__(self):
-        return f"Parcel('{self.sender_name}', '{self.sender_email}', '{self.receiver_name}', '{self.status}')"
+        return f"Parcel('{self.id}', '{self.sender_name}', '{self.receiver_name}', '{self.status}')"
 
 
 class Admin(db.Model, UserMixin):
