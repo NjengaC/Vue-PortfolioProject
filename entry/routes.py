@@ -39,6 +39,11 @@ def register():
         db.session.add(user)
         try:
             db.session.commit()
+            welcome_msg = f"Hello {user.username}. Welcome to Vue, the solution for all your package transportation problems. We are safe, secure,reliable,  and efficient. Click <a href=\"{url_for('login')}\">here</a> to login anytime."
+            msg= Message('Welcome to Vue!', recipients=[user.email])
+            msg.html = welcome_msg
+            mail.send(msg)
+
             flash('Account created', 'success')
             return redirect(url_for('login'))
         except IntegrityError:
@@ -300,3 +305,23 @@ def notify_rider_new_assignment(rider_email, parcel):
     mail.send(msg)
     flash('Delivery assignment not found.', 'error')
     return redirect(url_for('view_assignments'))
+
+@app.route('/support', methods=['GET', 'POST'])
+def support():
+    if request.method == 'POST':
+        email = request.form['email']
+        subject = request.form['subject']
+        body = request.form['body']
+
+        # Create a Message object
+        msg = Message(subject=subject, recipients=[email])
+        msg.body = body
+
+        try:
+            # Send the email
+            mail.send(msg)
+            return 'Email sent successfully!'
+        except Exception as e:
+            return f'Error: {str(e)}'
+
+    return render_template('support.html')
