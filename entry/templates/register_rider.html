@@ -113,8 +113,10 @@
                                     <!-- Include additional fields as needed -->
                                 </div>
                                 <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
-                                <input type="submit" class="btn btn-outline-info" value="Submit"/>
                             </fieldset>
+			     <div class="form-group">
+				     {{ form.submit(class="btn btn-outline-info") }}
+			     </div>
                         </form>
                     </div>
                 </div>
