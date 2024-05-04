@@ -42,5 +42,5 @@ Navigate to the project's root directory.
 Run the following command:
 
 python3 run.py
-Access the app in your web browser at http://localhost:5000.
+Access the app in your web browser at happyface.tech
 No Legal and Regulatory Considerations in until deployment!
