@@ -189,11 +189,10 @@
                         $(this).parent().find('.radio').removeClass('selected');
                         $(this).addClass('selected');
                     });
-
-                    $(".submit").click(function(){
-                        return false;
-                    })
-
+		$(".submit").click(function(){
+    // Redirect to the login page
+    window.location.replace("{{ url_for('login_rider') }}");
+});
                 });
                 </script>
 </body>
