@@ -87,8 +87,8 @@ def edit_profile():
             return render_template('home.html', title='Home', user=current_user)
     return render_template('edit_profile.html', title='Edit Profile', form=form, user=current_user)
 
-@app.route('/send_parcel')
-def send_parcel():
+@app.route('/track_parcel')
+def track_parcel():
     # Implement the functionality for sending parcels here
     return render_template('request_pickup.html')
 
