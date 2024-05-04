@@ -90,7 +90,7 @@ def edit_profile():
 @app.route('/track_parcel')
 def track_parcel():
     # Implement the functionality for sending parcels here
-    return render_template('request_pickup.html')
+    return render_template('track_parcel.html')
 
 
 @app.route('/view_shipping_providers')
