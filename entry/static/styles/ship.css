@@ -173,4 +173,49 @@ input:checked + .slider:before {
     background: red;
     color: white;
 }
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
 
+.contain {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Authenticated Content Styles */
+.authenticated-content {
+    margin-top: 20px;
+}
+
+.action-item {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.action-item h3 {
+    margin-top: 0;
+}
+
+.action-item p {
+    margin-bottom: 10px;
+}
+
+.action-item button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.action-item button:hover {
+    background-color: #0056b3;
+}

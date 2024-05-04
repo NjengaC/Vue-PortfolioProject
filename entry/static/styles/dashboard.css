@@ -1,75 +1,19 @@
 /* styles.css */
 .dashboard-container {
-	text-align: center;
-}
-.dashboard-heading {
-	color: #333;
-	margin-bottom: 20px;
-}
-.dashboard-message {
-	color: #666;
-	margin-bottom: 20px;
-}
-.dashboard-link {
-	color: #007bff;
-	text-decoration: none;
-}
-.dashboard-link:hover {
-	text-decoration: underline;
-}
-.assyn {
-	max-width: 800px;
-	margin: 0 auto;
-	padding: 20px;
-}
-
-.heading {
-	font-size: 24px;
-	margin-bottom: 20px;
-}
-
-.assignment-list {
-	list-style: none;
-	padding: 0;
-}
-
-.assignment-item {
-	background-color: #f9f9f9;
-	border-radius: 8px;
-	padding: 20px;
-	margin-bottom: 20px;
-}
-
-.assignment-info {
-	margin: 0;
-	margin-bottom: 10px;
-}
-
-.action-buttons {
-	display: flex;
-	justify-content: flex-end;
-}
-
-.accept-btn,
-.deny-btn {
-	padding: 10px 20px;
-	margin-left: 10px;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-}
-
-.accept-btn {
-	background-color: #4caf50;
-	color: white;
-}
-
-.deny-btn {
-	background-color: #f44336;
-	color: white;
-}
-
-.no-assignments {
-	font-style: italic;
-	color: #888;
-}
+	    text-align: center;
+    }
+    .dashboard-heading {
+	        color: #333;
+		    margin-bottom: 20px;
+	    }
+	    .dashboard-message {
+		        color: #666;
+			    margin-bottom: 20px;
+		    }
+		    .dashboard-link {
+			        color: #007bff;
+				    text-decoration: none;
+			    }
+			    .dashboard-link:hover {
+				        text-decoration: underline;
+				}

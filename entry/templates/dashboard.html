@@ -1,16 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		    <meta charset="UTF-8">
-		        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-			    <title>User Dashboard</title>
-			        <link rel="stylesheet" href="styles.css">
-	</head>
-	<body>
-		    <div class="dashboard-container">
-			            <h1 class="dashboard-heading">User Dashboard</h1>
-				            <p class="dashboard-message">Hello, User {{ current_user.id }}!</p>
-					            <a href="{{ url_for('logout') }}" class="dashboard-link">Logout</a>
-						        </div>
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Delivery Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Tracking</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-profile">
+                <span class="user-greeting">Hello, Vue Courier!</span>
+                <a href="#" class="logout-btn">Logout</a>
+            </div>
+        </header>
+        <section class="main-content">
+            <h1 class="dashboard-heading">Welcome to Vue Delivery Dashboard</h1>
+            <p class="dashboard-message">Manage your deliveries, track packages, and access our services.</p>
+            <div class="dashboard-actions">
+                <a href="#" class="action-btn">Track Package</a>
+                <a href="#" class="action-btn">Schedule Pickup</a>
+                <a href="#" class="action-btn">Manage Deliveries</a>
+                <a href="#" class="action-btn">Services</a>
+            </div>
+        </section>
+        <footer>
+            <p>&copy; 2024 Vue Delivery. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
 </html>
