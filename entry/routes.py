@@ -130,8 +130,8 @@ def register_rider():
             return redirect(url_for('login_rider'))
         except IntegrityError:
             db.session.rollback()
-            flash('Username already exists. Please choose a different username.', 'danger')
-            return redirect(url_for('register_rider'))
+            flash('User with details provided already exists. Please check Name, contact or Vehicle Registration', 'danger')
+            return render_template('register_rider.html', title='Register Rider', form=form)
     return render_template('register_rider.html', title='Register Rider', form=form)
 
 @app.route('/login_rider', methods=['GET', 'POST'])
@@ -219,6 +219,21 @@ def allocate_parcel(parcel):
         return {'success': False, 'message': 'Allocation in progress. Please wait for a rider to be assigned.'}
 
 
+@app.route('/toggle_rider_status/<int:rider_id>', methods=['POST'])
+def toggle_rider_status(rider_id):
+    """
+    Toggles the status of the rider between available and unavailable
+    """
+    rider = Rider.query.filter(rider_id).first()
+    if rider:
+        if rider.status == 'available':
+            rider.status = 'unavailable'
+        else:
+            rider.status = 'available'
+        db.session.commit()
+        return jsonify({'status': rider.status})
+
+
 @retrying.retry(wait_exponential_multiplier=1000, wait_exponential_max=10000)
 def geocode_with_retry(geolocator, location):
     """
@@ -232,7 +247,8 @@ def calculate_distance(location1, location2):
     Implements distance calculation logic
     It uses the location format: (latitude, longitude)
     """
-    geolocator = Nominatim(user_agent='myapplication')
+    user_agent = 'MyGeocodingApp/1.0 (victorcyrus01@gmail.com)'
+    geolocator = Nominatim(user_agent=user_agent)
     location1 = geolocator.geocode(location1)
     location2 = geolocator.geocode(location2)
     current = location1.latitude, location1.longitude
@@ -282,3 +298,5 @@ def notify_rider_new_assignment(rider_email, parcel):
     msg = Message('New Delivery Assignment', recipients=[rider_email])
     msg.body = f'Hey, you have a new delivery assignment:\n\n{parcel}\n\nClick here to view and accept: http://127.0.0.1:5000/view_assignments'
     mail.send(msg)
+    flash('Delivery assignment not found.', 'error')
+    return redirect(url_for('view_assignments'))
