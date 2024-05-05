@@ -73,3 +73,8 @@ class ParcelForm(FlaskForm):
     pickup_location = StringField('Pickup Location', validators=[DataRequired(), Length(max=255)])
     delivery_location = StringField('Delivery Location', validators=[DataRequired(), Length(max=255)])
     description = TextAreaField('Description', validators=[DataRequired(), Length(max=400)])
+
+
+class ForgotPasswordForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Submit')
