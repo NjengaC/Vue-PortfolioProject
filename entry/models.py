@@ -15,6 +15,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     role = db.Column(db.String(20), nullable=False)
+    reset_password_token = db.Column(db.String(100), nullable=True)
 
     def __str__(self):
         return f"User('{self.username}', '{self.email}', '{self.password}')"
@@ -36,6 +37,7 @@ class Rider(db.Model, UserMixin):
     role = db.Column(db.String(20), nullable=False)
     status = db.Column(db.String(20), default='available')
     assigned_parcels = db.relationship('Parcel', back_populates='assigned_rider')
+    reset_password_token = db.Column(db.String(100), nullable=True)
 
     def __repr__(self):
         return f"Rider('{self.name}', '{self.contact_number}', '{self.vehicle_type}', '{self.area_of_operation}', '{self.availability}')"

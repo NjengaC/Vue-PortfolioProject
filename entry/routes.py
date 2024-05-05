@@ -17,7 +17,7 @@ from functools import wraps
 from flask_login import current_user
 from entry import mail
 import retrying
-from entry.forms import ForgotPasswordForm
+from entry.forms import ForgotPasswordForm, ResetPasswordForm
 import geopy.exc
 import secrets
 
@@ -360,14 +360,16 @@ def support():
 
     return render_template('support.html')
 
+
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
     form = ForgotPasswordForm()
     if form.validate_on_submit():
         email = form.email.data
         user = User.query.filter_by(email=email).first()
+        rider = Rider.query.filter_by(email=email).first()
         if user:
-            # Generate a unique token
+            # Generate a unique token for the user
             token = secrets.token_urlsafe(32)
             user.reset_password_token = token
             db.session.commit()
@@ -379,12 +381,27 @@ def forgot_password():
 
             flash("Instructions to reset your password have been sent to your email.")
             return redirect(url_for('login'))
+        elif rider:
+            # Generate a unique token for the rider
+            token = secrets.token_urlsafe(32)
+            rider.reset_password_token = token
+            db.session.commit()
+
+            # Send password reset email
+            reset_url = url_for('reset_password', token=token, _external=True)
+            message = f"Click the link to reset your password: {reset_url}"
+            send_email(rider.email, "Password Reset Request", message)
+
+            flash("Instructions to reset your password have been sent to your email.")
+            return redirect(url_for('login'))
         else:
             flash("Email address not found.")
     return render_template('forgot_password.html', form=form)
 
+
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
+    # Check if the token exists for a user
     user = User.query.filter_by(reset_password_token=token).first()
     if user:
         form = ResetPasswordForm()
@@ -400,9 +417,27 @@ def reset_password(token):
             flash("Your password has been successfully reset. You can now log in with your new password.")
             return redirect(url_for('login'))
         return render_template('reset_password.html', form=form)
-    else:
-        flash("Invalid or expired token.")
-        return redirect(url_for('forgot_password'))
+
+    # If the token doesn't exist for a user, check if it exists for a rider
+    rider = Rider.query.filter_by(reset_password_token=token).first()
+    if rider:
+        form = ResetPasswordForm()
+        if form.validate_on_submit():
+            # Update the rider's password
+            new_password = form.password.data
+            rider.password = bcrypt.generate_password_hash(new_password).decode('utf-8')
+
+            # Clear the reset_password_token
+            rider.reset_password_token = None
+            db.session.commit()
+
+            flash("Your password has been successfully reset. You can now log in with your new password.")
+            return redirect(url_for('login_rider'))
+        return render_template('reset_password.html', form=form)
+
+    # If the token is invalid or expired for both user and rider
+    flash("Invalid or expired token.")
+    return redirect(url_for('forgot_password'))
 
 
 def send_email(recipient, subject, html_body):
