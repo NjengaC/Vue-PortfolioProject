@@ -4,119 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .container {
-            width: 400px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        #card-element {
-            margin-bottom: 20px;
-        }
-
-        #card-errors {
-            color: red;
-            margin-top: 10px;
-        }
-
-        button[type="submit"] {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-    </style>
-    <script src="https://js.stripe.com/v3/"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/payment.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Payment</h1>
-        <form method="post" id="payment-form">
-            <div class="form-group">
-                <label for="card-element">Credit or debit card</label>
-                <div id="card-element">
-                    <!-- A Stripe Element will be inserted here. -->
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>Parcel Payment</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Payment Options Section -->
+            <section id="payment-options">
+                <h2>Payment Options</h2>
+                <div class="payment-card">
+                    <h3>How would you like to pay?</h3>
+                    <form id="payment-form">
+                        <!-- Add inputs for card details, owner, cvv no, expiration date, card number, etc. -->
+                    </form>
                 </div>
-                <!-- Used to display form errors. -->
-                <div id="card-errors" role="alert"></div>
-            </div>
-            <button type="submit">Submit Payment</button>
-        </form>
-    </div>
+            </section>
 
-    <script>
-        // Create a Stripe client.
-        var stripe = Stripe('pk_live_838dd40463bf4548983e057d966ff390e86145e4');
+            <!-- Parcel Summary Section -->
+            <section id="parcel-summary">
+                <h2>Parcel Summary</h2>
+                <div class="parcel-details">
+                    <!-- Display parcel details such as amount payable -->
+                    <p>Amount Payable: ${{ result.distance }}</p>
+                    <!-- Add more details as needed -->
+                </div>
+                <form id="payment-submit">
+                    <button type="submit">Submit Payment</button>
+                </form>
+            </section>
 
-        // Create an instance of Elements.
-        var elements = stripe.elements();
+            <!-- Receipt Section -->
+            <section id="receipt">
+                <h2>Payment Receipt</h2>
+                <div class="receipt-details">
+                    <!-- Display dynamically produced receipt -->
+                    <p>{{ result.message }}</p>
+                    <!-- Add more receipt details as needed -->
+                </div>
+            </section>
+        </div>
+    </main>
 
-        // Create an instance of the card Element.
-        var card = elements.create('card');
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Parcel Delivery. All rights reserved.</p>
+        </div>
+    </footer>
 
-        // Add an instance of the card Element into the `card-element` div.
-        card.mount('#card-element');
-
-        // Handle real-time validation errors from the card Element.
-        card.on('change', function(event) {
-            var displayError = document.getElementById('card-errors');
-            if (event.error) {
-                displayError.textContent = event.error.message;
-            } else {
-                displayError.textContent = '';
-            }
-        });
-
-        // Handle form submission.
-        var form = document.getElementById('payment-form');
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            stripe.createToken(card).then(function(result) {
-                if (result.error) {
-                    // Inform the user if there was an error.
-                    var errorElement = document.getElementById('card-errors');
-                    errorElement.textContent = result.error.message;
-                } else {
-                    // Send the token to your server.
-                    stripeTokenHandler(result.token);
-                }
-            });
-        });
-
-        // Submit the form with the token ID.
-        function stripeTokenHandler(token) {
-            // Insert the token ID into the form so it gets submitted to the server
-            var form = document.getElementById('payment-form');
-            var hiddenInput = document.createElement('input');
-            hiddenInput.setAttribute('type', 'hidden');
-            hiddenInput.setAttribute('name', 'stripeToken');
-            hiddenInput.setAttribute('value', token.id);
-            form.appendChild(hiddenInput);
-
-            // Submit the form
-            form.submit();
-        }
-    </script>
+    <!-- JavaScript -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="{{ url_for('static', filename='scripts/payment.js') }}"></script>
 </body>
 </html>

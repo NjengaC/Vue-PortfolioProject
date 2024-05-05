@@ -208,7 +208,7 @@ def request_pickup():
         #Allocate parcel to the nearest unoccupied rider
         allocation_result = allocate_parcel(parcel)
         if allocation_result['success']:
-            send_rider_details_email(current_user.email, allocation_result)
+            send_rider_details_email(parcel.sender_email, allocation_result)
             flash(f'Rider Allocated. Check your email for more details')
             return render_template('payment.html', result = allocation_result)
         else:
