@@ -94,11 +94,19 @@ def track_parcel():
 
 @app.route('/get_parcel_status')
 def get_parcel_status():
-    parcel = Parcel.query.filter_by(tracking_number=request.args.get('tracking_number')).first()
-    if parcel:
-        return parcel.status
+    tracking_number = request.args.get('tracking_number')
+    if tracking_number:
+        parcel = Parcel.query.filter_by(tracking_number=tracking_number).first()
+        if parcel:
+            return jsonify({
+                'status': parcel.status,
+                'expected_arrival': parcel.expected_arrival
+            }), 200
+        else:
+            return jsonify({'error': 'Parcel not found'}), 404
     else:
-        return None
+        return jsonify({'error': 'Tracking number not provided'}), 400
+
 
 @app.route('/view_shipping_providers')
 def view_shipping_providers():
@@ -190,10 +198,10 @@ def request_pickup():
         allocation_result = allocate_parcel(parcel)
         if allocation_result['success']:
             flash('Parcel allocated to the nearest rider. Please wait for confirmation.')
-            return render_template('payment.html')
+            return render_template('payment.html', result = allocation_result)
         else:
             flash('Allocation in progress. Please wait for a rider to be assigned.')
-            return render_template('home.html')
+            return render_template('payment.html', result = allocation_result)
     return render_template('request_pickup.html', form=form)
 
 def allocate_parcel(parcel):
@@ -204,6 +212,7 @@ def allocate_parcel(parcel):
     available_riders = Rider.query.filter_by(status='available').all()
     closest_rider = None
     min_distance = float('inf')
+    distance = 0
 
     for rider in available_riders:
         distance = calculate_distance(pickup_location, rider.current_location)
@@ -215,15 +224,21 @@ def allocate_parcel(parcel):
         parcel.rider_id = closest_rider.id
         db.session.commit()
         notify_rider_new_assignment(closest_rider.email, parcel)
-        return {
+        result = {
             'success': True,
             'rider_id': closest_rider.id,
             'rider_name': closest_rider.name,
             'vehicle_type': closest_rider.vehicle_type,
             'vehicle_registration': closest_rider.vehicle_registration,
+            'distance': distance,
+            'message': 'Allocation Successful. Please wait for rider to accept pick up'
         }
     else:
-        return {'success': False, 'message': 'Allocation in progress. Please wait for a rider to be assigned.'}
+        result = {'success': False,
+                'distance': distance,
+                'message': 'Allocation in progress. Please wait for a rider to be assigned.'}
+
+    return result
 
 
 @app.route('/toggle_rider_status/<int:rider_id>', methods=['POST'])
@@ -306,3 +321,5 @@ def notify_rider_new_assignment(rider_email, parcel):
     msg.body = f'Hey, you have a new delivery assignment:\n\n{parcel}\n\nClick here to view and accept: https:www.happyfaces/rider_login'
     mail.send(msg)
     flash('Delivery assignment not found.', 'error')
+
+
