@@ -28,16 +28,22 @@ h1 {
 header {
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  margin: auto;
+  background-color: grey;
+  align-items: center;
+  text-align: center;
+  align: center;
 }
-
 nav ul {
-  list-style-type: none;
+list-style-type: none;
+margin: 0;
+padding: 0;
 }
 
 nav ul li {
-  display: flex;
-  margin-right: 10px;
-  float: right;
+  display: inline-block;
+  margin-right: 20px;
 }
 
 nav ul li a {
@@ -50,11 +56,16 @@ nav ul li a {
 }
 
 .list-group ul li a {
-	color: lightblue;
+	color: navy;
 }
 nav ul li a:hover {
   background-color: #333;
   color: #fff;
+}
+.btn-outline-primary {
+  color: #007bff; /* Blue color */
+  border-color: #007bff; /* Blue color */
+  background-color: transparent;
 }
 main {
   display:inline-block;
@@ -65,7 +76,7 @@ main {
 }
 
 footer {
-  display:inline-block;
+  display:block;
   justify-content: space-between;
   align-items: center;
   margin: auto;
@@ -95,19 +106,23 @@ footer {
 section.companies {
   text-align: center;
 }
+#reg {
+  padding: 20px; /* Adjust padding for better spacing */
+  background-color: #007bff; /* Change to a blue color */
+  color: #fff; /* Set text color to white */
+}
 
-#reg a{
+#reg a {
   padding: 10px 20px;
-  color: black;
   cursor: pointer;
   margin: 10px;
-  background-color: #ffcc99;
+  color: #fff; /* Set link text color to white */
 }
 
 #reg a:hover {
-  background-color: #333;
-  color: #fff;
+  background-color: #0056b3; /* Darken the background color on hover */
 }
+
 #companies:hover {
   background-color: #333;
   color: #fff;
@@ -129,6 +144,10 @@ container {
   background: -webkit-linear-gradient(#648880, #293f50);
   background:    -moz-linear-gradient(#648880, #293f50);
   background:         linear-gradient(#648880, #293f50);
+}
+sider {
+	display: inline-block;
+	margin 0 40px;
 }
 #company-list {
   list-style-type: none;
@@ -168,3 +187,41 @@ form {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+/* Add custom styles here */
+/*this is for the  home page*/
+.ship {
+	text-align: center;
+	padding: 20px;
+	background-color: #f8f9fa;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sign-up {
+	font-size: 18px;
+	margin-bottom: 20px;
+}
+
+.button-container {
+	margin-bottom: 20px;
+}
+
+#view-riders {
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+#view-riders:hover {
+	background-color: #0056b3;
+}
+
+#rider-list {
+	list-style: none;
+}
+
+/* Add more styles as needed */
+

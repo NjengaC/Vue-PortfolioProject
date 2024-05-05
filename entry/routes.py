@@ -97,6 +97,13 @@ def track_parcel():
     # Implement the functionality for sending parcels here
     return render_template('track_parcel.html')
 
+@app.route('/get_parcel_status')
+def get_parcel_status():
+    parcel = Parcel.query.filter_by(tracking_number=request.args.get('tracking_number')).first()
+    if parcel:
+        return parcel.status
+    else:
+        return None
 
 @app.route('/view_shipping_providers')
 def view_shipping_providers():
