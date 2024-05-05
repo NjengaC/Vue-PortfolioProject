@@ -39,7 +39,7 @@ def register():
         db.session.add(user)
         try:
             db.session.commit()
-            welcome_msg = f"Hello {user.username}. Welcome to Vue, the solution for all your package transportation problems. We are safe, secure,reliable,  and efficient. Click <a href=\"{url_for('login')}\">here</a> to login anytime."
+            welcome_msg = render_template('welcome_user_mail.html', user=user, login_url=url_for('login', _external=True))
             msg= Message('Welcome to Vue!', recipients=[user.email])
             msg.html = welcome_msg
             mail.send(msg)
@@ -97,6 +97,21 @@ def track_parcel():
     # Implement the functionality for sending parcels here
     return render_template('track_parcel.html')
 
+@app.route('/get_parcel_status')
+def get_parcel_status():
+    tracking_number = request.args.get('tracking_number')
+    if tracking_number:
+        parcel = Parcel.query.filter_by(tracking_number=tracking_number).first()
+        if parcel:
+            return jsonify({
+                'status': parcel.status,
+                'expected_arrival': parcel.expected_arrival
+            }), 200
+        else:
+            return jsonify({'error': 'Parcel not found'}), 404
+    else:
+        return jsonify({'error': 'Tracking number not provided'}), 400
+
 
 @app.route('/view_shipping_providers')
 def view_shipping_providers():
@@ -131,6 +146,11 @@ def register_rider():
         db.session.add(new_rider)
         try:
             db.session.commit()
+            welcome_msg = render_template('welcome_rider_mail.html', rider=new_rider, login_url=url_for('login_rider', _external=True))
+            msg= Message('Welcome to Vue!', recipients=[new_rider.email])
+            msg.html = welcome_msg
+            mail.send(msg)
+
             flash('Rider registration successful!', 'success')
             return redirect(url_for('login_rider'))
         except IntegrityError:
@@ -187,11 +207,12 @@ def request_pickup():
         #Allocate parcel to the nearest unoccupied rider
         allocation_result = allocate_parcel(parcel)
         if allocation_result['success']:
-            flash('Parcel allocated to the nearest rider. Please wait for confirmation.')
-            return render_template('payment.html')
+            send_rider_details_email(current_user.email, allocation_result)
+            flash(f'Rider Allocated. Check your email for more details')
+            return render_template('payment.html', result = allocation_result)
         else:
             flash('Allocation in progress. Please wait for a rider to be assigned.')
-            return render_template('home.html')
+            return render_template('payment.html', result = allocation_result)
     return render_template('request_pickup.html', form=form)
 
 def allocate_parcel(parcel):
@@ -202,6 +223,7 @@ def allocate_parcel(parcel):
     available_riders = Rider.query.filter_by(status='available').all()
     closest_rider = None
     min_distance = float('inf')
+    distance = 0
 
     for rider in available_riders:
         distance = calculate_distance(pickup_location, rider.current_location)
@@ -213,15 +235,21 @@ def allocate_parcel(parcel):
         parcel.rider_id = closest_rider.id
         db.session.commit()
         notify_rider_new_assignment(closest_rider.email, parcel)
-        return {
+        result = {
             'success': True,
             'rider_id': closest_rider.id,
             'rider_name': closest_rider.name,
             'vehicle_type': closest_rider.vehicle_type,
             'vehicle_registration': closest_rider.vehicle_registration,
+            'distance': distance,
+            'message': 'Allocation Successful. Please wait for rider to accept pick up'
         }
     else:
-        return {'success': False, 'message': 'Allocation in progress. Please wait for a rider to be assigned.'}
+        result = {'success': False,
+                'distance': distance,
+                'message': 'Allocation in progress. Please wait for a rider to be assigned.'}
+
+    return result
 
 
 @app.route('/toggle_rider_status/<int:rider_id>', methods=['POST'])
@@ -295,16 +323,21 @@ def track_assignment(id):
         flash('Assignment not found or not assigned to you.', 'error')
         return redirect(url_for('home'))
 
-
 def notify_rider_new_assignment(rider_email, parcel):
     """
     Trigger notification when assigning a parcel to a rider
     """
+    msg = render_template('new_assignment_email.html', parcel=parcel)
     msg = Message('New Delivery Assignment', recipients=[rider_email])
-    msg.body = f'Hey, you have a new delivery assignment:\n\n{parcel}\n\nClick here to view and accept: http://127.0.0.1:5000/view_assignments'
     mail.send(msg)
     flash('Delivery assignment not found.', 'error')
-    return redirect(url_for('view_assignments'))
+
+def send_rider_details_email(recipient_email, allocation_result):
+    msg = Message('Parcel Allocation Details', recipients=[recipient_email])
+    html_content = render_template('rider_details_email.html', **allocation_result)
+    msg.html = html_content
+    mail.send(msg)
+
 
 @app.route('/support', methods=['GET', 'POST'])
 def support():

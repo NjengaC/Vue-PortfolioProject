@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/track.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/man.css') }}">
 </head>
 <body>
     <!-- Navigation menu -->
@@ -32,15 +33,17 @@
 
     <!-- Search bar -->
     <div class="container mt-4">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Enter Tracking Number">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button">Track</button>
-                    </div>
-                </div>
-            </div>
+	    <div class="row justify-content-center">
+		    <div class="col-md-6">
+			    <div class="input-group">
+				    <input type="text" class="form-control" placeholder="Enter Tracking Number" id="trackingNumberInput">
+				    <div class="input-group-append">
+					    <button class="btn btn-primary" type="button" id="trackButton">
+						    <span>Track</span>
+					    </button>
+				    </div>
+			    </div>
+		    </div>
         </div>
     </div>
 
@@ -49,11 +52,10 @@
         <div class="card">
             <div class="row d-flex justify-content-between px-3 top">
                 <div class="d-flex">
-                    <h5>ORDER <span class="text-primary font-weight-bold">#{{ parcel.tracking_number }}</span></h5>
+                    <h5>ORDER <span class="text-primary font-weight-bold" id="trackingNumberPlaceholder">Insert Tracking Number </span></h5>
                 </div>
                 <div class="d-flex flex-column text-sm-right">
-                    <p class="mb-0">Expected Arrival <span>{{ parcel.expected_arrival }}</span></p>
-                    <!-- You can display other parcel details here -->
+                    <p class="mb-0">Expected Arrival <span id="expectedArrivalPlaceholder">Always Atleast a Day</span></p>
                 </div>
             </div>
             <!-- Add class 'active' to progress -->
@@ -61,36 +63,36 @@
                 <div class="col-12">
                     <ul id="progressbar" class="text-center">
                         <!-- You can dynamically add classes to these li elements based on parcel status -->
-                        <li class="active step0"></li>
-                        <li class="active step0"></li>
-                        <li class="active step0"></li>
-                        <li class="step0"></li>
+                        <li id="step1" class="step0"></li>
+                        <li id="step2" class="step0"></li>
+                        <li id="step3" class="step0"></li>
+                        <li id="step4" class="step0"></li>
                     </ul>
                 </div>
             </div>
             <div class="row justify-content-between top">
                 <div class="row d-flex icon-content">
-                    <img class="icon" src="https://i.imgur.com/9nnc9Et.png">
+                    <img class="icon" src="../static/images/rider.png">
                     <div class="d-flex flex-column">
-                        <p class="font-weight-bold">Order<br>Processed</p>
+                        <p class="font-weight-bold">Rider<br>Allocated</p>
                     </div>
                 </div>
                 <div class="row d-flex icon-content">
-                    <img class="icon" src="https://i.imgur.com/u1AzR7w.png">
+                    <img class="icon" src="../static/images/ship.png">
                     <div class="d-flex flex-column">
-                        <p class="font-weight-bold">Order<br>Shipped</p>
+                        <p class="font-weight-bold">Parcel<br>Shipped</p>
                     </div>
                 </div>
                 <div class="row d-flex icon-content">
-                    <img class="icon" src="https://i.imgur.com/TkPm63y.png">
+                    <img class="icon" src="../static/images/road.png">
                     <div class="d-flex flex-column">
-                        <p class="font-weight-bold">Order<br>En Route</p>
+                        <p class="font-weight-bold">Parcel<br>En Route</p>
                     </div>
                 </div>
                 <div class="row d-flex icon-content">
-                    <img class="icon" src="https://i.imgur.com/HdsziHP.png">
+                    <img class="icon" src="../static/images/arrive.png">
                     <div class="d-flex flex-column">
-                        <p class="font-weight-bold">Order<br>Arrived</p>
+                        <p class="font-weight-bold">Parcel<br>Arrived</p>
                     </div>
                 </div>
             </div>
@@ -107,5 +109,58 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<script>
+document.getElementById('trackButton').addEventListener('click', function() {
+    var trackingNumber = document.getElementById('trackingNumberInput').value;
+
+    fetch('/get_parcel_status?tracking_number=' + trackingNumber)
+        .then(response => response.json())
+        .then(parcel => {
+            if (parcel && parcel.status) {
+		var expected_arrival = parcel.expected_arrival;
+                updateProgressBar(parcel.status);
+                updateTrackingInfo(trackingNumber, expected_arrival);
+            } else {
+                console.log('Parcel not found or status missing');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching parcel status:', error);
+        });
+});
+
+function updateProgressBar(status) {
+    // Reset progress bar to initial state
+    document.querySelectorAll('#progressbar li').forEach(li => {
+        li.classList.remove('active');
+    });
+
+    // Update progress bar based on parcel status
+    switch (status) {
+        case 'pending':
+            document.getElementById('step1').classList.add('active');
+            break;
+        case 'allocated':
+            document.getElementById('step2').classList.add('active');
+            break;
+        case 'in-progress':
+            document.getElementById('step3').classList.add('active');
+            break;
+        case 'shipped':
+            document.getElementById('step4').classList.add('active');
+            break;
+        default:
+            console.log('Unknown parcel status:', status);
+            break;
+    }
+}
+
+function updateTrackingInfo(trackingNumber, expectedArrival) {
+    // Update tracking number and expected arrival time in HTML
+    document.getElementById('trackingNumberPlaceholder').textContent = trackingNumber;
+    document.getElementById('expectedArrivalPlaceholder').textContent = expectedArrival;
+}
+</script>
 </body>
 </html>

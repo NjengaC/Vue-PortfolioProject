@@ -2,8 +2,8 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 import json
 from datetime import datetime
 from entry import db, login_manager
-
-
+import random
+from datetime import timedelta 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -35,7 +35,6 @@ class Rider(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     role = db.Column(db.String(20), nullable=False)
     status = db.Column(db.String(20), default='available')
-
     assigned_parcels = db.relationship('Parcel', back_populates='assigned_rider')
 
     def __repr__(self):
@@ -55,19 +54,26 @@ class Parcel(db.Model):
     description = db.Column(db.String(400), nullable=False)
     rider_id = db.Column(db.Integer, db.ForeignKey('rider.id'), nullable=True)
     status = db.Column(db.String(20), default='pending')
+    expected_arrival = db.Column(db.String(50))
+    tracking_number = db.Column(db.String(50), unique=True, nullable=False)
 
     assigned_rider = db.relationship('Rider', back_populates='assigned_parcels', overlaps='rider')
-    lifecycle = db.relationship('ParcelLifecycle', backref='parcel', lazy=True)
+
+    @staticmethod
+    def generate_tracking_number():
+        return ''.join(random.choices('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', k=10))
+
+    def set_expected_arrival(self):
+        self.expected_arrival = (datetime.now() + timedelta(days=1)).strftime('%B %d, %Y, %I:%M %p')
+
+    def __init__(self, **kwargs):
+        super(Parcel, self).__init__(**kwargs)
+        self.tracking_number = self.generate_tracking_number()
+        self.set_expected_arrival()
 
     def __repr__(self):
         return f"Parcel('{self.id}', '{self.sender_name}', '{self.receiver_name}', '{self.status}')"
 
-
-class ParcelLifecycle(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    parcel_id = db.Column(db.Integer, db.ForeignKey('parcel.id'), nullable=False)
-    status = db.Column(db.String(20), nullable=False)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 
 class Admin(db.Model, UserMixin):
