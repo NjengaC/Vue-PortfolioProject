@@ -39,7 +39,7 @@ def register():
         db.session.add(user)
         try:
             db.session.commit()
-            welcome_msg = render_template('welcome_user_mail.htnl', user=user, login_url=url_for('login', _external=True))
+            welcome_msg = render_template('welcome_user_mail.html', user=user, login_url=url_for('login', _external=True))
             msg= Message('Welcome to Vue!', recipients=[user.email])
             msg.html = welcome_msg
             mail.send(msg)
