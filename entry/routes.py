@@ -409,3 +409,33 @@ def send_email(recipient, subject, html_body):
     msg = Message(subject, recipients=[recipient])
     msg.html = html_body
     mail.send(msg)
+
+@app.route('/payment_success', methods=['POST'])
+def payment_success():
+    return redirect(url_for('home'))
+
+
+@app.route('/verify_payment', methods=['POST'])
+def verify_payment():
+    # Extract the token from the request data
+    stripe_token = request.form.get('stripeToken')
+
+    # Here you would perform the necessary steps to verify the payment using the token
+    # For demonstration purposes, let's assume the payment is verified successfully
+    payment_verified = True
+
+    if payment_verified:
+        send_payment_notification_email()
+        return redirect(url_for('home'))
+
+    else:
+        return redirect(url_for('home'))
+
+# Function to send email notification to admin
+def send_payment_notification_email():
+    msg = Message('New Payment Received', recipients=['victorcyrus01@gmai.com'])
+    msg.body = 'A new payment has been received. Please check the dashboard for details.'
+    mail.send(msg)
+
+    # Optionally, you can also render a template for the email content
+    # msg.html = render_template('payment_notification.html', amount=...)

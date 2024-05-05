@@ -1,3 +1,4 @@
+/* Reset and General Styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -10,15 +11,16 @@ body {
     padding: 20px 0;
 }
 
-/* Header styles */
+/* Header Styles */
 header {
-    background-color: #333;
+    background-color: #007bff;
     color: #fff;
     padding: 20px 0;
 }
 
 header h1 {
     margin: 0;
+    font-size: 28px;
 }
 
 nav ul {
@@ -35,11 +37,17 @@ nav ul li {
 nav ul li a {
     color: #fff;
     text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease;
 }
 
-/* Form styles */
+nav ul li a:hover {
+    color: #cfd8dc;
+}
+
+/* Form Styles */
 form {
-    width: 50%;
+    width: 100%;
 }
 
 .form-group {
@@ -57,24 +65,54 @@ form {
 }
 
 button {
-    background-color: #007bff;
+    background-color: #4caf50;
     color: #fff;
-    padding: 10px 20px;
+    padding: 12px 24px;
     border: none;
     cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #388e3c;
 }
 
-/* Footer styles */
-footer {
+/* Parcel Summary Styles */
+#parcel-summary {
     background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 40px;
+}
+
+.parcel-details {
+    font-size: 18px;
+}
+
+/* Receipt Styles */
+#receipt {
+    margin-top: 40px;
+}
+
+.receipt-details {
+    font-size: 18px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #333;
     padding: 20px 0;
     text-align: center;
+    color: #fff;
 }
 
 footer p {
     margin: 0;
+    font-size: 16px;
 }
+

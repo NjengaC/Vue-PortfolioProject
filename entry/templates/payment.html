@@ -13,8 +13,8 @@
             <h1>Parcel Payment</h1>
             <nav>
                 <ul>
-                    <li><a href="{{ url_for('home') }}">Home</a></li>
-                    <li><a href="{{ url_for('about') }}">About</a></li>
+			<li><a href="{{ url_for('home') }}"></li>
+                    <li><a href="#">About</a></li>
                     <li><a href="#">Contact</a></li>
                 </ul>
             </nav>
@@ -30,7 +30,22 @@
                 <div class="payment-card">
                     <h3>How would you like to pay?</h3>
                     <form id="payment-form">
-                        <!-- Add inputs for card details, owner, cvv no, expiration date, card number, etc. -->
+                        <div class="form-group">
+                            <label for="card-owner">Card Owner</label>
+                            <input type="text" id="card-owner" name="card-owner" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="card-number">Card Number</label>
+                            <input type="text" id="card-number" name="card-number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="expiration-date">Expiration Date</label>
+                            <input type="text" id="expiration-date" name="expiration-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" name="cvv" required>
+                        </div>
                     </form>
                 </div>
             </section>
