@@ -17,8 +17,9 @@ from functools import wraps
 from flask_login import current_user
 from entry import mail
 import retrying
+from entry.forms import ForgotPasswordForm
 import geopy.exc
-
+import secrets
 
 @app.route('/')
 @app.route('/home')
@@ -327,10 +328,10 @@ def notify_rider_new_assignment(rider_email, parcel):
     """
     Trigger notification when assigning a parcel to a rider
     """
-    msg = render_template('new_assignment_email.html', parcel=parcel)
     msg = Message('New Delivery Assignment', recipients=[rider_email])
+    html_content = render_template('new_assignment_email.html', parcel=parcel)
+    msg.html = html_content
     mail.send(msg)
-    flash('Delivery assignment not found.', 'error')
 
 def send_rider_details_email(recipient_email, allocation_result):
     msg = Message('Parcel Allocation Details', recipients=[recipient_email])
@@ -358,3 +359,53 @@ def support():
             return f'Error: {str(e)}'
 
     return render_template('support.html')
+
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    form = ForgotPasswordForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        user = User.query.filter_by(email=email).first()
+        if user:
+            # Generate a unique token
+            token = secrets.token_urlsafe(32)
+            user.reset_password_token = token
+            db.session.commit()
+
+            # Send password reset email
+            reset_url = url_for('reset_password', token=token, _external=True)
+            message = f"Click the link to reset your password: {reset_url}"
+            send_email(user.email, "Password Reset Request", message)
+
+            flash("Instructions to reset your password have been sent to your email.")
+            return redirect(url_for('login'))
+        else:
+            flash("Email address not found.")
+    return render_template('forgot_password.html', form=form)
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    user = User.query.filter_by(reset_password_token=token).first()
+    if user:
+        form = ResetPasswordForm()
+        if form.validate_on_submit():
+            # Update the user's password
+            new_password = form.password.data
+            user.password = bcrypt.generate_password_hash(new_password).decode('utf-8')
+
+            # Clear the reset_password_token
+            user.reset_password_token = None
+            db.session.commit()
+
+            flash("Your password has been successfully reset. You can now log in with your new password.")
+            return redirect(url_for('login'))
+        return render_template('reset_password.html', form=form)
+    else:
+        flash("Invalid or expired token.")
+        return redirect(url_for('forgot_password'))
+
+
+def send_email(recipient, subject, html_body):
+    msg = Message(subject, recipients=[recipient])
+    msg.html = html_body
+    mail.send(msg)
