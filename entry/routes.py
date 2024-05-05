@@ -92,6 +92,13 @@ def track_parcel():
     # Implement the functionality for sending parcels here
     return render_template('track_parcel.html')
 
+@app.route('/get_parcel_status')
+def get_parcel_status():
+    parcel = Parcel.query.filter_by(tracking_number=request.args.get('tracking_number')).first()
+    if parcel:
+        return parcel.status
+    else:
+        return None
 
 @app.route('/view_shipping_providers')
 def view_shipping_providers():
@@ -296,7 +303,6 @@ def notify_rider_new_assignment(rider_email, parcel):
     Trigger notification when assigning a parcel to a rider
     """
     msg = Message('New Delivery Assignment', recipients=[rider_email])
-    msg.body = f'Hey, you have a new delivery assignment:\n\n{parcel}\n\nClick here to view and accept: http://127.0.0.1:5000/view_assignments'
+    msg.body = f'Hey, you have a new delivery assignment:\n\n{parcel}\n\nClick here to view and accept: https:www.happyfaces/rider_login'
     mail.send(msg)
     flash('Delivery assignment not found.', 'error')
-    return redirect(url_for('view_assignments'))

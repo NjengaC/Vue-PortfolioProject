@@ -130,10 +130,6 @@ container {
   background:    -moz-linear-gradient(#648880, #293f50);
   background:         linear-gradient(#648880, #293f50);
 }
-sider {
-	display: inline-block;
-	margin 0 40px;
-}
 #company-list {
   list-style-type: none;
   padding: 0;
