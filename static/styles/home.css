@@ -82,7 +82,7 @@
 .container .card-body .btn.btn-primary:hover {
     color: #9f07e6;
     background-color: #fff;
-    border: 2px solid #9f07e6;
+    border: 3px solid #9f07e6;
 }
 
 .container .card-footer {
