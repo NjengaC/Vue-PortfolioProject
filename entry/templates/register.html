@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../static/styles/register.css"> <!-- Link to the CSS file -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Bootstrap CSS -->
 </head>
-<body>
+<body id="grad1">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
@@ -40,7 +40,7 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="content-section">
-                    <form method="POST" action="">
+                    <form method="POST" action="{{ url_for('register') }}">
                         {{ form.hidden_tag() }}
                         <fieldset class="form-group">
                             <legend class="border-bottom mb-4">Join Today</legend>

@@ -39,6 +39,11 @@ def register():
         db.session.add(user)
         try:
             db.session.commit()
+            welcome_msg = render_template('welcome_user_mail.html', user=user, login_url=url_for('login', _external=True))
+            msg= Message('Welcome to Vue!', recipients=[user.email])
+            msg.html = welcome_msg
+            mail.send(msg)
+
             flash('Account created', 'success')
             return redirect(url_for('login'))
         except IntegrityError:
@@ -141,6 +146,11 @@ def register_rider():
         db.session.add(new_rider)
         try:
             db.session.commit()
+            welcome_msg = render_template('welcome_rider_mail.html', rider=new_rider, login_url=url_for('login_rider', _external=True))
+            msg= Message('Welcome to Vue!', recipients=[new_rider.email])
+            msg.html = welcome_msg
+            mail.send(msg)
+
             flash('Rider registration successful!', 'success')
             return redirect(url_for('login_rider'))
         except IntegrityError:
@@ -197,7 +207,8 @@ def request_pickup():
         #Allocate parcel to the nearest unoccupied rider
         allocation_result = allocate_parcel(parcel)
         if allocation_result['success']:
-            flash('Parcel allocated to the nearest rider. Please wait for confirmation.')
+            send_rider_details_email(current_user.email, allocation_result)
+            flash(f'Rider Allocated. Check your email for more details')
             return render_template('payment.html', result = allocation_result)
         else:
             flash('Allocation in progress. Please wait for a rider to be assigned.')
@@ -312,14 +323,38 @@ def track_assignment(id):
         flash('Assignment not found or not assigned to you.', 'error')
         return redirect(url_for('home'))
 
-
 def notify_rider_new_assignment(rider_email, parcel):
     """
     Trigger notification when assigning a parcel to a rider
     """
+    msg = render_template('new_assignment_email.html', parcel=parcel)
     msg = Message('New Delivery Assignment', recipients=[rider_email])
-    msg.body = f'Hey, you have a new delivery assignment:\n\n{parcel}\n\nClick here to view and accept: https:www.happyfaces/rider_login'
     mail.send(msg)
     flash('Delivery assignment not found.', 'error')
 
+def send_rider_details_email(recipient_email, allocation_result):
+    msg = Message('Parcel Allocation Details', recipients=[recipient_email])
+    html_content = render_template('rider_details_email.html', **allocation_result)
+    msg.html = html_content
+    mail.send(msg)
 
+
+@app.route('/support', methods=['GET', 'POST'])
+def support():
+    if request.method == 'POST':
+        email = request.form['email']
+        subject = request.form['subject']
+        body = request.form['body']
+
+        # Create a Message object
+        msg = Message(subject=subject, recipients=[email])
+        msg.body = body
+
+        try:
+            # Send the email
+            mail.send(msg)
+            return 'Email sent successfully!'
+        except Exception as e:
+            return f'Error: {str(e)}'
+
+    return render_template('support.html')
