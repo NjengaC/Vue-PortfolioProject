@@ -193,9 +193,7 @@ def login_required(func):
 def request_pickup():
     form = ParcelForm()
     if form.validate_on_submit():
-        tracking_number = Parcel.generate_tracking_number()
         parcel = Parcel(
-            tracking_number=tracking_number,
             sender_name=form.sender_name.data,
             sender_email=form.sender_email.data,
             sender_contact=form.sender_contact.data,
@@ -205,12 +203,13 @@ def request_pickup():
             delivery_location=form.delivery_location.data,
             description=form.description.data
         )
+        parcel.tracking_number = Parcel.generate_tracking_number()
         db.session.add(parcel)
         db.session.commit()
         #Allocate parcel to the nearest unoccupied rider
         allocation_result = allocate_parcel(parcel)
         if allocation_result['success']:
-            send_rider_details_email(parcel.sender_email, allocation_result, tracking_number)
+            send_rider_details_email(parcel.sender_email, allocation_result, parcel.tracking_number)
             flash(f'Rider Allocated. Check your email for more details')
             return redirect(url_for('home'))
 #            return render_template('payment.html', result = allocation_result)
@@ -312,7 +311,7 @@ def update_assignment():
             assignment.status = 'pending'
             assignment.rider_id = None
             db.session.commit()
-            return jsonify({'success': True})
+
         else:
             return jsonify({'error': 'Invalid action'}), 400
     else:
