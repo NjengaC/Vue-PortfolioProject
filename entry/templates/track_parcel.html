@@ -32,6 +32,18 @@
     </nav>
 
     <!-- Search bar -->
+    <div class="row justify-content-center">
+	    {% with messages = get_flashed_messages(with_categories=true) %}
+	    {% if messages %}
+	    {% for category, message in messages %}
+	    <div class="alert alert-{{ category }}">
+		    {{ message }}
+	    </div>
+	    {% endfor %}
+	    {% endif %}
+	    {% endwith %}
+
+    </div>
     <div class="container mt-4">
 	    <div class="row justify-content-center">
 		    <div class="col-md-6">
@@ -52,25 +64,31 @@
         <div class="card">
             <div class="row d-flex justify-content-between px-3 top">
                 <div class="d-flex">
-                    <h5>ORDER <span class="text-primary font-weight-bold" id="trackingNumberPlaceholder">Insert Tracking Number </span></h5>
+                    <h5>PARCEL: <span class="text-primary font-weight-bold" id="trackingNumberPlaceholder">Insert Tracking Number </span></h5>
                 </div>
                 <div class="d-flex flex-column text-sm-right">
-                    <p class="mb-0">Expected Arrival <span id="expectedArrivalPlaceholder">Always Atleast a Day</span></p>
+                    <p class="mb-0">Expected Arrival: <span id="expectedArrivalPlaceholder">Always Atleast a Day</span></p>
                 </div>
             </div>
             <!-- Add class 'active' to progress -->
             <div class="row d-flex justify-content-center">
                 <div class="col-12">
-                    <ul id="progressbar" class="text-center">
-                        <!-- You can dynamically add classes to these li elements based on parcel status -->
+                    <ul id="progressbar" class="text-center no-gutters">
                         <li id="step1" class="step0"></li>
                         <li id="step2" class="step0"></li>
                         <li id="step3" class="step0"></li>
                         <li id="step4" class="step0"></li>
+                        <li id="step5" class="step0"></li>
                     </ul>
                 </div>
             </div>
             <div class="row justify-content-between top">
+                <div class="row d-flex icon-content">
+                    <img class="icon" src="../static/images/arrive.png">
+                    <div class="d-flex flex-column">
+                        <p class="font-weight-bold">Allocation<br>Pending</p>
+                    </div>
+                </div>
                 <div class="row d-flex icon-content">
                     <img class="icon" src="../static/images/rider.png">
                     <div class="d-flex flex-column">
@@ -90,7 +108,7 @@
                     </div>
                 </div>
                 <div class="row d-flex icon-content">
-                    <img class="icon" src="../static/images/arrive.png">
+                    <img class="icon" src="../static/images/delivered.png">
                     <div class="d-flex flex-column">
                         <p class="font-weight-bold">Parcel<br>Arrived</p>
                     </div>
@@ -142,13 +160,26 @@ function updateProgressBar(status) {
             document.getElementById('step1').classList.add('active');
             break;
         case 'allocated':
+            document.getElementById('step1').classList.add('active');
             document.getElementById('step2').classList.add('active');
             break;
         case 'in-progress':
+            document.getElementById('step1').classList.add('active');
+	    document.getElementById('step2').classList.add('active');
             document.getElementById('step3').classList.add('active');
             break;
         case 'shipped':
+            document.getElementById('step1').classList.add('active');
+            document.getElementById('step2').classList.add('active');
+            document.getElementById('step3').classList.add('active');
             document.getElementById('step4').classList.add('active');
+            break;
+        case 'arrived':
+            document.getElementById('step1').classList.add('active');
+            document.getElementById('step2').classList.add('active');
+            document.getElementById('step3').classList.add('active');
+            document.getElementById('step4').classList.add('active');
+            document.getElementById('step5').classList.add('active');
             break;
         default:
             console.log('Unknown parcel status:', status);

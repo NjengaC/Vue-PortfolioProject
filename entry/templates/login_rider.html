@@ -34,7 +34,18 @@
             </div>
         </div>
     </nav>
+    <div class="row justify-content-center">
+	    {% with messages = get_flashed_messages(with_categories=true) %}
+	    {% if messages %}
+	    {% for category, message in messages %}
+	    <div class="alert alert-{{ category }}">
+		    {{ message }}
+	    </div>
+	    {% endfor %}
+	    {% endif %}
+	    {% endwith %}
 
+    </div>
     <!-- Login Form Section -->
     <div class="container mt-5">
         <div class="row justify-content-center">
