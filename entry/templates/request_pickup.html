@@ -23,7 +23,7 @@
     </header>
 
         <div class="send_form">
-            <form id="parcelForm" method="POST" action="">
+		<form id="parcelForm" method="POST" action="{{ url_for('request_pickup') }}">
                 {{ form.hidden_tag() }}
                 <div class="form-group">
                     <div class="row">
