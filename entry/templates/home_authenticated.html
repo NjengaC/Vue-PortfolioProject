@@ -8,22 +8,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
 </head>
 <body class="bg-gray-100">
+<header>
+                <div class="sidebar-link">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                                {{ message }}
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+
+                </div>
+</header>
     <div class="min-h-screen flex flex-row bg-gray-100">
         <div class="flex flex-col w-56 bg-white rounded-r-3xl overflow-hidden">
             <div class="flex items-center justify-center h-20 shadow-md">
                 <h1 class="text-3xl uppercase text-indigo-500">Logo</h1>
-		<div class="row">
-			{% with messages = get_flashed_messages(with_categories=true) %}
-			{% if messages %}
-			{% for category, message in messages %}
-			<div class="alert alert-{{ category }}">
-				{{ message }}
-			</div>
-			{% endfor %}
-			{% endif %}
-			{% endwith %}
-
-		</div>
             </div>
             <ul class="flex flex-col py-4">
                 <li>
@@ -39,7 +41,7 @@
                     </a>
                 </li>
 		<li>
-                    <a href="#" class="sidebar-link">
+			<a href="{{ url_for('view_order_history') }}" class="sidebar-link">
                         <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"><i class="bx bx-history"></i></span>
                         <span class="text-sm font-medium">View Order History</span>
                     </a>
@@ -57,7 +59,7 @@
                     </a>
                 </li>
 		<li>
-                    <a href="{{ url_for('logout') }}" class="sideba">
+                    <a href="{{ url_for('logout') }}" >
                         <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"><i class="bx bx-log-out"></i></span>
                         <span class="text-sm font-medium">Logout</span>
                     </a>

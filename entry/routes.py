@@ -478,3 +478,10 @@ def send_payment_notification_email():
 
     # Optionally, you can also render a template for the email content
     # msg.html = render_template('payment_notification.html', amount=...)
+
+@app.route('/view_order_history', methods=['GET', 'POST'])
+def view_order_history():
+    if current_user.is_authenticated:
+        parcels = Parcel.query.filter_by(email=current_user.email).all()
+        return render_template('view_order_history', parcels=parcels)
+    pass
