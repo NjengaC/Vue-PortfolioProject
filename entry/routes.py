@@ -207,7 +207,7 @@ def request_pickup():
         db.session.add(parcel)
         db.session.commit()
         #Allocate parcel to the nearest unoccupied rider
-        allocation_result = allocate_parcel(parcel)
+        allocation_result = allocate_parcel()
         if allocation_result['success']:
             send_rider_details_email(parcel.sender_email, allocation_result, parcel.tracking_number)
             flash(f'Rider Allocated. Check your email for more details')
@@ -219,40 +219,50 @@ def request_pickup():
 #           return render_template('payment.html', result = allocation_result)
     return render_template('request_pickup.html', form=form)
 
-def allocate_parcel(parcel):
-    """
-    Allocates a parcel delivery to a rider
-    """
-    pickup_location = parcel.pickup_location
-    available_riders = Rider.query.filter_by(status='available').all()
-    closest_rider = None
-    min_distance = float('inf')
-    ship_distance = calculate_distance(pickup_location, parcel.delivery_location)
 
-    for rider in available_riders:
-        distance = calculate_distance(pickup_location, rider.current_location)
-        if distance < min_distance:
-            closest_rider = rider
-            min_distance = distance
-    if closest_rider:
-        parcel.status = 'allocated'
-        parcel.rider_id = closest_rider.id
-        db.session.commit()
-        notify_rider_new_assignment(closest_rider.email, parcel)
+def allocate_parcel():
+    """
+    Allocates pending parcel deliveries to available riders
+    """
+    pending_parcels = Parcel.query.filter_by(status='pending').all()
+    available_riders = Rider.query.filter_by(status='available').all()
+    allocated_parcels = []
+
+    for parcel in pending_parcels:
+        if not available_riders:
+            break  # Break if no available riders left
+
+        pickup_location = parcel.pickup_location
+        closest_rider = None
+        min_distance = float('inf')
+
+        available_riders_excluding_denied = [rider for rider in available_riders if rider.id != parcel.rider_id]
+
+        for rider in available_riders_excluding_denied:
+            distance = calculate_distance(pickup_location, rider.current_location)
+            if distance < min_distance:
+                closest_rider = rider
+                min_distance = distance
+
+        if closest_rider:
+            parcel.status = 'allocated'
+            parcel.rider_id = closest_rider.id
+            closest_rider.status = 'unavailable'
+            db.session.commit()
+            notify_rider_new_assignment(closest_rider.email, parcel)
+            allocated_parcels.append(parcel)
+
+    if allocated_parcels:
         result = {
             'success': True,
-            'rider_id': closest_rider.id,
-            'rider_name': closest_rider.name,
-            'vehicle_type': closest_rider.vehicle_type,
-            'vehicle_registration': closest_rider.vehicle_registration,
-            'distance': ship_distance,
-            'message': 'Allocation Successful. Please wait for rider to accept pick up'
+            'allocated_parcels': allocated_parcels
         }
     else:
-        result = {'success': False,
-                'distance': ship_distance,
-                'message': 'Allocation in progress. Please wait for a rider to be assigned.'}
-
+        result = {
+            'success': False,
+            'message': 'No available riders or pending parcels to allocate'
+        }
+    
     return result
 
 
@@ -308,14 +318,25 @@ def update_assignment():
             db.session.commit()
             return jsonify({'success': True})
         elif action == 'deny':
+            rider = Rider.query.get(assignment.rider_id)
+            if rider:
+                rider.status = 'available'
             assignment.status = 'pending'
             assignment.rider_id = None
             db.session.commit()
+            
+            # Try to allocate the next pending parcel
+            allocation_result = allocate_parcel()
+            if allocation_result['success']:
+                flash('Next pending parcel allocated successfully!', 'success')
+            else:
+                flash('Parcel not found or already denied', 'danger')
 
         else:
             return jsonify({'error': 'Invalid action'}), 400
     else:
         return jsonify({'error': 'Assignment not found or already accepted/denied'}), 404
+    return redirect(url_for('home'))
 
 @app.route('/track_assignment/<int:id>')
 def track_assignment(id):
