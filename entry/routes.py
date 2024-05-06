@@ -210,10 +210,12 @@ def request_pickup():
         if allocation_result['success']:
             send_rider_details_email(parcel.sender_email, allocation_result)
             flash(f'Rider Allocated. Check your email for more details')
-            return render_template('payment.html', result = allocation_result)
+            return redirect(url_for('home'))
+#            return render_template('payment.html', result = allocation_result)
         else:
-            flash('Allocation in progress. Please wait for a rider to be assigned.')
-            return render_template('payment.html', result = allocation_result)
+            flash('Allocation in progress. Please wait for a rider to be assigned')
+            return redirect(url_for('home'))
+#           return render_template('payment.html', result = allocation_result)
     return render_template('request_pickup.html', form=form)
 
 def allocate_parcel(parcel):
@@ -224,7 +226,7 @@ def allocate_parcel(parcel):
     available_riders = Rider.query.filter_by(status='available').all()
     closest_rider = None
     min_distance = float('inf')
-    distance = 0
+    ship_distance = calculate_distance(pickup_location, parcel.delivery_location)
 
     for rider in available_riders:
         distance = calculate_distance(pickup_location, rider.current_location)
@@ -242,12 +244,12 @@ def allocate_parcel(parcel):
             'rider_name': closest_rider.name,
             'vehicle_type': closest_rider.vehicle_type,
             'vehicle_registration': closest_rider.vehicle_registration,
-            'distance': distance,
+            'distance': ship_distance,
             'message': 'Allocation Successful. Please wait for rider to accept pick up'
         }
     else:
         result = {'success': False,
-                'distance': distance,
+                'distance': ship_distance,
                 'message': 'Allocation in progress. Please wait for a rider to be assigned.'}
 
     return result
@@ -453,7 +455,7 @@ def payment_success():
 @app.route('/verify_payment', methods=['POST'])
 def verify_payment():
     # Extract the token from the request data
-    stripe_token = request.form.get('stripeToken')
+    # stripe_token = request.form.get('stripeToken')
 
     # Here you would perform the necessary steps to verify the payment using the token
     # For demonstration purposes, let's assume the payment is verified successfully
