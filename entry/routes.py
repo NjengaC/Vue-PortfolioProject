@@ -125,7 +125,11 @@ def update():
 @app.route('/about')
 def about():
     # Implement the functionality for sending parcels here
-    return render_template('about.html')
+    return render_template('about1.html')
+
+@app.route('/contacts')
+def contacts():
+    return render_template('contact.html')
 
 
 @app.route('/register_rider', methods=['GET', 'POST'])
@@ -211,12 +215,12 @@ def request_pickup():
         if allocation_result['success']:
             send_rider_details_email(parcel.sender_email, allocation_result, parcel.tracking_number)
             flash(f'Rider Allocated. Check your email for more details')
-            return redirect(url_for('home'))
-#            return render_template('payment.html', result = allocation_result)
+#            return render_template('payment.html', results=allocation_result                    )
+            return render_template('payment.html', result = allocation_result)
         else:
             flash('Allocation in progress. Please wait for a rider to be assigned')
-            return redirect(url_for('home'))
-#           return render_template('payment.html', result = allocation_result)
+#            return redirect(url_for('verify_payment'))
+            return render_template('payment.html', result = allocation_result)
     return render_template('request_pickup.html', form=form)
 
 
@@ -474,7 +478,7 @@ def payment_success():
     return redirect(url_for('home'))
 
 
-@app.route('/verify_payment', methods=['POST'])
+@app.route('/verify_payment', methods=['GET', 'POST'])
 def verify_payment():
     # Extract the token from the request data
     # stripe_token = request.form.get('stripeToken')
@@ -499,9 +503,11 @@ def send_payment_notification_email():
     # Optionally, you can also render a template for the email content
     # msg.html = render_template('payment_notification.html', amount=...)
 
-@app.route('/view_order_history', methods=['GET', 'POST'])
-def view_order_history():
+@app.route('/view_parcel_history', methods=['GET', 'POST'])
+def view_parcel_history():
     if current_user.is_authenticated:
-        parcels = Parcel.query.filter_by(email=current_user.email).all()
-        return render_template('view_order_history', parcels=parcels)
-    pass
+        parcels = Parcel.query.filter_by(sender_email=current_user.email).all()
+        return render_template('view_parcel_history.html', parcels=parcels)
+    else:
+        return render_template('view_parcel_history.html')
+        flash('Log in to view your parcels history!', 'danger')
