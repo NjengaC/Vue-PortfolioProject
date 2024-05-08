@@ -125,7 +125,7 @@ def update():
 @app.route('/about')
 def about():
     # Implement the functionality for sending parcels here
-    return render_template('about1.html')
+    return render_template('about.html')
 
 @app.route('/contacts')
 def contacts():
