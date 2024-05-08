@@ -375,15 +375,19 @@ def support():
         subject = request.form['subject']
         body = request.form['body']
 
+        if not email or not subject or not body:
+            return 'Please fill out all fields.', 400
+
         # Create a Message object
-        msg = Message(subject=subject, recipients=[email])
-        msg.body = body
+        msg = Message(subject=subject, recipients=[app.config['MAIL_USERNAME']])
+        msg.body = f"Sender's Email: {email}\n\n{body}"
 
         try:
             # Send the email
             mail.send(msg)
             return 'Email sent successfully!'
         except Exception as e:
+            print(f'Error sending email: {e}')
             return f'Error: {str(e)}'
 
     return render_template('support.html')
