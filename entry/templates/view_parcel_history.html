@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcel Sending History</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/view_parcel_history.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-4">Parcel Sending History</h1>
+        {% if parcels %}
+            <ul class="list-group">
+                {% for parcel in parcels %}
+                    <li class="list-group-item">
+                        <div class="parcel-info">
+                            <h2>Parcel ID: {{ parcel.id }}</h2>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Sender:</strong> {{ parcel.sender_name }}</p>
+                                    <p><strong>Recipient:</strong> {{ parcel.receiver_name }}</p>
+                                    <p><strong>Delivery Status:</strong> {{ parcel.status }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Delivery Date:</strong> {{ parcel.expected_arrival }}</p>
+                                    <p><strong>Tracking Number:</strong> {{ parcel.tracking_number }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="text-center">
+                <p class="my-4">No parcel history found.</p>
+                <img src="{{ url_for('static', filename='images/no_history.png') }}" alt="No History" class="img-fluid">
+            </div>
+        {% endif %}
+    </div>
+    <script src="{{ url_for('static', filename='scripts/view_parcel_history.js') }}"></script>
+</body>
+</html>
