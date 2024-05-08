@@ -1,0 +1,26 @@
+{
+  "name": "vue",
+  "version": "1.0.0",
+  "description": "Vue Parcel Sending Service Welcome to the Parcel Sending Service App! This application provides a convenient platform for users to send parcels and for parcel service companies to manage pickup requests and deliveries.",
+  "main": "tailwind.config.js",
+  "dependencies": {
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://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@github.com/NjengaC/Vue-PortfolioProject.git"
+  },
+  "author": "Kay",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NjengaC/Vue-PortfolioProject/issues"
+  },
+  "homepage": "https://github.com/NjengaC/Vue-PortfolioProject#readme"
+}
