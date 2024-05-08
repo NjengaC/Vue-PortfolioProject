@@ -1,6 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 /* Custom CSS for carousel content */
 .custom-carousel-content {
   position: absolute;
