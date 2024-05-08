@@ -207,24 +207,23 @@ def request_pickup():
             delivery_location=form.delivery_location.data,
             description=form.description.data
         )
-        parcel.tracking_number = Parcel.generate_tracking_number()
         db.session.add(parcel)
         db.session.commit()
         #Allocate parcel to the nearest unoccupied rider
-        allocation_result = allocate_parcel()
+        allocation_result = allocate_parcel(parcel)
         if allocation_result['success']:
             send_rider_details_email(parcel.sender_email, allocation_result, parcel.tracking_number)
             flash(f'Rider Allocated. Check your email for more details')
 #            return render_template('payment.html', results=allocation_result                    )
-            return render_template('payment.html', result = allocation_result)
+            return redirect(url_for('verify_payment'))
         else:
             flash('Allocation in progress. Please wait for a rider to be assigned')
-#            return redirect(url_for('verify_payment'))
-            return render_template('payment.html', result = allocation_result)
+            return redirect(url_for('verify_payment'))
+#            return render_template('payment.html', result = allocation_result)
     return render_template('request_pickup.html', form=form)
 
 
-def allocate_parcel():
+def allocate_parcel(temp_parcel):
     """
     Allocates pending parcel deliveries to available riders
     """
@@ -259,7 +258,8 @@ def allocate_parcel():
     if allocated_parcels:
         result = {
             'success': True,
-            'allocated_parcels': allocated_parcels
+            'allocated_parcels': allocated_parcels,
+
         }
     else:
         result = {
