@@ -113,6 +113,9 @@ def get_parcel_status():
     else:
         return jsonify({'error': 'Tracking number not provided'}), 400
 
+@app.route('/rider_dashboard')
+def rider_dashboard():
+    return render_template('rider_dashboard.html')
 
 @app.route('/view_shipping_providers')
 def view_shipping_providers():
