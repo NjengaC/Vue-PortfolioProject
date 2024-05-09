@@ -8,36 +8,194 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/view_parcel_history.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1 class="text-center my-4">Parcel Sending History</h1>
-        {% if parcels %}
-            <ul class="list-group">
-                {% for parcel in parcels %}
-                    <li class="list-group-item">
-                        <div class="parcel-info">
-                            <h2>Parcel ID: {{ parcel.id }}</h2>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <p><strong>Sender:</strong> {{ parcel.sender_name }}</p>
-                                    <p><strong>Recipient:</strong> {{ parcel.receiver_name }}</p>
-                                    <p><strong>Delivery Status:</strong> {{ parcel.status }}</p>
-                                </div>
-                                <div class="col-md-6">
-                                    <p><strong>Delivery Date:</strong> {{ parcel.expected_arrival }}</p>
-                                    <p><strong>Tracking Number:</strong> {{ parcel.tracking_number }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <div class="text-center">
-                <p class="my-4">No parcel history found.</p>
-                <img src="{{ url_for('static', filename='images/no_history.png') }}" alt="No History" class="img-fluid">
-            </div>
-        {% endif %}
-    </div>
-    <script src="{{ url_for('static', filename='scripts/view_parcel_history.js') }}"></script>
+<div class="tracking-item">
+   <div class="tracking-icon status-intransit">
+      <svg class="svg-inline--fa fa-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">May 15, 2024<span>10:00 AM</span></div>
+   <div class="tracking-content">Package shipped from Nairobi, Kenya to John Smith in Mombasa, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-delivered">
+      <svg class="svg-inline--fa fa-check-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="check-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">May 18, 2024<span>3:30 PM</span></div>
+   <div class="tracking-content">Package delivered to John Smith in Mombasa, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-intransit">
+      <svg class="svg-inline--fa fa-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">May 20, 2024<span>1:45 PM</span></div>
+   <div class="tracking-content">Package shipped from Kisumu, Kenya to Emily Johnson in Eldoret, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-delivered">
+      <svg class="svg-inline--fa fa-check-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="check-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">May 22, 2024<span>12:15 PM</span></div>
+   <div class="tracking-content">Package delivered to Emily Johnson in Eldoret, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-intransit">
+      <svg class="svg-inline--fa fa-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">May 25, 2024<span>9:00 AM</span></div>
+   <div class="tracking-content">Package shipped from Nakuru, Kenya to Sarah Brown in Thika, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-delivered">
+      <svg class="svg-inline--fa fa-check-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="check-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">May 28, 2024<span>2:45 PM</span></div>
+   <div class="tracking-content">Package delivered to Sarah Brown in Thika, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-intransit">
+      <svg class="svg-inline--fa fa-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">May 30, 2024<span>4:30 PM</span></div>
+   <div class="tracking-content">Package shipped from Nairobi, Kenya to David Clark in Kisumu, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-intransit">
+      <svg class="svg-inline--fa fa-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">June 2, 2024<span>11:30 AM</span></div>
+   <div class="tracking-content">Package shipped from Mombasa, Kenya to Michael Anderson in Nairobi, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-delivered">
+      <svg class="svg-inline--fa fa-check-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="check-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">June 5, 2024<span>4:00 PM</span></div>
+   <div class="tracking-content">Package delivered to Michael Anderson in Nairobi, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-intransit">
+      <svg class="svg-inline--fa fa-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">June 8, 2024<span>10:15 AM</span></div>
+   <div class="tracking-content">Package shipped from Eldoret, Kenya to Samantha Brown in Nakuru, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-delivered">
+      <svg class="svg-inline--fa fa-check-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="check-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">June 10, 2024<span>1:30 PM</span></div>
+   <div class="tracking-content">Package delivered to Samantha Brown in Nakuru, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-intransit">
+      <svg class="svg-inline--fa fa-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">June 13, 2024<span>3:45 PM</span></div>
+   <div class="tracking-content">Package shipped from Thika, Kenya to David Johnson in Kisumu, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-delivered">
+      <svg class="svg-inline--fa fa-check-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="check-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">June 16, 2024<span>11:00 AM</span></div>
+   <div class="tracking-content">Package delivered to David Johnson in Kisumu, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-intransit">
+      <svg class="svg-inline--fa fa-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">June 18, 2024<span>9:30 AM</span></div>
+   <div class="tracking-content">Package shipped from Nairobi, Kenya to Susan Taylor in Malindi, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-delivered">
+      <svg class="svg-inline--fa fa-check-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="check-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">June 20, 2024<span>2:45 PM</span></div>
+   <div class="tracking-content">Package delivered to Susan Taylor in Malindi, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-intransit">
+      <svg class="svg-inline--fa fa-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">June 23, 2024<span>8:00 AM</span></div>
+   <div class="tracking-content">Package shipped from Kisumu, Kenya to John Parker in Kitale, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-delivered">
+      <svg class="svg-inline--fa fa-check-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="check-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">June 26, 2024<span>12:20 PM</span></div>
+   <div class="tracking-content">Package delivered to John Parker in Kitale, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-intransit">
+      <svg class="svg-inline--fa fa-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">June 29, 2024<span>9:45 AM</span></div>
+   <div class="tracking-content">Package shipped from Malindi, Kenya to Emily Garcia in Meru, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-delivered">
+      <svg class="svg-inline--fa fa-check-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="check-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">July 2, 2024<span>3:00 PM</span></div>
+   <div class="tracking-content">Package delivered to Emily Garcia in Meru, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-intransit">
+      <svg class="svg-inline--fa fa-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">July 5, 2024<span>11:30 AM</span></div>
+   <div class="tracking-content">Package shipped from Kitale, Kenya to Peter Martinez in Busia, Kenya</div>
+</div>
+<div class="tracking-item">
+   <div class="tracking-icon status-delivered">
+      <svg class="svg-inline--fa fa-check-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="check-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+         <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+      </svg>
+   </div>
+   <div class="tracking-date">July 8, 2024<span>2:15 PM</span></div>
+   <div class="tracking-content">Package delivered to Peter Martinez in Busia, Kenya</div>
+</div>
 </body>
 </html>
