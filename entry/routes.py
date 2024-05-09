@@ -3,7 +3,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 import json
 import stripe
 from entry.forms import LoginRiderForm, RegistrationForm, LoginForm, UpdateAccountForm, RiderRegistrationForm, ParcelForm
-from entry.models import User, Rider, Parcel
+from entry.models import User, Rider, Parcel, FAQ
 import secrets
 from entry import app, db, bcrypt
 from sqlalchemy.exc import IntegrityError
@@ -397,37 +397,13 @@ def support():
         # Handle GET request for fetching FAQs
         search_query = request.args.get('search_query', '')
 
-#        try:
-            # Connect to the PostgreSQL database
- #           conn = psycopg2.connect(
-  #              dbname='vue',
-   #             user='postgres',
-    #            password='new_password',
-     #           host='localhost',
-      #          port='5003'
-       #     )
+        # Query FAQs using the existing database connection
+        faqs = FAQ.query.filter(
+            (FAQ.question.ilike(f'%{search_query}%')) |
+            (FAQ.answer.ilike(f'%{search_query}%'))
+        ).all()
 
-            # Create a cursor object to execute queries
-        #    cursor = conn.cursor()
-
-            # Execute SQL query to fetch FAQs based on search query
-         #   cursor.execute("SELECT question, answer FROM faqs WHERE question ILIKE %s OR answer ILIKE %s", ('%' + search_query + '%', '%' + search_query + '%'))
-
-            # Fetch all rows from the result set
-          #  faqs = cursor.fetchall()
-
-            # Close cursor and connection
-           # cursor.close()
-            #conn.close()
-
-            # Render the template with fetched FAQs and search query
-#            return render_template('support.html', faqs=faqs, search_query=search_query)
-
- #       except psycopg2.Error as e:
-            # Handle database connection or query errors
-  #          print("Error fetching FAQs:", e)
-   #         return 'Error fetching FAQs.', 500
-
+        return render_template('support.html', faqs=faqs, search_query=search_query)
 
     return render_template('support.html')
 
