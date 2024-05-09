@@ -1,149 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vue</title>
-  <link rel="stylesheet" href="../static/styles/home.css">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-P8XN+Jyrp6rVIiIMT9RYBq5h6DScnIxK1K8yhSfFNSq7hdx38P4qNGpbKNisF3d6V2fK60h0RVaMx6syPeCifQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <!-- Bootstrap CSS -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <!-- jQuery -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+    <!-- Link to the compiled Tailwind CSS file -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Optionally, you can include your custom CSS file here -->
+    <link href="path/to/your/custom.css" rel="stylesheet">
+     <script src="../static/scripts/script.js" defer></script>
 </head>
 <body>
-<nav  id ="mainNavbar" class ="navbar navbar-dark  navbar-expand-md py-0 fixed-top">
-    <a href="#" class = "navbar-brand">VUE</a>
-    <button class = "navbar-toggler" data-toggle="collapse" data-target ="#navLinks">
-      <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class ="collapse navbar-collapse" id="navLinks">
-         <ul class ="navbar-nav">
-          <li class ="nav-item">
-            <a href="" class="nav-link">HOME</a>
-          </li>
-          <li class ="nav-item">
-            <a href="" class="nav-link">ABOUT</a>
-          </li>
-          <li class ="nav-item">
-            <a href="" class="nav-link">SERVICES</a>
-          </li>
-          <li class ="nav-item">
-            <a href="" class="nav-link">CONTACTS</a>
-          </li>
-        </ul>
-      </div>
-</nav>
+    <!-- Your HTML content goes here -->
+    <aside class="flex flex-col w-64 h-screen px-5 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700">
+<a href="#">
+        <img class="w-auto h-7" src="https://merakiui.com/images/logo.svg" alt="">
+    </a>
 
-<header>
-  <img src="https://images.unsplash.com/photo-1465146633011-14f8e0781093?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80">
-  <div class="carousel-caption d-none d-md-block custom-carousel-content">
-    <h3 class="display-4">Welcome to Our Website</h3>
-    <p class="lead text-white">Explore our services and get started today!</p>
-    <a href="track_parcel.html" class="btn btn-secondary">Ship Now</a>
-    <a href="register.html" class="btn btn-primary mr-3 future">Get Started</a>
-  </div>
-</header>
+    <div class="flex flex-col justify-between flex-1 mt-6">
+        <nav class="flex-1 -mx-3 space-y-3 ">
+            <div class="relative mx-3">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                    <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none">
+                        <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </span>
 
-<!-- Page Content -->
-<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+                <input type="text" class="w-full py-1.5 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" placeholder="Search" />
+            </div>
 
-<a href="#" class="card delivery">
-  <div class="overlay"></div>
-  <div class="circle">
-    <svg width="71px" height="76px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M4.91421 2.41421C5.03855 2.28989 5.18852 2.18934 5.35697 2.11869C5.52542 2.04805 5.7088 2.00953 5.89339 2.00574C6.07798 2.00194 6.25913 2.03238 6.42435 2.09561C6.58957 2.15884 6.7343 2.25396 6.84835 2.37157L12.7071 8.23035L18.5646 2.37285C18.6784 2.25884 18.8226 2.16102 18.9874 2.09853C19.1522 2.03604 19.3335 2.00994 19.5127 2.02293C19.6918 2.03592 19.8622 2.08752 20.0107 2.17357C20.1592 2.25962 20.2823 2.37707 20.3695 2.51486C20.4566 2.65265 20.5059 2.8068 20.5136 2.96684C20.5213 3.12687 20.487 3.28706 20.4135 3.43555C20.3401 3.58404 20.2299 3.71585 20.0922 3.8173L12.7071 11.2024L5.32203 3.8173C5.18431 3.71585 5.07411 3.58404 5.00071 3.43555C4.92731 3.28706 4.893 3.12687 4.90072 2.96684C4.90843 2.8068 4.95769 2.65265 5.0448 2.51486C5.1319 2.37707 5.25504 2.25962 5.40353 2.17357C5.55202 2.08752 5.7224 2.03592 5.90152 2.02293C6.08064 2.00994 6.26192 2.03604 6.42674 2.09853C6.59155 2.16102 6.73579 2.25884 6.84958 2.37285L12.7071 8.23035Z" fill="#D98A19"/>
-    </svg>
-  </div>
-  <p>Timely Delivery</p>
-</a>
+            <a class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="" data-url="{{ url_for('rider_dashboard') }}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                </svg>
 
-<a href="#" class="card secure">
-  <div class="overlay"></div>
-  <div class="circle">
-    <svg width="64px" height="72px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M22 0H2C0.895431 0 0 0.89543 0 2V22C0 23.1046 0.89543 24 2 24H22C23.1046 24 24 23.1046 24 22V2C24 0.895431 23.1046 0 22 0ZM16 2C16 2.55228 15.5523 3 15 3H9C8.44772 3 8 2.55228 8 2V1H16V2ZM2 22V4H22V22H2ZM9.5 10H10.5V16H9.5V10ZM9.5 17H10.5V18H9.5V17Z" fill="#59A785"/>
-    </svg>
-  </div>
-  <p>Secure Parcel Handling</p>
-</a>
+                <span class="mx-2 text-sm font-medium">Home</span>
+            </a>
 
-<a href="{{ url_for('track_parcel') }}" class="card tracking">
-  <div class="overlay"></div>
-  <div class="circle">
-    <svg width="78px" height="60px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M18.71 11.29L20.12 9.88C20.5 9.5 20.5 8.88 20.12 8.5L18.71 7.08C18.32 6.7 17.69 6.7 17.29 7.08L15.88 8.5C15.5 8.88 15.5 9.5 15.88 9.88L17.29 11.29C17.68 11.67 17.68 12.29 17.29 12.67L12.34 17.59C12.17 17.76 11.93 17.86 11.69 17.86C11.44 17.86 11.2 17.76 11.03 17.59L6.08 12.67C5.68 12.29 5.68 11.67 6.08 11.29L7.49 9.88C7.87 9.5 8.49 9.5 8.88 9.88L10.29 11.29C10.68 11.67 11.31 11.67 11.71 11.29L12 11L12.29 11.29C12.69 11.67 13.32 11.67 13.71 11.29L18.71 6.29C19.1 5.91 19.73 5.91 20.12 6.29L21.52 7.71C21.91 8.09 21.91 8.71 21.52 9.09L18.71 11.29Z" fill="#25D48A"/>
-    </svg>
-  </div>
-  <p>Real-time Parcel Tracking</p>
-</a>
+            <a class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605" />
+                </svg>
 
-<a href="#" class="card secure-delivery">
-  <div class="overlay"></div>
-  <div class="circle">
-    <svg width="71px" height="76px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M17 0H7C6.44772 0 6 0.447715 6 1V3C6 3.55228 6.44772 4 7 4H17C17.5523 4 18 3.55228 18 3V1C18 0.447715 17.5523 0 17 0ZM7 22H17C17.5523 22 18 21.5523 18 21V5C18 4.44771 17.5523 4 17 4H7C6.44772 4 6 4.44771 6 5V21C6 21.5523 6.44772 22 7 22ZM15 7H9C8.44772 7 8 7.44772 8 8C8 8.55228 8.44772 9 9 9H15C15.5523 9 16 8.55228 16 8C16 7.44772 15.5523 7 15 7ZM15 11H9C8.44772 11 8 11.4477 8 12C8 12.5523 8.44772 13 9 13H15C15.5523 13 16 12.5523 16 12C16 11.4477 15.5523 11 15 11ZM15 15H9C8.44772 15 8 15.4477 8 16C8 16.5523 8.44772 17 9 17H15C15.5523 17 16 16.5523 16 16C16 15.4477 15.5523 15 15 15Z" fill="#AC8BE9"/>
-    </svg>
-  </div>
-  <p>Fast & Secure Delivery</p>
-</a>
+                <span class="mx-2 text-sm font-medium">Dashboard</span>
+            </a>
 
-<a href="{{ url_for('login_rider') }}" class="card secure">
-  <div class="overlay"></div>
-  <div class="circle">
-    <svg width="66px" height="77px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M4.28872 42.7465C4.28872 39.3309 5.41592 33.7621 6.40577 30.4913C10.5921 32.1099 14.3021 35.1208 18.6959 35.1208C30.9936 35.1208 42.5761 28.7163 50 17.9015C56.8027 23.8881 60.8188 33.0463 60.8188 42.7465C60.8188 60.8174 47.6105 76.6693 32.5538 76.6693C17.4971 76.6693 4.28872 60.8174 4.28872 42.7465ZM16 2C16 2.55228 15.5523 3 15 3H9C8.44772 3 8 2.55228 8 2V1H16V2ZM2 22V4H22V22H2ZM9.5 10H10.5V16H9.5V10ZM9.5 17H10.5V18H9.5V17Z" fill="#AFCEFF"/>
-    </svg>
-  </div>
-  <p>Earn with us</p>
-</a>
+            <a class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" />
+                </svg>
 
-<script>
-  $(function () {
-      $(document).scroll(function () {
-          var $nav = $("#mainNavbar");
-          $nav.toggleClass("scrolled", $(this).scrollTop() > $nav.height());
-      });
-  });
-</script>
-<section class="p-4 lg:p-8 bg-gray-800 dark:bg-gray-100 text-gray-100 dark:text-gray-800">
-	<div class="container mx-auto space-y-12">
-		<div class="flex flex-col overflow-hidden rounded-md shadow-sm lg:flex-row">
-			<img src="https://source.unsplash.com/640x480/?1" alt="" class="h-80 bg-gray-500 dark:bg-gray-500 aspect-video">
-			<div class="flex flex-col justify-center flex-1 p-6 bg-gray-900 dark:bg-gray-50">
-				<span class="text-xs uppercase text-gray-400 dark:text-gray-600">Join, it's free</span>
-				<h3 class="text-3xl font-bold">We're not reinventing the wheel</h3>
-				<p class="my-6 text-gray-400 dark:text-gray-600">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor aliquam possimus quas, error esse quos.</p>
-				<button type="button" class="self-start">Action</button>
-			</div>
-		</div>
-		<div class="flex flex-col overflow-hidden rounded-md shadow-sm lg:flex-row-reverse">
-			<img src="https://source.unsplash.com/640x480/?2" alt="" class="h-80 bg-gray-500 dark:bg-gray-500 aspect-video">
-			<div class="flex flex-col justify-center flex-1 p-6 bg-gray-900 dark:bg-gray-50">
-				<span class="text-xs uppercase text-gray-400 dark:text-gray-600">Join, it's free</span>
-				<h3 class="text-3xl font-bold">We're not reinventing the wheel</h3>
-				<p class="my-6 text-gray-400 dark:text-gray-600">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor aliquam possimus quas, error esse quos.</p>
-				<button type="button" class="self-start">Action</button>
-			</div>
-		</div>
-		<div class="flex flex-col overflow-hidden rounded-md shadow-sm lg:flex-row">
-			<img src="https://source.unsplash.com/640x480/?3" alt="" class="h-80 bg-gray-500 dark:bg-gray-500 aspect-video">
-			<div class="flex flex-col justify-center flex-1 p-6 bg-gray-900 dark:bg-gray-50">
-				<span class="text-xs uppercase text-gray-400 dark:text-gray-600">Join, it's free</span>
-				<h3 class="text-3xl font-bold">We're not reinventing the wheel</h3>
-				<p class="my-6 text-gray-400 dark:text-gray-600">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor aliquam possimus quas, error esse quos.</p>
-				<button type="button" class="self-start">Action</button>
-			</div>
-		</div>
-	</div>
-</section>
+                <span class="mx-2 text-sm font-medium">Projects</span>
+            </a>
+
+            <a class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" />
+                </svg>
+
+                <span class="mx-2 text-sm font-medium">Tasks</span>
+            </a>
+
+            <a class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+                </svg>
+
+                <span class="mx-2 text-sm font-medium">Reporting</span>
+            </a>
+
+            <a class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                </svg>
+
+                <span class="mx-2 text-sm font-medium">Users</span>
+            </a>
+
+            <a class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+
+                <span class="mx-2 text-sm font-medium">Setting</span>
+            </a>
+        </nav>
+
+            <div class="flex items-center justify-between mt-6">
+                <a href="#" class="flex items-center gap-x-2">
+                    <img class="object-cover rounded-full h-7 w-7" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&h=634&q=80" alt="avatar" />
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Kay Macharia</span>
+                </a>
+                
+                <a href="#" class="text-gray-500 transition-colors duration-200 rotate-180 dark:text-gray-400 rtl:rotate-0 hover:text-blue-500 dark:hover:text-blue-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</aside>
+        <!-- Your sidebar content -->
 </body>
 </html>

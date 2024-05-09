@@ -3,7 +3,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 import json
 import stripe
 from entry.forms import LoginRiderForm, RegistrationForm, LoginForm, UpdateAccountForm, RiderRegistrationForm, ParcelForm
-from entry.models import User, Rider, Parcel
+from entry.models import User, Rider, Parcel, FAQ
 import secrets
 from entry import app, db, bcrypt
 from sqlalchemy.exc import IntegrityError
@@ -20,6 +20,8 @@ import retrying
 from entry.forms import ForgotPasswordForm, ResetPasswordForm
 import geopy.exc
 import secrets
+import psycopg2
+
 
 @app.route('/')
 @app.route('/home')
@@ -113,6 +115,9 @@ def get_parcel_status():
     else:
         return jsonify({'error': 'Tracking number not provided'}), 400
 
+@app.route('/rider_dashboard')
+def rider_dashboard():
+    return render_template('rider_dashboard.html')
 
 @app.route('/view_shipping_providers')
 def view_shipping_providers():
@@ -385,6 +390,19 @@ def support():
         except Exception as e:
             print(f'Error sending email: {e}')
             return f'Error: {str(e)}'
+
+
+    if request.method == 'GET':
+        # Handle GET request for fetching FAQs
+        search_query = request.args.get('search_query', '')
+
+        # Query FAQs using the existing database connection
+        faqs = FAQ.query.filter(
+            (FAQ.question.ilike(f'%{search_query}%')) |
+            (FAQ.answer.ilike(f'%{search_query}%'))
+        ).all()
+
+        return render_template('support.html', faqs=faqs, search_query=search_query)
 
     return render_template('support.html')
 
