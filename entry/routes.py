@@ -210,7 +210,7 @@ def request_pickup():
         db.session.add(parcel)
         db.session.commit()
         #Allocate parcel to the nearest unoccupied rider
-        allocation_result = allocate_parcel(parcel)
+        allocation_result = allocate_parcel()
         if allocation_result['success']:
             send_rider_details_email(parcel.sender_email, allocation_result, parcel.tracking_number)
             flash(f'Rider Allocated. Check your email for more details')
@@ -223,7 +223,7 @@ def request_pickup():
     return render_template('request_pickup.html', form=form)
 
 
-def allocate_parcel(temp_parcel):
+def allocate_parcel():
     """
     Allocates pending parcel deliveries to available riders
     """
@@ -264,7 +264,7 @@ def allocate_parcel(temp_parcel):
     else:
         result = {
             'success': False,
-            'message': 'No available riders or pending parcels to allocate'
+            'message': 'No available riders, parcel allocation pending'
         }
     
     return result
@@ -320,22 +320,18 @@ def update_assignment():
         if action == 'accept':
             assignment.status = 'in_progress'
             db.session.commit()
+            flash("You have accepted parcel pick-up! We are waiting", success)
             return jsonify({'success': True})
         elif action == 'deny':
-            rider = Rider.query.get(assignment.rider_id)
+            rider = Rider.query.filter(assignment.rider_id).first()
             if rider:
                 rider.status = 'available'
             assignment.status = 'pending'
             assignment.rider_id = None
             db.session.commit()
+            flash("You have Rejected parcel pickup!, contact admin if that was unintentional", danger)
+            allocate_parcel()
             
-            # Try to allocate the next pending parcel
-            allocation_result = allocate_parcel()
-            if allocation_result['success']:
-                flash('Next pending parcel allocated successfully!', 'success')
-            else:
-                flash('Parcel not found or already denied', 'danger')
-
         else:
             return jsonify({'error': 'Invalid action'}), 400
     else:
