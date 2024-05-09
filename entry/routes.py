@@ -3,7 +3,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 import json
 import stripe
 from entry.forms import LoginRiderForm, RegistrationForm, LoginForm, UpdateAccountForm, RiderRegistrationForm, ParcelForm
-from entry.models import User, Rider, Parcel
+from entry.models import User, Rider, Parcel, FAQ
 import secrets
 from entry import app, db, bcrypt
 from sqlalchemy.exc import IntegrityError
@@ -20,6 +20,8 @@ import retrying
 from entry.forms import ForgotPasswordForm, ResetPasswordForm
 import geopy.exc
 import secrets
+import psycopg2
+
 
 @app.route('/')
 @app.route('/home')
@@ -113,6 +115,9 @@ def get_parcel_status():
     else:
         return jsonify({'error': 'Tracking number not provided'}), 400
 
+@app.route('/rider_dashboard')
+def rider_dashboard():
+    return render_template('rider_dashboard.html')
 
 @app.route('/view_shipping_providers')
 def view_shipping_providers():
@@ -126,6 +131,10 @@ def update():
 def about():
     # Implement the functionality for sending parcels here
     return render_template('about.html')
+
+@app.route('/contacts')
+def contacts():
+    return render_template('contact.html')
 
 
 @app.route('/register_rider', methods=['GET', 'POST'])
@@ -170,7 +179,7 @@ def login_rider():
                 login_user(rider)
                 flash('Rider login successful!', 'success')
                 pending_assignments = Parcel.query.filter(Parcel.status == 'allocated', Parcel.rider_id==rider.id).first()
-                return render_template('view_assignments.html', title='Rider\'s dashboard', user=rider, assignment=pending_assignments)
+                return render_template('rider_authenticated.html', title='Rider\'s dashboard', user=rider, assignment=pending_assignments)
             else:
                 flash('Invalid password. Please try again.', 'danger')
         else:
@@ -203,24 +212,23 @@ def request_pickup():
             delivery_location=form.delivery_location.data,
             description=form.description.data
         )
-        parcel.tracking_number = Parcel.generate_tracking_number()
         db.session.add(parcel)
         db.session.commit()
         #Allocate parcel to the nearest unoccupied rider
-        allocation_result = allocate_parcel()
+        allocation_result = allocate_parcel(parcel)
         if allocation_result['success']:
             send_rider_details_email(parcel.sender_email, allocation_result, parcel.tracking_number)
             flash(f'Rider Allocated. Check your email for more details')
-            return redirect(url_for('home'))
-#            return render_template('payment.html', result = allocation_result)
+#            return render_template('payment.html', results=allocation_result                    )
+            return redirect(url_for('verify_payment'))
         else:
             flash('Allocation in progress. Please wait for a rider to be assigned')
-            return redirect(url_for('home'))
-#           return render_template('payment.html', result = allocation_result)
+            return redirect(url_for('verify_payment'))
+#            return render_template('payment.html', result = allocation_result)
     return render_template('request_pickup.html', form=form)
 
 
-def allocate_parcel():
+def allocate_parcel(temp_parcel):
     """
     Allocates pending parcel deliveries to available riders
     """
@@ -255,7 +263,8 @@ def allocate_parcel():
     if allocated_parcels:
         result = {
             'success': True,
-            'allocated_parcels': allocated_parcels
+            'allocated_parcels': allocated_parcels,
+
         }
     else:
         result = {
@@ -371,16 +380,33 @@ def support():
         subject = request.form['subject']
         body = request.form['body']
 
+        if not email or not subject or not body:
+            return 'Please fill out all fields.', 400
+
         # Create a Message object
-        msg = Message(subject=subject, recipients=[email])
-        msg.body = body
+        msg = Message(subject=subject, recipients=[app.config['MAIL_USERNAME']])
+        msg.body = f"Sender's Email: {email}\n\n{body}"
 
         try:
             # Send the email
             mail.send(msg)
             return 'Email sent successfully!'
         except Exception as e:
+            print(f'Error sending email: {e}')
             return f'Error: {str(e)}'
+
+
+    if request.method == 'GET':
+        # Handle GET request for fetching FAQs
+        search_query = request.args.get('search_query', '')
+
+        # Query FAQs using the existing database connection
+        faqs = FAQ.query.filter(
+            (FAQ.question.ilike(f'%{search_query}%')) |
+            (FAQ.answer.ilike(f'%{search_query}%'))
+        ).all()
+
+        return render_template('support.html', faqs=faqs, search_query=search_query)
 
     return render_template('support.html')
 
@@ -474,7 +500,7 @@ def payment_success():
     return redirect(url_for('home'))
 
 
-@app.route('/verify_payment', methods=['POST'])
+@app.route('/verify_payment', methods=['GET', 'POST'])
 def verify_payment():
     # Extract the token from the request data
     # stripe_token = request.form.get('stripeToken')
@@ -499,9 +525,11 @@ def send_payment_notification_email():
     # Optionally, you can also render a template for the email content
     # msg.html = render_template('payment_notification.html', amount=...)
 
-@app.route('/view_order_history', methods=['GET', 'POST'])
-def view_order_history():
+@app.route('/view_parcel_history', methods=['GET', 'POST'])
+def view_parcel_history():
     if current_user.is_authenticated:
-        parcels = Parcel.query.filter_by(email=current_user.email).all()
-        return render_template('view_order_history', parcels=parcels)
-    pass
+        parcels = Parcel.query.filter_by(sender_email=current_user.email).all()
+        return render_template('view_parcel_history.html', parcels=parcels)
+    else:
+        return render_template('view_parcel_history.html')
+        flash('Log in to view your parcels history!', 'danger')

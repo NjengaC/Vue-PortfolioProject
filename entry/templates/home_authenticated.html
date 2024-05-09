@@ -35,13 +35,13 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="sidebar-link">
+                    <a href="{{ url_for('track_parcel') }}" class="sidebar-link">
                         <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"><i class="bx bx-map"></i></span>
                         <span class="text-sm font-medium">Track Parcel</span>
                     </a>
                 </li>
 		<li>
-			<a href="{{ url_for('view_order_history') }}" class="sidebar-link">
+			<a href="{{ url_for('view_parcel_history') }}" class="sidebar-link">
                         <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"><i class="bx bx-history"></i></span>
                         <span class="text-sm font-medium">View Order History</span>
                     </a>
@@ -53,7 +53,7 @@
                     </a>
                 </li>
 		  <li>
-                    <a href="#" class="sidebar-link">
+                    <a href="{{ url_for('support') }}" class="sidebar-link">
                         <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"><i class="bx bx-map"></i></span>
                         <span class="text-sm font-medium">Support</span>
                     </a>

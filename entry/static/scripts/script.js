@@ -117,4 +117,24 @@ jQuery(function($) {
 	
 	adjustNav();
 }); 
+ function loadContent(url) {
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                // Update the content area with the fetched HTML
+                document.getElementById('content-area').innerHTML = html;
+            })
+            .catch(error => console.error('Error fetching content:', error));
+    }
 
+    // Add event listeners to sidebar links
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+        link.addEventListener('click', function(event) {
+            // Prevent default navigation behavior
+            event.preventDefault();
+            // Get the URL from the data-url attribute
+            const url = this.getAttribute('data-url');
+            // Load content for the clicked link
+            loadContent(url);
+        });
+    });

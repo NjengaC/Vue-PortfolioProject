@@ -11,7 +11,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
-            <a class="navbar-brand" href="#">YourBrand</a>
+            <a class="navbar-brand" href="{{ url_for('home') }}">VUE Express</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -22,13 +22,13 @@
                         <a class="nav-link" href="{{ url_for('home') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
+			    <a class="nav-link" href="{{ url_for('about') }}">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Services</a>
+			    <a class="nav-link" href="{{ url_for('support') }}">Support</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
+			    <a class="nav-link" href="{{ url_for('home') }}">Contact</a>
                     </li>
                 </ul>
             </div>
@@ -113,11 +113,11 @@
                         <div class="form-group">
                             {{ form.submit(class="btn btn-outline-info") }}
                         </div>
-                </div>
-                <div class="border-top pt-3">
-                    <small class="text-muted">
-                        Login Instead <a class="ml-2" href="{{ url_for('login') }}">Login</a>
-                    </small>
+			<div class="border-top pt-3">
+				<small class="text-muted">
+					Login Instead <a class="ml-2" href="{{ url_for('login') }}">Login</a>
+				</small>
+			</div>
                 </div>
 		</form>
             </div>
