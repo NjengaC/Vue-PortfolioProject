@@ -116,25 +116,42 @@ jQuery(function($) {
 	$(window).on('resize', adjustNav);
 	
 	adjustNav();
-}); 
- function loadContent(url) {
-        fetch(url)
-            .then(response => response.text())
-            .then(html => {
-                // Update the content area with the fetched HTML
-                document.getElementById('content-area').innerHTML = html;
-            })
-            .catch(error => console.error('Error fetching content:', error));
-    }
+});
+document.addEventListener("DOMContentLoaded", function(event) {
+   
+const showNavbar = (toggleId, navId, bodyId, headerId) =>{
+const toggle = document.getElementById(toggleId),
+nav = document.getElementById(navId),
+bodypd = document.getElementById(bodyId),
+headerpd = document.getElementById(headerId)
 
-    // Add event listeners to sidebar links
-    document.querySelectorAll('.sidebar-link').forEach(link => {
-        link.addEventListener('click', function(event) {
-            // Prevent default navigation behavior
-            event.preventDefault();
-            // Get the URL from the data-url attribute
-            const url = this.getAttribute('data-url');
-            // Load content for the clicked link
-            loadContent(url);
-        });
-    });
+// Validate that all variables exist
+if(toggle && nav && bodypd && headerpd){
+toggle.addEventListener('click', ()=>{
+// show navbar
+nav.classList.toggle('show')
+// change icon
+toggle.classList.toggle('bx-x')
+// add padding to body
+bodypd.classList.toggle('body-pd')
+// add padding to header
+headerpd.classList.toggle('body-pd')
+})
+}
+}
+
+showNavbar('header-toggle','nav-bar','body-pd','header')
+
+/*===== LINK ACTIVE =====*/
+const linkColor = document.querySelectorAll('.nav_link')
+
+function colorLink(){
+if(linkColor){
+linkColor.forEach(l=> l.classList.remove('active'))
+this.classList.add('active')
+}
+}
+linkColor.forEach(l=> l.addEventListener('click', colorLink))
+
+ // Your code to run since DOM is loaded and ready
+}); 
