@@ -10,31 +10,36 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <!-- Leaflet JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
     <link rel="stylesheet" href="../static/styles/ship.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/profiles.css') }}">
 </head>
+<header>
+        <nav id="reg">
 
-<body>
-    <header>
-        <div class="note">
-            <h2>Tell us about where you are requesting from.</h2>
+                <a class="home-btn" href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('support') }}">Support</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+                <a href="{{ url_for('edit_rider_profile') }}">Profile</a>
+
+        </nav>
+</header>
+<div class="container rounded">
+        <div class="row">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
         </div>
-    </header>
-    <div class="row justify-content-center">
-	    {% with messages = get_flashed_messages(with_categories=true) %}
-	    {% if messages %}
-	    {% for category, message in messages %}
-	    <div class="alert alert-{{ category }}">
-		    {{ message }}
-	    </div>
-	    {% endfor %}
-	    {% endif %}
-	    {% endwith %}
-
-    </div>
-        <div class="send_form">
-		<form id="parcelForm" method="POST" action="{{ url_for('request_pickup') }}">
+<body>
+    <div class="container">
+            <h1><i class="fas fa-shipping-fast"></i>Shipping Details</h1>
+            <form id="parcelForm" method="POST" action="">
                 {{ form.hidden_tag() }}
                 <div class="form-group">
                     <div class="row">
@@ -110,21 +115,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
-        </div>
-
-        <!-- Map section -->
-
-    <!-- Leaflet JavaScript -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <footer>
-        <div class="footer-links">
-            <a href="#">Link 1</a>
-            <a href="#">Link 2</a>
-            <a href="#">Link 3</a>
-        </div>
-        <div class="copyright">
-            &copy; 2024 Vue. All rights reserved.
-        </div>
-    </footer>
+	    <a href="{{ url_for('home') }}" class="btn btn-primary">Go back home</a>
+    </div>
 </body>
 </html>

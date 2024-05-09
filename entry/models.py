@@ -3,7 +3,8 @@ import json
 from datetime import datetime
 from entry import db, login_manager
 import random
-from datetime import timedelta 
+from datetime import timedelta
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -38,10 +39,13 @@ class Rider(db.Model, UserMixin):
     status = db.Column(db.String(20), default='available')
     assigned_parcels = db.relationship('Parcel', back_populates='assigned_rider')
     reset_password_token = db.Column(db.String(100), nullable=True)
+    @login_manager.user_loader
+    def load_rider(rider_id):
+        return Rider.query.get(int(rider_id))
 
     def __repr__(self):
         return f"Rider('{self.name}', '{self.contact_number}', '{self.vehicle_type}', '{self.area_of_operation}', '{self.availability}')"
-
+ 
 
 class Parcel(db.Model):
     __tablename__ = 'parcel'

@@ -2,7 +2,7 @@ from flask import render_template, flash, request, redirect, url_for, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
 import json
 import stripe
-from entry.forms import LoginRiderForm, RegistrationForm, LoginForm, UpdateAccountForm, RiderRegistrationForm, ParcelForm
+from entry.forms import LoginRiderForm, RegistrationForm, LoginForm, UpdateAccountForm, RiderRegistrationForm, ParcelForm, UpdateRiderForm, ForgotPasswordForm, ResetPasswordForm
 from entry.models import User, Rider, Parcel, FAQ
 import secrets
 from entry import app, db, bcrypt
@@ -17,7 +17,6 @@ from functools import wraps
 from flask_login import current_user
 from entry import mail
 import retrying
-from entry.forms import ForgotPasswordForm, ResetPasswordForm
 import geopy.exc
 import secrets
 import psycopg2
@@ -95,6 +94,35 @@ def edit_profile():
             return render_template('home.html', title='Home', user=current_user)
     return render_template('edit_profile.html', title='Edit Profile', form=form, user=current_user)
 
+
+@app.route('/edit__rider_profile', methods=['GET', 'POST'])
+def edit_rider_profile():
+    form = UpdateRiderForm()
+    if request.method == 'GET':
+        form.email.data = current_user.email
+        form.name.data = current_user.name
+        form.current_location.data = current_user.current_location
+        form.area_of_operation.data = current_user.area_of_operation
+        form.vehicle_registration.data = current_user.vehicle_registration
+        form.vehicle_type.data = current_user.vehicle_type
+        form.contact_number.data = current_user.contact_number
+    elif request.method == 'POST':
+        if form.validate_on_submit():
+            current_user.email = form.email.data
+            current_user.username = form.name.data
+            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            current_user.password = hashed_password
+            current_user.contact_number = form.contact_number.data
+            current_user.vehicle_type = form.vehicle_type.data
+            current_user.vehicle_registration = form.vehicle_registration.data
+            current_user.area_of_operation = form.area_of_operation.data
+            current_user.current_location = form.current_location.data
+
+            db.session.commit()
+            flash('Your account has been updated successfully!', 'success')
+            return redirect(url_for('login_rider'))
+    return render_template('edit_rider_profile.html', title='Edit Profile', form=form, user=current_user)
+
 @app.route('/track_parcel')
 def track_parcel():
     # Implement the functionality for sending parcels here
@@ -115,14 +143,10 @@ def get_parcel_status():
     else:
         return jsonify({'error': 'Tracking number not provided'}), 400
 
-
 @app.route('/view_shipping_providers')
 def view_shipping_providers():
     return render_template('view_shipping_providers.html')
 
-@app.route('/update_profile')
-def update():
-    return render_template('update_profile.html')
 
 @app.route('/about')
 def about():
@@ -168,6 +192,8 @@ def register_rider():
 
 @app.route('/login_rider', methods=['GET', 'POST'])
 def login_rider():
+    if current_user.is_authenticated and current_user.role == 'rider':
+        return render_template('rider_authenticated.html', title='Rider\'s dashboard', user=current_user)
     form = LoginRiderForm()
     if form.validate_on_submit():
         rider = Rider.query.filter_by(contact_number=form.contact_number.data).first()
@@ -212,20 +238,20 @@ def request_pickup():
         db.session.add(parcel)
         db.session.commit()
         #Allocate parcel to the nearest unoccupied rider
-        allocation_result = allocate_parcel(parcel)
+        allocation_result = allocate_parcel()
         if allocation_result['success']:
             send_rider_details_email(parcel.sender_email, allocation_result, parcel.tracking_number)
             flash(f'Rider Allocated. Check your email for more details')
 #            return render_template('payment.html', results=allocation_result                    )
             return redirect(url_for('verify_payment'))
         else:
-            flash('Allocation in progress. Please wait for a rider to be assigned')
+            flash('Allocation in progress. Please wait for a rider to be assigned', 'success')
             return redirect(url_for('verify_payment'))
 #            return render_template('payment.html', result = allocation_result)
     return render_template('request_pickup.html', form=form)
 
 
-def allocate_parcel(temp_parcel):
+def allocate_parcel():
     """
     Allocates pending parcel deliveries to available riders
     """
@@ -266,7 +292,7 @@ def allocate_parcel(temp_parcel):
     else:
         result = {
             'success': False,
-            'message': 'No available riders or pending parcels to allocate'
+            'message': 'No available riders, parcel allocation pending'
         }
     
     return result
@@ -322,22 +348,18 @@ def update_assignment():
         if action == 'accept':
             assignment.status = 'in_progress'
             db.session.commit()
+            flash("You have accepted parcel pick-up! We are waiting", success)
             return jsonify({'success': True})
         elif action == 'deny':
-            rider = Rider.query.get(assignment.rider_id)
+            rider = Rider.query.filter(assignment.rider_id).first()
             if rider:
                 rider.status = 'available'
             assignment.status = 'pending'
             assignment.rider_id = None
             db.session.commit()
+            flash("You have Rejected parcel pickup!, contact admin if that was unintentional", 'danger')
+            allocate_parcel()
             
-            # Try to allocate the next pending parcel
-            allocation_result = allocate_parcel()
-            if allocation_result['success']:
-                flash('Next pending parcel allocated successfully!', 'success')
-            else:
-                flash('Parcel not found or already denied', 'danger')
-
         else:
             return jsonify({'error': 'Invalid action'}), 400
     else:
@@ -428,7 +450,7 @@ def forgot_password():
             message = f"Click the link to reset your password: {reset_url}"
             send_email(user.email, "Password Reset Request", message)
 
-            flash("Instructions to reset your password have been sent to your email.")
+            flash("Instructions to reset your password have been sent to your email.", 'success')
             return redirect(url_for('login'))
         elif rider:
             # Generate a unique token for the rider
@@ -444,7 +466,7 @@ def forgot_password():
             flash("Instructions to reset your password have been sent to your email.")
             return redirect(url_for('login'))
         else:
-            flash("Email address not found.")
+            flash("Email address not found.", 'danger')
     return render_template('forgot_password.html', form=form)
 
 
@@ -463,7 +485,7 @@ def reset_password(token):
             user.reset_password_token = None
             db.session.commit()
 
-            flash("Your password has been successfully reset. You can now log in with your new password.")
+            flash("Your password has been successfully reset. You can now log in with your new password.", 'success')
             return redirect(url_for('login'))
         return render_template('reset_password.html', form=form)
 
@@ -480,12 +502,12 @@ def reset_password(token):
             rider.reset_password_token = None
             db.session.commit()
 
-            flash("Your password has been successfully reset. You can now log in with your new password.")
+            flash("Your password has been successfully reset. You can now log in with your new password.", 'success')
             return redirect(url_for('login_rider'))
         return render_template('reset_password.html', form=form)
 
     # If the token is invalid or expired for both user and rider
-    flash("Invalid or expired token.")
+    flash("Invalid or expired token.", 'danger')
     return redirect(url_for('forgot_password'))
 
 @app.route('/send_email', methods=['POST'])
@@ -537,3 +559,18 @@ def view_parcel_history():
     else:
         return render_template('view_parcel_history.html')
         flash('Log in to view your parcels history!', 'danger')
+
+@app.route('/view_rider_history', methods=['GET', 'POST'])
+def view_rider_history():
+    if current_user.is_authenticated:
+        parcels = Parcel.query.filter_by(sender_email=current_user.email).all()
+        return render_template('view_parcel_history.html', parcels=parcels)
+    else:
+        return render_template('view_parcel_history.html')
+        flash('Log in to view your parcels history!', 'danger')
+
+
+@app.route('/rider_dashboard', methods=['GET', 'POST'])
+def rider_dashboard():
+    pending_assignments = Parcel.query.filter(Parcel.status == 'allocated', Parcel.rider_id==rider.id).first()
+    return render_template('rider_dashboard.html', rider=current_user)
