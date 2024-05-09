@@ -392,18 +392,20 @@ def support():
             print(f'Error sending email: {e}')
             return f'Error: {str(e)}'
 
-
     if request.method == 'GET':
-        # Handle GET request for fetching FAQs
-        search_query = request.args.get('search_query', '')
+        search_query = request.args.get('search_query', '').strip()
 
-        # Query FAQs using the existing database connection
-        faqs = FAQ.query.filter(
-            (FAQ.question.ilike(f'%{search_query}%')) |
-            (FAQ.answer.ilike(f'%{search_query}%'))
-        ).all()
+        if search_query:
+            # If search_query is provided, filter FAQs based on it
+            existing_faqs = FAQ.query.filter(
+                (FAQ.question.ilike(f'%{search_query}%')) |
+                (FAQ.answer.ilike(f'%{search_query}%'))
+            ).all()
+        else:
+            # If search_query is empty, fetch all existing FAQs
+            existing_faqs = FAQ.query.all()
 
-        return render_template('support.html', faqs=faqs, search_query=search_query)
+        return render_template('support.html', existing_faqs=existing_faqs, search_query=search_query)
 
     return render_template('support.html')
 
@@ -486,11 +488,16 @@ def reset_password(token):
     flash("Invalid or expired token.")
     return redirect(url_for('forgot_password'))
 
+@app.route('/send_email', methods=['POST'])
+def send_email():
+    if request.method == 'POST':
+        name = request.json.get('name')
+        email = request.json.get('email')
+        comment = request.json.get('comment')
 
-def send_email(recipient, subject, html_body):
-    msg = Message(subject, recipients=[recipient])
-    msg.html = html_body
-    mail.send(msg)
+        return jsonify({'message': 'Email sent successfully!'})
+    else:
+        return jsonify({'error': 'Invalid request method'}), 405
 
 @app.route('/payment_success', methods=['POST'])
 def payment_success():
