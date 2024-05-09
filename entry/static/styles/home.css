@@ -1,6 +1,5 @@
 /* Custom CSS for carousel content */
 .custom-carousel-content {
-  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -10,11 +9,19 @@
 .custom-carousel-content h3 {
   font-size: 2.5rem;
   color: white;
+  text-align: center;
+}
+.carousel-caption {
+  display: flex;
+  justify-content: center; /* Center-align the content horizontally */
+  align-items: center; /* Center-align the content vertically */
+  margin-left: 450px;
 }
 
 .custom-carousel-content p {
   font-size: 1.25rem;
   color: white;
+  text-align: center;
 }
 
 .custom-carousel-content .btn {
@@ -186,13 +193,107 @@ body {
   transition: transform 0.3s ease-out;
 }
 .logo {
-	    width: 40px; /* Adjust the width as needed */
-	        height: auto;
-		    vertical-align: middle;
-	    }
+	width: 40px; /* Adjust the width as needed */
+	height: auto;
+	vertical-align: middle;
+}
 
-	    .title {
-		        font-size: 24px; /* Adjust the font size as needed */
-			    font-weight: bold;
-			        color: #333; /* Adjust the color as needed */
-				    margin-left: 10px; /* Adjust the spacing between the logo and title as needed */
+.title {
+	font-size: 24px; /* Adjust the font size as needed */
+	font-weight: bold;
+	color: #333; /* Adjust the color as needed */
+	margin-left: 10px; /* Adjust the spacing between the logo and title as needed */
+}
+.small-header {
+	height: 60vh; /* Adjust the height as needed */
+	width: 100%;
+	overflow: hidden; /* Hide any content that exceeds the height */
+	text-align: center;
+	align: center;
+	background-image: url('https://images.unsplash.com/photo-1465146633011-14f8e0781093?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80');
+	/* Adjust background properties */
+	background-size: cover; /* Cover the entire header area */
+	background-position: center; /* Center the background image */
+	height: 400px;
+}
+
+.small-header img {
+	object-fit: cover; /* Ensure the background image covers the entire header */
+	height: 100%; /* Ensure the image fills the entire header */
+        width: 100%;
+}
+.display-4 .lead {
+  /* Other styles */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+section {
+  width: 100%;
+}
+.cards-container {
+  display: flex; /* Use flexbox to display cards horizontally */
+  flex-wrap: wrap; /* Allow cards to wrap to the next line if needed */
+  justify-content: space-between; /* Distribute space between cards evenly */
+  background-color: #f3f4f6; /* Light grey background color */
+  padding: 20px; /* Adjust padding as needed */
+  border-radius: 8px; /* Optional: Add border radius for rounded corners */
+}
+
+.card {
+  flex: 0 0 calc(20% - 10px); /* Adjust card width as needed */
+  margin-bottom: 20px; /* Optional: Add margin between cards */
+}
+
+/* Optional: Adjust card width for smaller screens */
+@media screen and (max-width: 768px) {
+  .card {
+    flex: 0 0 calc(33.33% - 10px); /* Adjust card width for smaller screens */
+  }
+}
+
+.policy-section {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  z-index: 9999; /* Ensure the section appears on top of other content */
+}
+
+.policy-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.policy-content-item {
+  background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: Add shadow effect */
+  color: #000;
+}
+
+.close-policy-btn {
+  position: absolute;
+  right: 10px; /* Adjust right position to be closer to the right */
+  background-color: #000;
+  padding: 10px 20px;
+  top: 5px;
+  color: #fff; /* Set button text color to white */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  /* Set z-index to ensure the button appears above the policy content */
+  z-index: 1;
+}
+.smaller-text {
+  font-size: 14px; /* Adjust font size as needed */
+  color: blue; /* Set color for the smaller text */
+}
+
