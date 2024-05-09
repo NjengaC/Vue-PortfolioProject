@@ -10,100 +10,112 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <!-- Leaflet JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
     <link rel="stylesheet" href="../static/styles/ship.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/profiles.css') }}">
 </head>
+<header>
+        <nav id="reg">
 
+                <a class="home-btn" href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('support') }}">Support</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+                <a href="{{ url_for('edit_rider_profile') }}">Profile</a>
+
+        </nav>
+</header>
+<div class="container rounded">
+        <div class="row">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+        </div>
 <body>
-<div class="wrapper">
     <div class="container">
-        <form id="parcelForm" method="POST" action="{{ url_for('request_pickup') }}">
-            {{ form.hidden_tag() }}
-            <h1>
-                <i class="fas fa-shipping-fast"></i>
-                Shipping Details
-            </h1>
-            <div class="name">
-                <div>
-                    <label for="sender_name">Sender's Name</label>
-                    {{ form.sender_name(class="form-control") }}
-                    {% for error in form.sender_name.errors %}
-                        <span class="text-danger">{{ error }}</span>
-                    {% endfor %}
+            <h1><i class="fas fa-shipping-fast"></i>Shipping Details</h1>
+            <form id="parcelForm" method="POST" action="">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <label for="sender_name">Sender's Name</label>
+                            {{ form.sender_name(class="form-control") }}
+                            {% for error in form.sender_name.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col">
+                            <label for="sender_email">Sender's Email</label>
+                            {{ form.sender_email(class="form-control") }}
+                            {% for error in form.sender_email.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <label for="sender_email">Sender's Email</label>
-                    {{ form.sender_email(class="form-control") }}
-                    {% for error in form.sender_email.errors %}
-                        <span class="text-danger">{{ error }}</span>
-                    {% endfor %}
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <label for="sender_contact">Sender's Contact</label>
+                            {{ form.sender_contact(class="form-control") }}
+                            {% for error in form.sender_contact.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col">
+                            <label for="receiver_name">Receiver's Name</label>
+                            {{ form.receiver_name(class="form-control") }}
+                            {% for error in form.receiver_name.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="name">
-                <div>
-                    <label for="receiver_name">Receiver's Name</label>
-                    {{ form.receiver_name(class="form-control") }}
-                    {% for error in form.receiver_name.errors %}
-                        <span class="text-danger">{{ error }}</span>
-                    {% endfor %}
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <label for="receiver_contact">Receiver's Contact</label>
+                            {{ form.receiver_contact(class="form-control") }}
+                            {% for error in form.receiver_contact.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col">
+                            <label for="pickup_location">Pickup Location</label>
+                            {{ form.pickup_location(class="form-control") }}
+                            {% for error in form.pickup_location.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <label for="receiver_contact">Receiver's Contact</label>
-                    {{ form.receiver_contact(class="form-control") }}
-                    {% for error in form.receiver_contact.errors %}
-                        <span class="text-danger">{{ error }}</span>
-                    {% endfor %}
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <label for="delivery_location">Delivery Location</label>
+                            {{ form.delivery_location(class="form-control") }}
+                            {% for error in form.delivery_location.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col">
+                            <label for="description">Description</label>
+                            {{ form.description(class="form-control") }}
+                            {% for error in form.description.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="address-info">
-                <div>
-                    <label for="pickup_location">Pickup Location</label>
-                    {{ form.pickup_location(class="form-control") }}
-                    {% for error in form.pickup_location.errors %}
-                        <span class="text-danger">{{ error }}</span>
-                    {% endfor %}
-                </div>
-                <div>
-                    <label for="delivery_location">Delivery Location</label>
-                    {{ form.delivery_location(class="form-control") }}
-                    {% for error in form.delivery_location.errors %}
-                        <span class="text-danger">{{ error }}</span>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="address-info">
-                <div>
-                    <label for="description">Description</label>
-                    {{ form.description(class="form-control") }}
-                    {% for error in form.description.errors %}
-                        <span class="text-danger">{{ error }}</span>
-                    {% endfor %}
-                </div>
-            </div>
-            <h1>
-                <i class="far fa-credit-card"></i> Payment Information
-            </h1>
-            <div class="cc-num">
-                <label for="card-num">Credit Card No.</label>
-                <input type="text" name="card-num">
-            </div>
-            <div class="cc-info">
-                <div>
-                    <label for="card-num">Exp</label>
-                    <input type="text" name="expire">
-                </div>
-                <div>
-                    <label for="card-num">CCV</label>
-                    <input type="text" name="security">
-                </div>
-            </div>
-            <div class="btns">
                 <button type="submit" class="btn btn-primary">Submit</button>
-		<button type=""  href="{{ url_for('home') }}" class="btn btn-primary">Go back home</button>
-            </div>
-        </form>
+            </form>
+	    <a href="{{ url_for('home') }}" class="btn btn-primary">Go back home</a>
     </div>
-</div>
 </body>
 </html>

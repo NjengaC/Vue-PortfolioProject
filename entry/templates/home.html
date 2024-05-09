@@ -42,7 +42,18 @@
         </ul>
       </div>
 </nav>
+        <div class="row">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
 
+        </div>
 <header class="small-header">
   <div class="carousel-caption d-none d-md-block custom-carousel-content">
     <h3 class="display-4">Welcome to Vue, Express</h3>
