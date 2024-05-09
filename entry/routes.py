@@ -20,6 +20,8 @@ import retrying
 from entry.forms import ForgotPasswordForm, ResetPasswordForm
 import geopy.exc
 import secrets
+import psycopg2
+
 
 @app.route('/')
 @app.route('/home')
@@ -389,6 +391,43 @@ def support():
         except Exception as e:
             print(f'Error sending email: {e}')
             return f'Error: {str(e)}'
+
+
+    if request.method == 'GET':
+        # Handle GET request for fetching FAQs
+        search_query = request.args.get('search_query', '')
+
+#        try:
+            # Connect to the PostgreSQL database
+ #           conn = psycopg2.connect(
+  #              dbname='vue',
+   #             user='postgres',
+    #            password='new_password',
+     #           host='localhost',
+      #          port='5003'
+       #     )
+
+            # Create a cursor object to execute queries
+        #    cursor = conn.cursor()
+
+            # Execute SQL query to fetch FAQs based on search query
+         #   cursor.execute("SELECT question, answer FROM faqs WHERE question ILIKE %s OR answer ILIKE %s", ('%' + search_query + '%', '%' + search_query + '%'))
+
+            # Fetch all rows from the result set
+          #  faqs = cursor.fetchall()
+
+            # Close cursor and connection
+           # cursor.close()
+            #conn.close()
+
+            # Render the template with fetched FAQs and search query
+#            return render_template('support.html', faqs=faqs, search_query=search_query)
+
+ #       except psycopg2.Error as e:
+            # Handle database connection or query errors
+  #          print("Error fetching FAQs:", e)
+   #         return 'Error fetching FAQs.', 500
+
 
     return render_template('support.html')
 

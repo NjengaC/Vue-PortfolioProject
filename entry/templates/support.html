@@ -82,20 +82,18 @@
 </section>
 <section class="faq faq-box">
 	<h2 class="header-text">Frequently Asked Questions</h2>
-	<div class="question">
-		<h3>How do I create an account?</h3>
-		<p>To create an account, click on the <a href="{{ url_for('register') }}">"Sign Up"</a> button on the homepage and fill out the required information.</p>
-	</div>
-	<div class="question">
-		<h3>How can I track my parcel?</h3>
-		<p>To track your parcel, Go to homepage or log in to your account and click <a href="{{ url_for('track_parcel') }}">"Track Parcel"</a> section. Enter your parcel tracking number to get real-time updates on its status.</p>
-	</div>
-	<div class="question">
-		<h3>What payment methods do you accept?</h3>
-		<p>We accept payment via credit/debit card, PayPal, and Mpesa transfer. You can choose your preferred payment method during checkout.</p>
-	</div>
+	{% if faqs %}
+                {% for faq in faqs %}
+                    <div class="question">
+                        <h3>{{ faq[0] }}</h3>
+                        <p>{{ faq[1] }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No FAQs found.</p>
+            {% endif %}
+        </div>
 </div>
-	<!-- Add more questions and answers as needed -->
 </section>
     <footer class="footer-box text-center">
 	<script>
