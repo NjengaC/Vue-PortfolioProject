@@ -1,7 +1,6 @@
 /* Background styling */
 #grad1 {
-    background-color: #9c27b0;
-    background-image: linear-gradient(120deg, #ff4081, #81d4fa);
+    background-color: navy;
 }
 
 /* login.css */
@@ -31,7 +30,7 @@
 }
 
 .btn-outline-info:hover {
-    color: #fff;
+    color: navy;
     background-color: #17a2b8;
     border-color: #17a2b8;
 }
@@ -79,14 +78,14 @@ legend {
 
 /* Button styling */
 .btn-outline-info {
-    color: #17a2b8;
-    border-color: #17a2b8;
+    color: navy;
+    border-color: navy;
 }
 
 .btn-outline-info:hover {
-    color: #fff;
-    background-color: #17a2b8;
-    border-color: #17a2b8;
+    color: navy;
+    background-color: navy;
+    border-color: navy;
 }
 
 /* Content section styling */
