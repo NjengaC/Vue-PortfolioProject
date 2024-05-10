@@ -141,27 +141,31 @@ Rest assured that your parcel is in good hands, and we take every precaution to 
 			<img src="../static/images/feature 1.png" alt="" class="h-80 bg-gray-500 dark:bg-gray-500 aspect-video">
 			<div class="flex flex-col justify-center flex-1 p-6 bg-gray-900 dark:bg-gray-50">
 				<span class="text-xs uppercase text-gray-400 dark:text-gray-600">Shipping Made Easy</span>
-				<h3 class="text-3xl font-bold">We're not reinventing the wheel</h3>
+				<h3 class="text-3xl font-bold">Revolutionizing Shipping, Simplified</h3>
 				<p class="my-6 text-gray-400 dark:text-gray-600">Discover seamless shipping solutions tailored to your needs at [Your Website Name]. Our commitment to excellence is reflected in our streamlined shipping process, ensuring your orders reach you swiftly and securelyDiscover seamless shipping solutions tailored to your needs at Vue. Our commitment to excellence is reflected in our streamlined shipping process, ensuring your orders reach you swiftly and securely</p>
-				<button type="button" class="self-start">Action</button>
+				<a href="{{ url_for('request_pickup') }}" class="self-start">
+					<button type="button">Action</button></a>
 			</div>
 		</div>
 		<div class="flex flex-col overflow-hidden rounded-md shadow-sm lg:flex-row-reverse">
 			<img src="../static/images/feature 2.png" alt="" class="h-80 bg-gray-500 dark:bg-gray-500 aspect-video">
 			<div class="flex flex-col justify-center flex-1 p-6 bg-gray-900 dark:bg-gray-50">
 				<span class="text-xs uppercase text-gray-400 dark:text-gray-600">Join now to enjoy these benefits, it's free!</span>
-				<h3 class="text-3xl font-bold">We're not reinventing the wheel</h3>
+				<h3 class="text-3xl font-bold">Unlock Exclusive Benefits for Free Today!</h3>
 				<p class="my-6 text-gray-400 dark:text-gray-600">Discover seamless shipping solutions tailored to your needs at [Your Website Name]. Our commitment to excellence is reflected in our streamlined shipping process, ensuring your orders reach you swiftly and securely.</p>
-				<button type="button" class="self-start">Action</button>
+				<a href="{{ url_for('register_rider') }}" class="self-start">
+					<button type="button">Action</button></a>
 			</div>
 		</div>
 		<div class="flex flex-col overflow-hidden rounded-md shadow-sm lg:flex-row">
 			<img src="../static/images/feature 3.png" alt="" class="h-80 bg-gray-500 dark:bg-gray-500 aspect-video">
 			<div class="flex flex-col justify-center flex-1 p-6 bg-gray-900 dark:bg-gray-50">
 				<span class="text-xs uppercase text-gray-400 dark:text-gray-600">Track Your Parcel with Ease</span>
-				<h3 class="text-3xl font-bold">We're not reinventing the wheel</h3>
+				<h3 class="text-3xl font-bold">Easily Track Your Parcel Every Step of the Way</h3>
 				<p class="my-6 text-gray-400 dark:text-gray-600">Stay informed every step of the way with our intuitive parcel tracking feature. Whether you're sending or receiving a package, our platform provides real-time updates to ensure peace of mind. Simply enter your tracking number, and gain instant access to the current status and estimated delivery time of your parcel.</p>
-				<button type="button" class="self-start">Action</button>
+				<a href="{{ url_for('track_parcel') }}" class="self-start">
+					  <button type="button">Action</button>
+				</a>
 			</div>
 		</div>
 	</div>
@@ -169,9 +173,9 @@ Rest assured that your parcel is in good hands, and we take every precaution to 
 </body>
 <footer>
             <div class="social"><a href="#"><i class="icon ion-social-instagram"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-facebook"></i></a></div>            <ul class="list-inline">
-                <li class="list-inline-item"><a href="#">Home</a></li>
-                <li class="list-inline-item"><a href="#">Services</a></li>
-                <li class="list-inline-item"><a href="#">About</a></li>
+		    <li class="list-inline-item"><a href="{{ url_for('home') }}">Home</a></li>
+		    <li class="list-inline-item"><a href="{{ url_for('about') }}">About</a></li>
+		    <li class="list-inline-item"><a href="{{ url_for('support') }}">Support</a></li>
                 <li class="list-inline-item"><a href="#">Terms</a></li>
                 <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
             </ul>
