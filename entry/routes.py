@@ -303,14 +303,12 @@ def toggle_rider_status(rider_id):
     """
     Toggles the status of the rider between available and unavailable
     """
-    rider = Rider.query.filter(rider_id).first()
+    rider = Rider.query.filter_by(id=rider_id).first()
     if rider:
-        if rider.status == 'available':
-            rider.status = 'unavailable'
-        else:
-            rider.status = 'available'
+        rider.status = 'unavailable' if rider.status == 'available' else 'available'
         db.session.commit()
         return jsonify({'status': rider.status})
+    return jsonify({'error': 'Rider not found'}), 404
 
 
 @retrying.retry(wait_exponential_multiplier=1000, wait_exponential_max=10000)
