@@ -225,9 +225,11 @@ async function toggleRiderStatus(isAvailable) {
     } else {
       greetingMessage = 'Good Evening! {{ current_user.name}}';
     }
+  const h1Element = document.createElement('h1');
+  h1Element.textContent = greetingMessage;
 
-    // Update the greeting message in the DOM
-    greetingElement.textContent = greetingMessage;
+  greetingElement.innerHTML = '';
+  greetingElement.appendChild(h1Element);
   });
 </script>
 
