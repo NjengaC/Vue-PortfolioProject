@@ -277,3 +277,8 @@ button:focus {
   transform: translateY(-100%);
  }
 }
+.action-buttons {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 20px;
+}
