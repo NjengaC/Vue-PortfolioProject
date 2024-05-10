@@ -193,15 +193,17 @@ def register_rider():
 @app.route('/login_rider', methods=['GET', 'POST'])
 def login_rider():
     if current_user.is_authenticated and current_user.role == 'rider':
-        return render_template('rider_authenticated.html', title='Rider\'s dashboard', user=current_user)
+        rider = Rider.query.filter_by(contact_number=current_user.contact_number).first()
+        pending_assignments = Parcel.query.filter(Parcel.rider_id==rider.id).first()
+        return render_template('rider_authenticated.html', title='Rider\'s dashboard', user=current_user, assignment=pending_assignments)
     form = LoginRiderForm()
     if form.validate_on_submit():
         rider = Rider.query.filter_by(contact_number=form.contact_number.data).first()
         if rider:
             if bcrypt.check_password_hash(rider.password, form.password.data):
                 login_user(rider)
+                pending_assignments = Parcel.query.filter(Parcel.rider_id==rider.id).first()
                 flash('Rider login successful!', 'success')
-                pending_assignments = Parcel.query.filter(Parcel.status == 'allocated', Parcel.rider_id==rider.id).first()
                 return render_template('rider_authenticated.html', title='Rider\'s dashboard', user=rider, assignment=pending_assignments)
             else:
                 flash('Invalid password. Please try again.', 'danger')
@@ -346,10 +348,10 @@ def update_assignment():
         if action == 'accept':
             assignment.status = 'in_progress'
             db.session.commit()
-            flash("You have accepted parcel pick-up! We are waiting", success)
+            flash("You have accepted parcel pick-up! We are waiting", 'success')
             return jsonify({'success': True})
-        elif action == 'deny':
-            rider = Rider.query.filter(assignment.rider_id).first()
+        elif action == 'reject':
+            rider = Rider.query.filter_by(id=assignment.rider_id).first()
             if rider:
                 rider.status = 'available'
             assignment.status = 'pending'
@@ -357,12 +359,48 @@ def update_assignment():
             db.session.commit()
             flash("You have Rejected parcel pickup!, contact admin if that was unintentional", 'danger')
             allocate_parcel()
-            
+        elif action == 'shipped':
+            assignment.status = 'shipped'
+            db.session.commit()
+            return jsonify({'success': True})
+        elif action == 'arrived':
+            assignment.status = 'arrived'
+            rider = Rider.query.filter_by(id=assignment.rider_id).first()
+            if rider:
+                rider.status = 'available'
+            db.session.commit()
+            return jsonify({'success': True})
         else:
             return jsonify({'error': 'Invalid action'}), 400
     else:
         return jsonify({'error': 'Assignment not found or already accepted/denied'}), 404
     return redirect(url_for('home'))
+
+@app.route('/update_assignment_status', methods=['POST'])
+def update_assignment_status():
+    data = request.json
+    parcel_id = data.get('parcel_id')
+    status = data.get('status')
+
+    assignment = Parcel.query.filter_by(id=parcel_id, status='shipped').first()
+
+    if assignment:
+        if status == 'shipped':
+            assignment.status = 'shipped'
+            db.session.commit()
+            return jsonify({'success': True})
+        elif status == 'arrived':
+            assignment.status = 'arrived'
+            rider = Rider.query.filter_by(id=assignment.rider_id).first()
+            if rider:
+                rider.status = 'available'
+            db.session.commit()
+            return jsonify({'success': True})
+        else:
+            return jsonify({'error': 'Invalid status'}), 400
+    else:
+        return jsonify({'error': 'Parcel not found or already arrived'}), 404
+
 
 @app.route('/track_assignment/<int:id>')
 def track_assignment(id):

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Find the PID of the Gunicorn process running on port 5003
+PID=$(lsof -ti tcp:5003)
+
+if [ -z "$PID" ]; then
+  echo "No Gunicorn process found running on port 5003."
+else
+  # Stop the Gunicorn process
+  echo "Stopping Gunicorn process with PID $PID..."
+  kill $PID
+fi
+
+# Restart Gunicorn
+echo "Restarting Gunicorn..."
+gunicorn -b 0.0.0.0:5003 run:app &
+sudo service nginx reload
