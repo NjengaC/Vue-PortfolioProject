@@ -38,6 +38,7 @@
         </div>
 <body>
     <div class="container">
+            <div id="spinner" class="spinner" style="display: none;"></div>
             <h1><i class="fas fa-shipping-fast"></i>Shipping Details</h1>
             <form id="parcelForm" method="POST" action="">
                 {{ form.hidden_tag() }}
@@ -117,5 +118,28 @@
             </form>
 	    <a href="{{ url_for('home') }}" class="btn btn-primary">Go back home</a>
     </div>
+<footer>
+<script>
+  // Function to show the spinner
+  function showSpinner() {
+    document.getElementById('spinner').style.display = 'block';
+  }
+
+  // Add event listener to the submit button
+  document.getElementById('submit-button').addEventListener('click', function(event) {
+    // Prevent default button behavior
+    event.preventDefault();
+
+    // Show the spinner
+    showSpinner();
+
+    // Submit the form after a short delay (to give time for spinner to display)
+    setTimeout(() => {
+      document.getElementById('your-form-id').submit();
+    }, 500); // Adjust the delay time as needed
+  });
+</script>
+
+</footer>
 </body>
 </html>
