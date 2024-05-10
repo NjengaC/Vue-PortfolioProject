@@ -3,11 +3,23 @@ import json
 from datetime import datetime
 from entry import db, login_manager
 import random
-from datetime import timedelta 
+from datetime import timedelta
+
+
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    # Check if the user ID corresponds to a Rider
+    rider = Rider.query.get(int(user_id))
+    if rider:
+        return rider
 
+    # If the user ID doesn't correspond to a Rider, check if it corresponds to a regular User
+    user = User.query.get(int(user_id))
+    if user:
+        return user
+
+    # If neither Rider nor User is found, return None
+    return None
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -41,7 +53,7 @@ class Rider(db.Model, UserMixin):
 
     def __repr__(self):
         return f"Rider('{self.name}', '{self.contact_number}', '{self.vehicle_type}', '{self.area_of_operation}', '{self.availability}')"
-
+ 
 
 class Parcel(db.Model):
     __tablename__ = 'parcel'

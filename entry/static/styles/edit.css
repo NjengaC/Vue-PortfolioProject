@@ -35,3 +35,10 @@ body {
 .labels {
     font-size: 11px;
 }
+#reg a {
+	display: inline-block;
+	margin: 0 30px;
+}
+#reg .home-btn {
+	margin-left: 140px;
+}

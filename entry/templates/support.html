@@ -18,26 +18,26 @@
                 <!-- Navigation links -->
                 <nav>
                     <ul class="list-inline text-light">
-			 <li class="list-inline-item"><a href="{{ url_for('home') }}">Home</a></li>
-			 <li class="list-inline-item"><a href="{{ url_for('login') }}">Login</a></li>
-			 <li class="list-inline-item"><a href="{{ url_for('register') }}">Register</a></li>
-			 <li class="list-inline-item"><a href="{{ url_for('request_pickup') }}">Request pickup</a></li>
-			 <li class="list-inline-item"><a href="{{ url_for('register_rider') }}">Find a Job</a></li>
+                         <li class="list-inline-item"><a href="{{ url_for('home') }}">Home</a></li>
+                         <li class="list-inline-item"><a href="{{ url_for('login') }}">Login</a></li>
+                         <li class="list-inline-item"><a href="{{ url_for('register') }}">Register</a></li>
+                         <li class="list-inline-item"><a href="{{ url_for('request_pickup') }}">Request pickup</a></li>
+                         <li class="list-inline-item"><a href="{{ url_for('register_rider') }}">Find a Job</a></li>
                     </ul>
                 </nav>
 
                 <div class="row justify-content-center">
-			{% with messages = get_flashed_messages(with_categories=true) %}
-			{% if messages %}
-			{% for category, message in messages %}
-			<div class="alert alert-{{ category }}">
-				{{ message }}
-			</div>
-			{% endfor %}
-			{% endif %}
-			{% endwith %}
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                                {{ message }}
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
 
-		</div>
+                </div>
             </div>
             <!-- Search bar -->
             <div class="input-group mt-3">
@@ -50,61 +50,115 @@
     </div>
 </div>
 
-</div>
-        <header class="header-box">
-                <h1 class="text-center display-4">Support Center</h1>
-        </header>
+<header class="header-box">
+    <h1 class="text-center display-4">Support Center</h1>
+</header>
+
 <div class="container">
-	<section class="support-form">
-		<h2 class="header-text">Having Problems?</h2>
-		<form class="mx-auto text-center">
-			<div class="form-group">
-				<label for="name">Name</label>
-				<input type="text" class="form-control" id="name" placeholder="Enter your name">
-			</div>
-			<div class="form-group">
-				<label for="email">Email address</label>
-				<input type="email" class="form-control" id="email" placeholder="Enter your email">
-			</div>
-			<div class="form-group">
-				<label for="comment">Comment</label>
-				<textarea class="form-control" id="comment" rows="5" placeholder="Enter your comment"></textarea>
-			</div>
-			<button type="submit" class="btn btn-primary btn-block">Send</button> <!-- Changed to btn-block -->
-		</form>
-		<p class="text-center mt-3">Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
-	</section>
+    <section class="support-form">
+        <h2 class="header-text">Having Problems?</h2>
+	<form class="mx-auto text-center" action="/send_email" method="POST">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="comment">Comment</label>
+                <textarea class="form-control" id="comment" rows="5" placeholder="Enter your comment"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Send</button> <!-- Changed to btn-block -->
+        </form>
+        <p class="text-center mt-3">Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+    </section>
 </div>
+
 <div class="container2">
-<section class="search-area text-center">
-	<input type="text" class="form-control search-box" placeholder="Search FAQs">
-	<button type="submit" class="btn btn-primary search-btn">Search</button>
-</section>
-<section class="faq faq-box">
-	<h2 class="header-text">Frequently Asked Questions</h2>
-	{% if faqs %}
-                {% for faq in faqs %}
-                    <div class="question">
-                        <h3>{{ faq[0] }}</h3>
-                        <p>{{ faq[1] }}</p>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p>No FAQs found.</p>
-            {% endif %}
-        </div>
+    <section class="search-area text-center">
+        <input type="text" class="form-control search-box" placeholder="Search FAQs">
+        <button type="submit" class="btn btn-primary search-btn">Search</button>
+    </section>
+
+    <section class="faq faq-box">
+        <h2 class="header-text">Frequently Asked Questions</h2>
+        {% if existing_faqs %}
+            {% for faq in existing_faqs %}
+                <div class="question">
+                    <h3>{{ faq.question }}</h3>
+                    <p>{{ faq.answer }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No existing FAQs found.</p>
+        {% endif %}
+    </section>
 </div>
-</section>
-    <footer class="footer-box text-center">
 	<script>
-		$(document).ready(function(){
-			$('.dropdown-toggle').dropdown();
-		});
+		document.addEventListener("DOMContentLoaded", function() {
+        	const searchBtn = document.querySelector(".search-btn");
+
+        	searchBtn.addEventListener("click", function() {
+            		const searchBox = document.querySelector(".search-box");
+            		const searchTerm = searchBox.value.trim();
+
+			// Send AJAX request to the server to perform search
+            		fetch(`/search?search_query=${encodeURIComponent(searchTerm)}`)
+                		.then(response => response.json())
+                		.then(data => {
+                    			// Handle the search results returned by the server
+                    			console.log("Search Results:", data);
+                    			// You can update the HTML to display the search results as needed
+                		})
+                		.catch(error => {
+                    			console.error("Error performing search:", error);
+                		});
+        		});
+    		});
 	</script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
- 
-        <p>&copy; 2024 Support Center. All rights reserved.</p>
-    </footer>
+	<script>
+	    document.addEventListener("DOMContentLoaded", function() {
+                const form = document.querySelector(".support-form form");
+
+                form.addEventListener("submit", function(event) {
+                    event.preventDefault(); // Prevent default form submission behavior
+
+                    // Get form data
+                    const name = document.getElementById("name").value.trim();
+                    const email = document.getElementById("email").value.trim();
+                    const comment = document.getElementById("comment").value.trim();
+
+                    // Send form data to the server
+                    fetch("/send_email", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ name, email, comment })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Handle response from the server (e.g., display success message)
+                        console.log("Email Sent:", data);
+                    })
+                    .catch(error => {
+                       console.error("Error sending email:", error);
+                    });
+               });
+            });
+	</script>
+<footer class="footer-box text-center">
+    <script>
+        $(document).ready(function(){
+            $('.dropdown-toggle').dropdown();
+        });
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+    <p>&copy; 2024 Support Center. All rights reserved.</p>
+</footer>
 </body>
 </html>

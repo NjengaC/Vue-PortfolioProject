@@ -82,7 +82,7 @@ function showRiders() {
 		            riderList.style.display = 'block';
 		        } else {
 				        riderList.style.display = 'none';
- });
+ }};
 
 jQuery(function($) {
     $(window).on('scroll', function() {

@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, SelectField, DateTimeField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp, Optional, ValidationError
 from flask_login import current_user
-from entry.models import User
+from entry.models import User, Rider
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
@@ -36,6 +36,41 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('User with this email is exists, please choose another one')
+
+
+class UpdateRiderForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    contact_number = StringField('Contact Number', validators=[DataRequired(),
+                                 Regexp(r'^[0-9]{10}$',
+                                 message='Please enter a valid 10-digit phone number')])
+    vehicle_type = StringField('Vehicle Type', validators=[DataRequired(),
+                               Length(min=2, max=50)])
+    vehicle_registration = StringField('Vehicle Registration',
+                                       validators=[DataRequired(),
+                                       Length(min=2, max=50)])
+    area_of_operation = StringField('Area of Operation',
+                                    validators=[DataRequired(),
+                                    Length(min=2, max=100)])
+    current_location = StringField('Current Location',
+                                   validators=[DataRequired(),
+                                   Length(min=5, max=100)])
+    submit = SubmitField('Update')
+
+    def validate_name(self, name):
+        if name.data != current_user.name:
+            rider = Rider.query.filter_by(name=name.data).first()
+            if rider:
+                raise ValidationError('Name is already taken, please choose another one')
+    def validate_email(self, email):
+        if email.data != current_user.email:
+            rider = Rider.query.filter_by(email=email.data).first()
+            if rider:
+                raise ValidationError('Rider with this email is exists, please choose another one')
+
+
 
 class RiderRegistrationForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(),
