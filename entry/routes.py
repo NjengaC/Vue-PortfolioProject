@@ -20,7 +20,7 @@ import retrying
 import geopy.exc
 import secrets
 import psycopg2
-
+from sqlalchemy import or_
 
 @app.route('/')
 @app.route('/home')
@@ -194,7 +194,7 @@ def register_rider():
 def login_rider():
     if current_user.is_authenticated and current_user.role == 'rider':
         rider = Rider.query.filter_by(contact_number=current_user.contact_number).first()
-        pending_assignments = Parcel.query.filter(Parcel.rider_id==rider.id).first()
+        pending_assignments=Parcel.query.filter_by(rider_id=current_user.id).filter(Parcel.status.in_(['allocated', 'shipped', 'in_progress'])).first()
         return render_template('rider_authenticated.html', title='Rider\'s dashboard', user=current_user, assignment=pending_assignments)
     form = LoginRiderForm()
     if form.validate_on_submit():
@@ -202,7 +202,7 @@ def login_rider():
         if rider:
             if bcrypt.check_password_hash(rider.password, form.password.data):
                 login_user(rider)
-                pending_assignments = Parcel.query.filter(Parcel.rider_id==rider.id).first()
+                pending_assignments=Parcel.query.filter_by(rider_id=rider.id).filter(Parcel.status.in_(['allocated', 'shipped', 'in_progress'])).first()
                 flash('Rider login successful!', 'success')
                 return render_template('rider_authenticated.html', title='Rider\'s dashboard', user=rider, assignment=pending_assignments)
             else:
@@ -284,20 +284,27 @@ def allocate_parcel():
             db.session.commit()
             notify_rider_new_assignment(closest_rider.email, parcel)
             allocated_parcels.append(parcel)
+            closest_rider_details = {
+                    'id': closest_rider.id,
+                    'name': closest_rider.name,
+                    'contact': closest_rider.contact_number,
+                    'vehicle_type': closest_rider.vehicle_type,
+                    'vehicle_registration': closest_rider.vehicle_registration
+                    }
 
-    if allocated_parcels:
-        result = {
-            'success': True,
-            'allocated_parcels': allocated_parcels,
-
-        }
+            if allocated_parcels:
+                result = {
+                        'success': True,
+                        'allocated_parcels': allocated_parcels,
+                        'closest_rider': closest_rider_details
+                        }
     else:
         result = {
-            'success': False,
-            'message': 'No available riders, parcel allocation pending'
-        }
-    
-    return result
+                'success': False,
+                'message': 'No available riders, parcel allocation pending'
+                }
+
+        return result
 
 
 @app.route('/toggle_rider_status/<int:rider_id>', methods=['POST'])
@@ -342,8 +349,7 @@ def update_assignment():
     parcel_id = data.get('parcel_id')
     action = data.get('action')
 
-    assignment = Parcel.query.filter_by(id=parcel_id, status='allocated').first()
-
+    assignment = Parcel.query.filter_by(id=parcel_id).filter(or_(Parcel.status == 'allocated', Parcel.status == 'shipped', Parcel.status == 'in_progress')).first()
     if assignment:
         if action == 'accept':
             assignment.status = 'in_progress'
@@ -375,31 +381,6 @@ def update_assignment():
     else:
         return jsonify({'error': 'Assignment not found or already accepted/denied'}), 404
     return redirect(url_for('home'))
-
-@app.route('/update_assignment_status', methods=['POST'])
-def update_assignment_status():
-    data = request.json
-    parcel_id = data.get('parcel_id')
-    status = data.get('status')
-
-    assignment = Parcel.query.filter_by(id=parcel_id, status='shipped').first()
-
-    if assignment:
-        if status == 'shipped':
-            assignment.status = 'shipped'
-            db.session.commit()
-            return jsonify({'success': True})
-        elif status == 'arrived':
-            assignment.status = 'arrived'
-            rider = Rider.query.filter_by(id=assignment.rider_id).first()
-            if rider:
-                rider.status = 'available'
-            db.session.commit()
-            return jsonify({'success': True})
-        else:
-            return jsonify({'error': 'Invalid status'}), 400
-    else:
-        return jsonify({'error': 'Parcel not found or already arrived'}), 404
 
 
 @app.route('/track_assignment/<int:id>')
