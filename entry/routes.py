@@ -97,9 +97,10 @@ def edit_profile():
 
 @app.route('/edit__rider_profile', methods=['GET', 'POST'])
 def edit_rider_profile():
-    form = UpdateRiderForm()
-    if request.method == 'GET':
-        form.email.data = current_user.email
+    if current_user.is_authenticated:
+        form = UpdateRiderForm()
+        if request.method == 'GET':
+            form.email.data = current_user.email
         form.name.data = current_user.name
         form.current_location.data = current_user.current_location
         form.area_of_operation.data = current_user.area_of_operation
@@ -121,7 +122,10 @@ def edit_rider_profile():
             db.session.commit()
             flash('Your account has been updated successfully!', 'success')
             return redirect(url_for('login_rider'))
-    return render_template('edit_rider_profile.html', title='Edit Profile', form=form, user=current_user)
+        return render_template('edit_rider_profile.html', title='Edit Profile', form=form, user=current_user)
+    else:
+        flash('please login to view this page!', 'danger')
+        return redirect(url_for('login'))
 
 @app.route('/track_parcel')
 def track_parcel():
@@ -485,6 +489,7 @@ def forgot_password():
         else:
             flash("Email address not found.", 'danger')
     return render_template('forgot_password.html', form=form)
+
 
 
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
