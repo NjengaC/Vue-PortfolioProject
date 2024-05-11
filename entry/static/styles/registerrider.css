@@ -1,7 +1,6 @@
 /*Background color*/
 #grad1 {
-    background-color: #9C27B0;
-    background-image: linear-gradient(120deg, #FF4081, #81D4FA);
+    background-color: navy;
 }
 
 /*Form styles*/
@@ -69,7 +68,7 @@
 #msform .action-button,
 #msform .action-button-previous {
     width: 100px;
-    background: skyblue;
+    background: navy;
     font-weight: bold;
     color: white;
     border: 0 none;
@@ -173,7 +172,7 @@
 }
 
 #msform #progressbar li.active:before, #msform #progressbar li.active:after {
-    background: skyblue;
+    background: navy;
 }
 
 /*Images Radio Buttons*/
@@ -187,7 +186,7 @@
     width: 204;
     height: 104;
     border-radius: 0;
-    background: lightblue;
+    background: navy;
     box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
     cursor: pointer;

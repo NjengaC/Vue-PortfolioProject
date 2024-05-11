@@ -6,6 +6,7 @@
     <title>Vue - Home Authenticated</title>
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
 <header>
@@ -67,11 +68,168 @@
                 <!-- Add more sidebar links here -->
             </ul>
         </div>
+<main class="my-1 pt-2 pb-2 px-10 flex-1 bg-gray-200 dark:bg-black rounded-l-lg transition duration-500 ease-in-out overflow-y-auto">
+    <div class="flex flex-col capitalize text-3xl">
+        <span class="font-semibold">hello,</span>
+        <span>User!</span>
+    </div>
+    <div class="flex">
+        <div class="mr-6 w-1/2 mt-8 py-2 flex-shrink-0 flex flex-col bg-white dark:bg-gray-600 rounded-lg">
+            <!-- Card list container -->
+            <h3 class="flex items-center pt-1 pb-1 px-8 text-lg font-semibold capitalize dark:text-gray-300">
+                <!-- Header -->
+                <span>nearby deliveries</span>
+                <button class="ml-2">
+                    <svg class="h-5 w-5 fill-current" viewBox="0 0 256 512">
+                        <path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"></path>
+                    </svg>
+                </button>
+            </h3>
+            <div>
+                <!-- List -->
+                <ul class="pt-1 pb-2 px-3 overflow-y-auto">
+                    <li class="mt-2">
+                        <a class="p-5 flex flex-col justify-between bg-gray-100 dark:bg-gray-200 rounded-lg" href="#">
+                            <div class="flex items-center justify-between font-semibold capitalize dark:text-gray-700">
+                                <!-- Top section -->
+                                <span>Package Delivery</span>
+                                <div class="flex items-center">
+                                    <svg class="h-5 w-5 fill-current mr-1 text-gray-600" viewBox="0 0 24 24">
+                                        <path d="M14 12l-4-4v3H2v2h8v3m12-4a10 10 0 01-19.54 3h2.13a8 8 0 100-6H2.46A10 10 0 0122 12z"></path>
+                                    </svg>
+                                    <span>4.2 mi</span>
+                                </div>
+                            </div>
+                            <p class="text-sm font-medium leading-snug text-gray-600 my-3">
+                                <!-- Middle section -->
+                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Explicabo assumenda porro sapiente, cum nobis tempore delectus consectetur ullam reprehenderit quis ducimus, iusto dolor nam corporis id perspiciatis consequuntur saepe excepturi.
+                            </p>
+                            <div class="flex justify-between">
+                                <!-- Bottom section -->
+                                <div class="flex">
+                                    <img class="h-6 w-6 rounded-full mr-3" src="https://via.placeholder.com/150" alt="" />
+                                    <span>
+                                        <span class="text-blue-500 font-semibold">John D.</span>
+                                        via ParcelTrack
+                                    </span>
+                                </div>
+                                <p class="text-sm font-medium leading-snug text-gray-600">14 hours ago</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mt-2">
+                        <a class="p-5 flex flex-col justify-between bg-gray-100 dark:bg-gray-200 rounded-lg" href="#">
+                            <div class="flex items-center justify-between font-semibold capitalize dark:text-gray-700">
+                                <!-- Top section -->
+                                <span>Express Delivery</span>
+                                <div class="flex items-center">
+                                    <svg class="h-5 w-5 fill-current mr-1 text-gray-600" viewBox="0 0 24 24">
+                                        <path d="M14 12l-4-4v3H2v2h8v3m12-4a10 10 0 01-19.54 3h2.13a8 8 0 100-6H2.46A10 10 0 0122 12z"></path>
+                                    </svg>
+                                    <span>2.8 mi</span>
+                                </div>
+                            </div>
+                            <p class="text-sm font-medium leading-snug text-gray-600 my-3">
+                                <!-- Middle section -->
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis, eaque aspernatur. Animi, quod tempora! Quas voluptatem accusantium voluptatum reiciendis distinctio architecto, dolorem, ad quisquam, consequatur rerum a dolor veniam dolorum?
+                            </p>
+                            <div class="flex justify-between">
+                                <!-- Bottom section -->
+                                <div class="flex">
+                                    <img class="h-6 w-6 rounded-full mr-3" src="https://via.placeholder.com/150" alt="" />
+                                    <span>
+                                        <span class="text-blue-500 font-semibold">Emily R.</span>
+                                        via QuickDeliver
+                                    </span>
+                                </div>
+                                <p class="text-sm font-medium leading-snug text-gray-600">19 hours ago</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="w-1/2 mt-8 py-2 flex-shrink-0 flex flex-col bg-white dark:bg-gray-600 rounded-lg">
+            <!-- Card list container -->
+            <h3 class="flex items-center pt-1 pb-1 px-8 text-lg font-semibold capitalize dark:text-gray-300">
+                <!-- Header -->
+                <span>scheduled deliveries</span>
+                <button class="ml-2">
+                    <svg class="h-5 w-5 fill-current" viewBox="0 0 256 512">
+                        <path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"></path>
+                    </svg>
+                </button>
+            </h3>
+            <div>
+                <!-- List -->
+                <ul class="pt-1 pb-2 px-3 overflow-y-auto">
+                    <li class="mt-2">
+                        <a class="p-5 flex flex-col justify-between bg-gray-100 dark:bg-gray-200 rounded-lg" href="#">
+                            <div class="flex items-center justify-between font-semibold capitalize dark:text-gray-700">
+                                <!-- Top section -->
+                                <span>Package Delivery</span>
+                                <div class="flex items-center">
+                                    <svg class="h-5 w-5 fill-current mr-1 text-gray-600" viewBox="0 0 24 24">
+                                        <path d="M14 12l-4-4v3H2v2h8v3m12-4a10 10 0 01-19.54 3h2.13a8 8 0 100-6H2.46A10 10 0 0122 12z"></path>
+                                    </svg>
+                                    <span>Tomorrow</span>
+                                </div>
+                            </div>
+                            <p class="text-sm font-medium leading-snug text-gray-600 my-3">
+                                <!-- Middle section -->
+                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Explicabo assumenda porro sapiente, cum nobis tempore delectus consectetur ullam reprehenderit quis ducimus, iusto dolor nam corporis id perspiciatis consequuntur saepe excepturi.
+                            </p>
+                            <div class="flex justify-between">
+                                <!-- Bottom section -->
+                                <div class="flex">
+                                    <img class="h-6 w-6 rounded-full mr-3" src="https://via.placeholder.com/150" alt="" />
+                                    <span>
+                                        <span class="text-blue-500 font-semibold">Parcel Express</span>
+                                        Scheduled by John D.
+                                    </span>
+                                </div>
+                                <p class="text-sm font-medium leading-snug text-gray-600">12:00 PM</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mt-2">
+                        <a class="p-5 flex flex-col justify-between bg-gray-100 dark:bg-gray-200 rounded-lg" href="#">
+                            <div class="flex items-center justify-between font-semibold capitalize dark:text-gray-700">
+                                <!-- Top section -->
+                                <span>Express Delivery</span>
+                                <div class="flex items-center">
+                                    <svg class="h-5 w-5 fill-current mr-1 text-gray-600" viewBox="0 0 24 24">
+                                        <path d="M14 12l-4-4v3H2v2h8v3m12-4a10 10 0 01-19.54 3h2.13a8 8 0 100-6H2.46A10 10 0 0122 12z"></path>
+                                    </svg>
+                                    <span>Today</span>
+                                </div>
+                            </div>
+                            <p class="text-sm font-medium leading-snug text-gray-600 my-3">
+                                <!-- Middle section -->
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis, eaque aspernatur. Animi, quod tempora! Quas voluptatem accusantium voluptatum reiciendis distinctio architecto, dolorem, ad quisquam, consequatur rerum a dolor veniam dolorum?
+                            </p>
+                            <div class="flex justify-between">
+                                <!-- Bottom section -->
+                                <div class="flex">
+                                    <img class="h-6 w-6 rounded-full mr-3" src="https://via.placeholder.com/150" alt="" />
+                                    <span>
+                                        <span class="text-blue-500 font-semibold">Speedy Ship</span>
+                                        Scheduled by Emily R.
+                                    </span>
+                                </div>
+                                <p class="text-sm font-medium leading-snug text-gray-600">3:00 PM</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
         <div id="main-content" class="flex-grow">
             <!-- Content from sidebar links will be loaded here -->
         </div>
     </div>
-
     <script>
         // Get all sidebar links
         const sidebarLinks = document.querySelectorAll('.sidebar-link');
