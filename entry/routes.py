@@ -90,20 +90,21 @@ def logout():
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    form = UpdateAccountForm()
-    if request.method == 'GET':
-        form.email.data = current_user.email
-        form.username.data = current_user.username
-    elif request.method == 'POST':
-        if form.validate_on_submit():
-            current_user.email = form.email.data
-            current_user.username = form.username.data
-            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-            current_user.password = hashed_password
-            db.session.commit()
-            flash('Your account has been updated successfully!', 'success')
-            return render_template('home.html', title='Home', user=current_user)
-    return render_template('edit_profile.html', title='Edit Profile', form=form, user=current_user)
+    if current_user.is_authenticated:
+        form = UpdateAccountForm()
+        if request.method == 'GET':
+            form.email.data = current_user.email
+            form.username.data = current_user.username
+        elif request.method == 'POST':
+            if form.validate_on_submit():
+                current_user.email = form.email.data
+                current_user.username = form.username.data
+                hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+                current_user.password = hashed_password
+                db.session.commit()
+                flash('Your account has been updated successfully!', 'success')
+                return render_template('home.html', title='Home', user=current_user)
+        return render_template('edit_profile.html', title='Edit Profile', form=form, user=current_user)
 
 
 @app.route('/edit__rider_profile', methods=['GET', 'POST'])
@@ -597,6 +598,18 @@ def send_payment_notification_email():
 def view_parcel_history():
     if current_user.is_authenticated:
         parcels = Parcel.query.filter_by(sender_email=current_user.email).all()
+
+        # Separate parcels by status
+        allocated_parcels = [parcel for parcel in parcels if parcel.status == 'allocated']
+        in_progress_parcels = [parcel for parcel in parcels if parcel.status == 'in_progress']
+        shipped_parcels = [parcel for parcel in parcels if parcel.status == 'shipped']
+        arrived_parcels = [parcel for parcel in parcels if parcel.status == 'arrived']
+
+        return render_template('view_parcel_history.html', 
+                               allocated_parcels=allocated_parcels,
+                               in_progress_parcels=in_progress_parcels,
+                               shipped_parcels=shipped_parcels,
+                               arrived_parcels=arrived_parcels)
         return render_template('view_parcel_history.html', parcels=parcels)
     else:
         return render_template('view_parcel_history.html')
