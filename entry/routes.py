@@ -496,7 +496,7 @@ def forgot_password():
             message = f"Click the link to reset your password: {reset_url}"
             send_email(user.email, "Password Reset Request", message)
 
-            flash("Instructions to reset your password have been sent to your email.", 'success')
+            flash("Instructions to reset your password have been sent to your email.", "success")
             return redirect(url_for('login'))
         elif rider:
             # Generate a unique token for the rider
@@ -509,7 +509,7 @@ def forgot_password():
             message = f"Click the link to reset your password: {reset_url}"
             send_email(rider.email, "Password Reset Request", message)
 
-            flash("Instructions to reset your password have been sent to your email.")
+            flash("Instructions to reset your password have been sent to your email.", "success")
             return redirect(url_for('login'))
         else:
             flash("Email address not found.", 'danger')
