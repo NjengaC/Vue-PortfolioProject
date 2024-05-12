@@ -428,7 +428,6 @@ def send_rider_details_email(recipient_email, allocation_result, tracking_number
 
 
 
-from flask import redirect, url_for
 
 @app.route('/support', methods=['GET', 'POST'])
 def support():
