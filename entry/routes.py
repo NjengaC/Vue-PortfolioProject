@@ -38,7 +38,9 @@ def home_authenticated():
 
 @app.route('/rider_authenticated')
 def rider_authenticated():
-    return render_template('rider_authenticated.html', title='Vue-Rider\'s HomePage', user=current_user)
+    rider = Rider.query.filter_by(contact_number=current_user.contact_number).first()
+        pending_assignments=Parcel.query.filter_by(rider_id=current_user.id).filter(Parcel.status.in_(['allocated', 'shipped', 'in_progress'])).first()
+    return render_template('rider_authenticated.html', title='Rider\'s dashboard', user=current_user, assignment=pending_assignments)    
 
 
 @app.route('/register', methods=['GET', 'POST'])
