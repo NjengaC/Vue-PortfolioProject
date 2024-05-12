@@ -25,9 +25,20 @@ from sqlalchemy import or_
 @app.route('/')
 @app.route('/home')
 def home():
-    if current_user.is_authenticated:
-        logout()
+    if current_user.is_authenticated and current_user.role == 'user':
+        return redirect(url_for('home_authenticated'))
+    elif current_user.is_authenticated and current_user.role == 'rider':
+        return redirect(url_for('rider_authenticated'))
+
     return render_template('home.html', title='Home')
+
+@app.route('/home_authenticated')
+def home_authenticated():
+    return render_template('home_authenticated.html', title='Vue-User\'s HomePage', user=current_user)
+
+@app.route('/rider_authenticated')
+def rider_authenticated():
+    return render_template('rider_authenticated.html', title='Vue-Rider\'s HomePage', user=current_user)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -414,16 +425,17 @@ def send_rider_details_email(recipient_email, allocation_result, tracking_number
 
 
 
+from flask import redirect, url_for
+
 @app.route('/support', methods=['GET', 'POST'])
 def support():
     if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        comment = request.form['comment']
+        name = request.form.get('name')
+        email = request.form.get('email')
+        comment = request.form.get('comment')
 
         if not name or not email or not comment:
             flash('Please fill out all fields.', 'error')
-            return render_template('support.html')
         else:
             # Create a Message object for sending email to admin
             msg = Message(subject='User Comment', recipients=['victorcyrus01@gmail.com'])
@@ -432,11 +444,12 @@ def support():
             try:
                 # Send the email to admin
                 mail.send(msg)
+                flash('Email sent successfully! Our support team will get back to you shortly', 'success')
             except Exception as e:
                 flash('Something unexpected happened! Please try again', 'error')
-                return render_template('support.html')
 
-            flash('Email sent successfully! Our support team will get back to you shortly', 'success')
+        # Redirect to the support page after processing the form data
+        return redirect(url_for('support'))
 
     if request.method == 'GET':
         search_query = request.args.get('search_query', '').strip()
@@ -460,7 +473,8 @@ def support():
             faqs_dict = [{'question': faq.question, 'answer': faq.answer} for faq in existing_faqs]
             existing_faqs = jsonify(faqs_dict)
             return existing_faqs  # Return JSON response for search query
-        return render_template('support.html')
+
+    return render_template('support.html')
 
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
