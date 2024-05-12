@@ -50,4 +50,6 @@
   font-size: 18px;
   color: #333; /* Adjust color as needed */
 }
-
+#frame {
+  width: 100%;
+}
