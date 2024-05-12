@@ -583,7 +583,7 @@ def view_parcel_history():
 @app.route('/view_rider_history', methods=['GET', 'POST'])
 def view_rider_history():
     if current_user.is_authenticated:
-        parcels = Parcel.query.filter_by(sender_email=current_user.email).all()
+        parcels = Parcel.query.filter_by(rider_id=current_user.id).all()
         return render_template('view_parcel_history.html', parcels=parcels)
     else:
         return render_template('view_parcel_history.html')
