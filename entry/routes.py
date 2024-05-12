@@ -618,11 +618,19 @@ def view_parcel_history():
 @app.route('/view_rider_history', methods=['GET', 'POST'])
 def view_rider_history():
     if current_user.is_authenticated:
+        # Query parcels for the current rider
         parcels = Parcel.query.filter_by(rider_id=current_user.id).all()
-        return render_template('view_parcel_history.html', parcels=parcels)
+
+        # Separate parcels by status
+        open_orders = [parcel for parcel in parcels if parcel.status in ['in_progress', 'shipped']]
+        closed_orders = [parcel for parcel in parcels if parcel.status == 'arrived']
+
+        return render_template('view_rider_history.html',
+                               open_orders=open_orders,
+                               closed_orders=closed_orders)
     else:
-        return render_template('view_parcel_history.html')
         flash('Log in to view your parcels history!', 'danger')
+        return render_template('login.html')
 
 
 @app.route('/rider_dashboard', methods=['GET', 'POST'])

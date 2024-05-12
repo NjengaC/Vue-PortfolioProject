@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rider Parcel History</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/view_rider_history.css') }}">
+</head>
+<body>
+<header>
+    <nav id="reg">
+        <a class="home-btn" href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+        <a href="{{ url_for('support') }}">Support</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+        <a href="{{ url_for('edit_rider_profile') }}">Profile</a>
+    </nav>
+</header>
+{% if current_user.is_authenticated %}
+<div class="container">
+    <h1>Your Parcel History</h1>
+
+    <h5>Open Orders</h5>
+    {% if open_orders %}
+        <div class="parcel-list">
+            {% for parcel in open_orders %}
+                <div class="parcel">
+                    <p>Parcel ID: {{ parcel.id }}</p>
+                    <!-- Display other parcel details as needed -->
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No open orders found.</p>
+    {% endif %}
+
+    <h5>Closed Orders</h5>
+    {% if closed_orders %}
+        <div class="parcel-list">
+            {% for parcel in closed_orders %}
+                <div class="parcel">
+                    <p>Parcel ID: {{ parcel.id }}</p>
+                    <!-- Display other parcel details as needed -->
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No closed orders found.</p>
+    {% endif %}
+</div>
+{% else %}
+<div class="container">
+    <h1>Rider Parcel History</h1>
+    <p>Please log in to view your parcel history.</p>
+</div>
+{% endif %}
+</body>
+</html>
