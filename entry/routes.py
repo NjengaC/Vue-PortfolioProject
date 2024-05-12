@@ -527,16 +527,12 @@ def reset_password(token):
     flash("Invalid or expired token.", 'danger')
     return redirect(url_for('forgot_password'))
 
-@app.route('/send_email', methods=['POST'])
-def send_email():
-    if request.method == 'POST':
-        name = request.json.get('name')
-        email = request.json.get('email')
-        comment = request.json.get('comment')
 
-        return jsonify({'message': 'Email sent successfully!'})
-    else:
-        return jsonify({'error': 'Invalid request method'}), 405
+def send_email(recipient, subject, html_body):
+    msg = Message(subject, recipients=[recipient])
+    msg.html = html_body
+    mail.send(msg)
+
 
 @app.route('/payment_success', methods=['POST'])
 def payment_success():
