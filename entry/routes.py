@@ -442,17 +442,25 @@ def support():
         search_query = request.args.get('search_query', '').strip()
 
         if search_query:
-            # If search_query is provided, filter FAQs based on it
-            existing_faqs = FAQ.query.filter(
-                (FAQ.question.ilike(f'%{search_query}%')) |
-                (FAQ.answer.ilike(f'%{search_query}%'))
-            ).all()
-            # Convert FAQs to a dictionary for JSON response
+            search_words = search_query.split()
+
+            filter_conditions = []
+
+            for word in search_words:
+                question_condition = FAQ.question.ilike(f'%{word}%')
+                answer_condition = FAQ.answer.ilike(f'%{word}%')
+
+                filter_conditions.append(question_condition)
+                filter_conditions.append(answer_condition)
+
+            combined_condition = or_(*filter_conditions)
+
+            existing_faqs = FAQ.query.filter(combined_condition).all()
+
             faqs_dict = [{'question': faq.question, 'answer': faq.answer} for faq in existing_faqs]
             existing_faqs = jsonify(faqs_dict)
             return existing_faqs  # Return JSON response for search query
-
-    return render_template('support.html')
+        return render_template('support.html')
 
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
