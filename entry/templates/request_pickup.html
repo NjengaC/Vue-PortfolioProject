@@ -40,7 +40,7 @@
     <div class="container">
             <div id="spinner" class="spinner" style="display: none;"></div>
             <h1><i class="fas fa-shipping-fast"></i>Shipping Details</h1>
-            <form id="parcelForm" method="POST" action="">
+	    <form id="parcelForm" method="POST" action="{{ url_for('request_pickup') }}">
                 {{ form.hidden_tag() }}
                 <div class="form-group">
                     <div class="row">
