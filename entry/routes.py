@@ -109,7 +109,7 @@ def edit_profile():
         return render_template('edit_profile.html', title='Edit Profile', form=form, user=current_user)
 
 
-@app.route('/edit__rider_profile', methods=['GET', 'POST'])
+@app.route('/edit_rider_profile', methods=['GET', 'POST'])
 def edit_rider_profile():
     if current_user.is_authenticated:
         form = UpdateRiderForm()
