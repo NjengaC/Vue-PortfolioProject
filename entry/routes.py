@@ -286,7 +286,7 @@ def allocate_parcel():
             parcel.rider_id = closest_rider.id
             closest_rider.status = 'unavailable'
             db.session.commit()
-            notify_rider_new_assignment(closest_rider.email, parcel)
+            notify_rider_new_assignment(closest_rider.email, parcel, closest_rider)
             allocated_parcels.append(parcel)
             closest_rider_details = {
                     'id': closest_rider.id,
@@ -397,12 +397,12 @@ def track_assignment(id):
         flash('Assignment not found or not assigned to you.', 'error')
         return redirect(url_for('home'))
 
-def notify_rider_new_assignment(rider_email, parcel):
+def notify_rider_new_assignment(rider_email, parcel, rider):
     """
     Trigger notification when assigning a parcel to a rider
     """
     msg = Message('New Delivery Assignment', recipients=[rider_email])
-    html_content = render_template('new_assignment_email.html', parcel=parcel)
+    html_content = render_template('new_assignment_email.html', parcel=parcel, rider=rider)
     msg.html = html_content
     mail.send(msg)
 
@@ -413,27 +413,30 @@ def send_rider_details_email(recipient_email, allocation_result, tracking_number
     mail.send(msg)
 
 
+
 @app.route('/support', methods=['GET', 'POST'])
 def support():
     if request.method == 'POST':
+        name = request.form['name']
         email = request.form['email']
-        subject = request.form['subject']
-        body = request.form['body']
+        comment = request.form['comment']
 
-        if not email or not subject or not body:
-            return 'Please fill out all fields.', 400
+        if not name or not email or not comment:
+            flash('Please fill out all fields.', 'error')
+            return render_template('support.html')
+        else:
+            # Create a Message object for sending email to admin
+            msg = Message(subject='User Comment', recipients=['victorcyrus01@gmail.com'])
+            msg.body = f"Name: {name}\nEmail: {email}\nComment: {comment}"
 
-        # Create a Message object
-        msg = Message(subject=subject, recipients=[app.config['MAIL_USERNAME']])
-        msg.body = f"Sender's Email: {email}\n\n{body}"
+            try:
+                # Send the email to admin
+                mail.send(msg)
+            except Exception as e:
+                flash('Something unexpected happened! Please try again', 'error')
+                return render_template('support.html')
 
-        try:
-            # Send the email
-            mail.send(msg)
-            return 'Email sent successfully!'
-        except Exception as e:
-            print(f'Error sending email: {e}')
-            return f'Error: {str(e)}'
+            flash('Email sent successfully! Our support team will get back to you shortly', 'success')
 
     if request.method == 'GET':
         search_query = request.args.get('search_query', '').strip()
@@ -444,11 +447,10 @@ def support():
                 (FAQ.question.ilike(f'%{search_query}%')) |
                 (FAQ.answer.ilike(f'%{search_query}%'))
             ).all()
-        else:
-            # If search_query is empty, fetch all existing FAQs
-            existing_faqs = FAQ.query.all()
-
-        return render_template('support.html', existing_faqs=existing_faqs, search_query=search_query)
+            # Convert FAQs to a dictionary for JSON response
+            faqs_dict = [{'question': faq.question, 'answer': faq.answer} for faq in existing_faqs]
+            existing_faqs = jsonify(faqs_dict)
+            return existing_faqs  # Return JSON response for search query
 
     return render_template('support.html')
 
