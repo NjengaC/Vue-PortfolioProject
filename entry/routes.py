@@ -38,7 +38,9 @@ def home_authenticated():
 
 @app.route('/rider_authenticated')
 def rider_authenticated():
-    return render_template('rider_authenticated.html', title='Vue-Rider\'s HomePage', user=current_user)
+    rider = Rider.query.filter_by(contact_number=current_user.contact_number).first()
+        pending_assignments=Parcel.query.filter_by(rider_id=current_user.id).filter(Parcel.status.in_(['allocated', 'shipped', 'in_progress'])).first()
+    return render_template('rider_authenticated.html', title='Rider\'s dashboard', user=current_user, assignment=pending_assignments)    
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -496,7 +498,7 @@ def forgot_password():
             message = f"Click the link to reset your password: {reset_url}"
             send_email(user.email, "Password Reset Request", message)
 
-            flash("Instructions to reset your password have been sent to your email.", 'success')
+            flash("Instructions to reset your password have been sent to your email.", "success")
             return redirect(url_for('login'))
         elif rider:
             # Generate a unique token for the rider
@@ -509,7 +511,7 @@ def forgot_password():
             message = f"Click the link to reset your password: {reset_url}"
             send_email(rider.email, "Password Reset Request", message)
 
-            flash("Instructions to reset your password have been sent to your email.")
+            flash("Instructions to reset your password have been sent to your email.", "success")
             return redirect(url_for('login'))
         else:
             flash("Email address not found.", 'danger')
