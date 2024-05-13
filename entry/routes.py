@@ -111,10 +111,9 @@ def edit_profile():
 
 @app.route('/edit_rider_profile', methods=['GET', 'POST'])
 def edit_rider_profile():
-    if current_user.is_authenticated:
-        form = UpdateRiderForm()
-        if request.method == 'GET':
-            form.email.data = current_user.email
+    form = UpdateRiderForm()
+    if request.method == 'GET':
+        form.email.data = current_user.email
         form.name.data = current_user.name
         form.current_location.data = current_user.current_location
         form.area_of_operation.data = current_user.area_of_operation
@@ -139,7 +138,7 @@ def edit_rider_profile():
         return render_template('edit_rider_profile.html', title='Edit Profile', form=form, user=current_user)
     else:
         flash('please login to view this page!', 'danger')
-        return redirect(url_for('login'))
+    return redirect(url_for('login_rider'))
 
 @app.route('/track_parcel')
 def track_parcel():
@@ -631,7 +630,7 @@ def view_rider_history():
                                closed_orders=closed_orders)
     else:
         flash('Log in to view your parcels history!', 'danger')
-        return render_template('login.html')
+        return render_template('login_rider.html')
 
 
 @app.route('/rider_dashboard', methods=['GET', 'POST'])
