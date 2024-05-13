@@ -6,17 +6,47 @@
     <title>Rider Parcel History</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/view_parcel_history.css') }}">
+  <link rel="icon" href="../static/images/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="180x180" href="../static/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../static/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../static/images/favicon-16x16.png">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-P8XN+Jyrp6rVIiIMT9RYBq5h6DScnIxK1K8yhSfFNSq7hdx38P4qNGpbKNisF3d6V2fK60h0RVaMx6syPeCifQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/view_parcel_history.css') }}">
 </head>
 <body>
 <header>
-    <nav id="reg">
-        <a class="home-btn" href="{{ url_for('home') }}">Home</a>
-        <a href="{{ url_for('about') }}">About</a>
-        <a href="{{ url_for('support') }}">Support</a>
-        <a href="{{ url_for('logout') }}">Logout</a>
-        <a href="{{ url_for('edit_rider_profile') }}">Profile</a>
+    <nav id="reg" class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">VUE</a> <!-- Your brand name or logo -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span> <!-- Hamburger icon for mobile -->
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('support') }}">Support</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('edit_profile') }}">Profile</a>
+                </li>
+            </ul>
+        </div>
     </nav>
 </header>
+
 {% if current_user.is_authenticated %}
 <div class="container">
     <h1>Your Parcel History</h1>
@@ -76,5 +106,17 @@
     <p>Please log in to view your parcel history.</p>
 </div>
 {% endif %}
+<footer id="footer">
+            <div class="social"><a href="#"><i class="icon ion-social-instagram"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-facebook"></i></a></div>            <ul class="list-inline">
+                    <li class="list-inline-item"><a href="{{ url_for('home') }}">Home</a></li>
+                    <li class="list-inline-item"><a href="{{ url_for('about') }}">About</a></li>
+                    <li class="list-inline-item"><a href="{{ url_for('support') }}">Support</a></li>
+                <li class="list-inline-item"><a href="#">Terms</a></li>
+                <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+            </ul>
+            <p class="copyright">Vue © 2024</p>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            </body>
+        </footer>
 </body>
 </html>

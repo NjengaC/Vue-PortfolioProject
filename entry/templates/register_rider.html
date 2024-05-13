@@ -12,6 +12,34 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/registerrider.css') }}">
 </head>
 <body>
+<header>
+    <nav id="reg" class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">VUE</a> <!-- Your brand name or logo -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span> <!-- Hamburger icon for mobile -->
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('support') }}">Support</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('edit_profile') }}">Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
 <div class="container-fluid" id="grad1">
     <div class="row justify-content-center mt-0">
         <div class="col-11 col-sm-9 col-md-7 col-lg-6 text-center p-0 mt-3 mb-2">
@@ -129,6 +157,17 @@
         </div>
     </div>
 </div>
+<footer id="footer">
+            <div class="social"><a href="#"><i class="icon ion-social-instagram"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-facebook"></i></a></div>            <ul class="list-inline">
+                    <li class="list-inline-item"><a href="{{ url_for('home') }}">Home</a></li>
+                    <li class="list-inline-item"><a href="{{ url_for('about') }}">About</a></li>
+                    <li class="list-inline-item"><a href="{{ url_for('support') }}">Support</a></li>
+                <li class="list-inline-item"><a href="#">Terms</a></li>
+                <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+            </ul>
+            <p class="copyright">Vue © 2024</p>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="static/scripts/home.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- Bootstrap Bundle (includes Popper.js) -->
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
@@ -219,6 +258,7 @@ $(document).ready(function(){
     });
 
 });
-                </script>
+</script>
+</footer>
 </body>
 </html>

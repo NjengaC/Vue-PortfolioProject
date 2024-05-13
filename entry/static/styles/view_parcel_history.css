@@ -1,131 +1,277 @@
+/* Reset styles */
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa; /* Light gray background */
+    color: #333; /* Dark text color */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 10px;
+}
+
+p {
+    margin-bottom: 15px;
+}
+
+/* Header styles */
+.navbar {
+    background-color: #007bff; /* Primary color for the header */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-nav .nav-link {
+    color: #fff; /* White text color for links */
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #fff; /* Hover color */
+    background-color: rgba(255, 255, 255, 0.1); /* Transparent background on hover */
+    border-radius: 5px; /* Rounded corners on hover */
+    transition: background-color 0.3s ease;
+}
+
+.home-btn {
+    margin-right: 20px;
+}
+
+/* Parcel history styles */
 .tracking-detail {
- padding:3rem 0
+    padding: 3rem 0;
 }
-#tracking {
- margin-bottom:1rem
-}
-[class*=tracking-status-] p {
- margin:0;
- font-size:1.1rem;
- color:#fff;
- text-transform:uppercase;
- text-align:center
-}
-[class*=tracking-status-] {
- padding:1.6rem 0
-}
-.tracking-status-intransit {
- background-color:#65aee0
-}
-.tracking-status-outfordelivery {
- background-color:#f5a551
-}
-.tracking-status-deliveryoffice {
- background-color:#f7dc6f
-}
-.tracking-status-delivered {
- background-color:#4cbb87
-}
-.tracking-status-attemptfail {
- background-color:#b789c7
-}
-.tracking-status-error,.tracking-status-exception {
- background-color:#d26759
-}
-.tracking-status-expired {
- background-color:#616e7d
-}
-.tracking-status-pending {
- background-color:#ccc
-}
-.tracking-status-inforeceived {
- background-color:#214977
-}
+
 .tracking-list {
- border:1px solid #e5e5e5
+    border: 1px solid #e5e5e5; /* Gray border for tracking list */
+    border-radius: 5px; /* Rounded corners */
+    overflow: hidden; /* Hide overflowing content */
 }
+
 .tracking-item {
- border-left:1px solid #e5e5e5;
- position:relative;
- padding:2rem 1.5rem .5rem 2.5rem;
- font-size:.9rem;
- margin-left:3rem;
- min-height:5rem
+    border-left: 3px solid transparent; /* Left border for status indication */
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fff; /* White background */
+    transition: background-color 0.3s ease;
 }
+
+.tracking-item:hover {
+    background-color: #f5f5f5; /* Light gray background on hover */
+}
+
 .tracking-item:last-child {
- padding-bottom:4rem
+    margin-bottom: 0; /* Remove bottom margin for the last item */
 }
-.tracking-item .tracking-date {
- margin-bottom:.5rem
+
+.tracking-date {
+    margin-bottom: 10px;
+    color: #777; /* Gray date color */
 }
-.tracking-item .tracking-date span {
- color:#888;
- font-size:85%;
- padding-left:.4rem
+
+.tracking-content p {
+    margin-bottom: 5px;
 }
-.tracking-item .tracking-content {
- padding:.5rem .8rem;
- background-color:#f4f4f4;
- border-radius:.5rem
+
+/* Status-specific styles */
+.tracking-icon {
+    float: left;
+    margin-right: 20px;
+    font-size: 24px;
+    line-height: 24px;
+    color: #777; /* Gray icon color */
 }
-.tracking-item .tracking-content span {
- display:block;
- color:#888;
- font-size:85%
+
+.tracking-status-intransit {
+    border-color: #65aee0; /* Blue border for 'In Transit' status */
 }
-.tracking-item .tracking-icon {
- line-height:2.6rem;
- position:absolute;
- left:-1.3rem;
- width:2.6rem;
- height:2.6rem;
- text-align:center;
- border-radius:50%;
- font-size:1.1rem;
- background-color:#fff;
- color:#fff
+
+/* Add more styles for other tracking statuses */
+
+/* Responsive styles */
+@media (max-width: 767px) {
+    .navbar-nav .nav-link {
+        margin-bottom: 10px;
+    }
+
+    .home-btn {
+        margin-right: 0;
+    }
+
+    .tracking-item {
+        padding: 15px;
+    }
 }
-.tracking-item .tracking-icon.status-sponsored {
- background-color:#f68
+/* Navigation styles */
+.navbar {
+    background-color: grey; /* Primary color for the navbar */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.tracking-item .tracking-icon.status-delivered {
- background-color:#4cbb87
+
+.navbar-nav .nav-link {
+    color: #fff; /* White text color for links */
+    font-weight: bold;
+    transition: color 0.3s ease; /* Smooth transition for color change */
 }
-.tracking-item .tracking-icon.status-outfordelivery {
- background-color:#f5a551
+
+.navbar-nav .nav-link:hover {
+    color: #fff; /* Hover color */
+    background-color: rgba(255, 255, 255, 0.1); /* Transparent background on hover */
+    border-radius: 5px; /* Rounded corners on hover */
+    transition: background-color 0.3s ease;
 }
-.tracking-item .tracking-icon.status-deliveryoffice {
- background-color:#f7dc6f
+
+.home-btn {
+    margin-right: 20px;
+    padding: 10px 20px; /* Add padding to make the button more clickable */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition for background color change */
 }
-.tracking-item .tracking-icon.status-attemptfail {
- background-color:#b789c7
+
+.home-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Transparent background on hover */
 }
-.tracking-item .tracking-icon.status-exception {
- background-color:#d26759
+
+footer {
+    background-color: #f8f9fa; /* Light background color */
+    padding: 20px 0; /* Add some padding for spacing */
+    text-align: center; /* Center align text */
+    font-size: 14px; /* Font size */
+    color: #333; /* Text color */
+    position: relative;
 }
-.tracking-item .tracking-icon.status-inforeceived {
- background-color:#214977
+
+.social {
+    margin-bottom: 20px; /* Add some margin for spacing */
 }
-.tracking-item .tracking-icon.status-intransit {
- color:#e5e5e5;
- border:1px solid #e5e5e5;
- font-size:.6rem
+
+.social a {
+    color: #333; /* Icon color */
+    font-size: 24px; /* Icon size */
+    margin: 0 10px; /* Add spacing between icons */
 }
-@media(min-width:992px) {
- .tracking-item {
-  margin-left:10rem
- }
- .tracking-item .tracking-date {
-  position:absolute;
-  left:-10rem;
-  width:7.5rem;
-  text-align:right
- }
- .tracking-item .tracking-date span {
-  display:block
- }
- .tracking-item .tracking-content {
-  padding:0;
-  background-color:transparent
- }
+
+.social a:hover {
+    color: #007bff; /* Hover color */
 }
+
+.list-inline {
+    margin-bottom: 20px; /* Add some margin for spacing */
+}
+
+.list-inline-item {
+    margin-right: 10px; /* Add spacing between list items */
+}
+
+.list-inline-item:last-child {
+    margin-right: 0; /* Remove margin from last list item */
+}
+
+.list-inline-item a {
+    color: #333; /* Link color */
+    text-decoration: none; /* Remove underline */
+}
+
+.list-inline-item a:hover {
+    color: #007bff; /* Hover color */
+}
+
+.copyright {
+    margin-top: 20px; /* Add margin for spacing */
+}
+

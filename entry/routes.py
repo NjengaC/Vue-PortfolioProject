@@ -110,17 +110,11 @@ def edit_profile():
 
 
 @app.route('/edit_rider_profile', methods=['GET', 'POST'])
+@login_required  # Assuming you have a login_required decorator for rider access
 def edit_rider_profile():
     form = UpdateRiderForm()
-    if request.method == 'GET':
-        form.email.data = current_user.email
-        form.name.data = current_user.name
-        form.current_location.data = current_user.current_location
-        form.area_of_operation.data = current_user.area_of_operation
-        form.vehicle_registration.data = current_user.vehicle_registration
-        form.vehicle_type.data = current_user.vehicle_type
-        form.contact_number.data = current_user.contact_number
-    elif request.method == 'POST':
+
+    if request.method == 'POST':
         if form.validate_on_submit():
             current_user.email = form.email.data
             current_user.username = form.name.data
@@ -134,11 +128,19 @@ def edit_rider_profile():
 
             db.session.commit()
             flash('Your account has been updated successfully!', 'success')
-            return redirect(url_for('login_rider'))
-        return render_template('edit_rider_profile.html', title='Edit Profile', form=form, user=current_user)
+            return redirect(url_for('profile'))  # Redirect to profile page after successful update
     else:
-        flash('please login to view this page!', 'danger')
-    return redirect(url_for('login_rider'))
+        form.email.data = current_user.email
+        form.name.data = current_user.name
+        form.current_location.data = current_user.current_location
+        form.area_of_operation.data = current_user.area_of_operation
+        form.vehicle_registration.data = current_user.vehicle_registration
+        form.vehicle_type.data = current_user.vehicle_type
+        form.contact_number.data = current_user.contact_number
+
+    return render_template('edit_rider_profile.html', title='Edit Profile', form=form)
+
+
 
 @app.route('/track_parcel')
 def track_parcel():

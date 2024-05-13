@@ -9,12 +9,12 @@ import uuid
 @login_manager.user_loader
 def load_user(user_id):
     # Check if the user ID corresponds to a Rider
-    rider = Rider.query.get(int(user_id))
+    rider = Rider.query.get(user_id)
     if rider:
         return rider
 
     # If the user ID doesn't correspond to a Rider, check if it corresponds to a regular User
-    user = User.query.get(int(user_id))
+    user = User.query.get(user_id)
     if user:
         return user
 
@@ -65,7 +65,7 @@ class Parcel(db.Model):
     pickup_location = db.Column(db.String(255), nullable=False)
     delivery_location = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(400), nullable=False)
-    rider_id = db.Column(db.Integer, db.ForeignKey('rider.id'), nullable=True)
+    rider_id = db.Column(db.String(36), db.ForeignKey('rider.id'), nullable=True)
     status = db.Column(db.String(20), default='pending')
     expected_arrival = db.Column(db.String(50))
     tracking_number = db.Column(db.String(50), unique=True, nullable=False)
