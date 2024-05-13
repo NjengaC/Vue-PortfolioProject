@@ -303,27 +303,27 @@ def allocate_parcel():
             db.session.commit()
             notify_rider_new_assignment(closest_rider.email, parcel, closest_rider)
             allocated_parcels.append(parcel)
-            closest_rider_details = {
-                    'id': closest_rider.id,
-                    'name': closest_rider.name,
-                    'contact': closest_rider.contact_number,
-                    'vehicle_type': closest_rider.vehicle_type,
-                    'vehicle_registration': closest_rider.vehicle_registration
-                    }
 
-            if allocated_parcels:
-                result = {
-                        'success': True,
-                        'allocated_parcels': allocated_parcels,
-                        'closest_rider': closest_rider_details
-                        }
+    if allocated_parcels:
+        closest_rider_details = {
+            'id': closest_rider.id,
+            'name': closest_rider.name,
+            'contact': closest_rider.contact_number,
+            'vehicle_type': closest_rider.vehicle_type,
+            'vehicle_registration': closest_rider.vehicle_registration
+        }
+        result = {
+            'success': True,
+            'allocated_parcels': allocated_parcels,
+            'closest_rider': closest_rider_details
+        }
     else:
         result = {
-                'success': False,
-                'message': 'No available riders, parcel allocation pending'
-                }
+            'success': False,
+            'message': 'No available riders, parcel allocation pending'
+        }
 
-        return result
+    return result
 
 
 @app.route('/toggle_rider_status/<int:rider_id>', methods=['POST'])
