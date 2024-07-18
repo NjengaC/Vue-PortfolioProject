@@ -257,3 +257,50 @@ footer a {
     color: #aaa;
     margin-bottom: 0;
 }
+footer {
+    background-color: #f8f9fa; /* Light background color */
+    padding: 20px 0; /* Add some padding for spacing */
+    text-align: center; /* Center align text */
+    font-size: 14px; /* Font size */
+    color: #333; /* Text color */
+    position: relative;
+}
+
+.social {
+    margin-bottom: 20px; /* Add some margin for spacing */
+}
+
+.social a {
+    color: #333; /* Icon color */
+    font-size: 24px; /* Icon size */
+    margin: 0 10px; /* Add spacing between icons */
+}
+
+.social a:hover {
+    color: #007bff; /* Hover color */
+}
+
+.list-inline {
+    margin-bottom: 20px; /* Add some margin for spacing */
+}
+
+.list-inline-item {
+    margin-right: 10px; /* Add spacing between list items */
+}
+
+.list-inline-item:last-child {
+    margin-right: 0; /* Remove margin from last list item */
+}
+
+.list-inline-item a {
+    color: #333; /* Link color */
+    text-decoration: none; /* Remove underline */
+}
+
+.list-inline-item a:hover {
+    color: #007bff; /* Hover color */
+}
+
+.copyright {
+    margin-top: 20px; /* Add margin for spacing */
+}

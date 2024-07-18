@@ -25,9 +25,22 @@ from sqlalchemy import or_
 @app.route('/')
 @app.route('/home')
 def home():
-    if current_user.is_authenticated:
-        logout()
+    if current_user.is_authenticated and current_user.role == 'user':
+        return redirect(url_for('home_authenticated'))
+    elif current_user.is_authenticated and current_user.role == 'rider':
+        return redirect(url_for('rider_authenticated'))
+
     return render_template('home.html', title='Home')
+
+@app.route('/home_authenticated')
+def home_authenticated():
+    return render_template('home_authenticated.html', title='Vue-User\'s HomePage', user=current_user)
+
+@app.route('/rider_authenticated')
+def rider_authenticated():
+    rider = Rider.query.filter_by(contact_number=current_user.contact_number).first()
+    pending_assignments=Parcel.query.filter_by(rider_id=current_user.id).filter(Parcel.status.in_(['allocated', 'shipped', 'in_progress'])).first()
+    return render_template('rider_authenticated.html', title='Rider\'s dashboard', user=current_user, assignment=pending_assignments)    
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -79,35 +92,29 @@ def logout():
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    form = UpdateAccountForm()
-    if request.method == 'GET':
-        form.email.data = current_user.email
-        form.username.data = current_user.username
-    elif request.method == 'POST':
-        if form.validate_on_submit():
-            current_user.email = form.email.data
-            current_user.username = form.username.data
-            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-            current_user.password = hashed_password
-            db.session.commit()
-            flash('Your account has been updated successfully!', 'success')
-            return render_template('home.html', title='Home', user=current_user)
-    return render_template('edit_profile.html', title='Edit Profile', form=form, user=current_user)
-
-
-@app.route('/edit__rider_profile', methods=['GET', 'POST'])
-def edit_rider_profile():
     if current_user.is_authenticated:
-        form = UpdateRiderForm()
+        form = UpdateAccountForm()
         if request.method == 'GET':
             form.email.data = current_user.email
-        form.name.data = current_user.name
-        form.current_location.data = current_user.current_location
-        form.area_of_operation.data = current_user.area_of_operation
-        form.vehicle_registration.data = current_user.vehicle_registration
-        form.vehicle_type.data = current_user.vehicle_type
-        form.contact_number.data = current_user.contact_number
-    elif request.method == 'POST':
+            form.username.data = current_user.username
+        elif request.method == 'POST':
+            if form.validate_on_submit():
+                current_user.email = form.email.data
+                current_user.username = form.username.data
+                hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+                current_user.password = hashed_password
+                db.session.commit()
+                flash('Your account has been updated successfully!', 'success')
+                return render_template('home.html', title='Home', user=current_user)
+        return render_template('edit_profile.html', title='Edit Profile', form=form, user=current_user)
+
+
+@app.route('/edit_rider_profile', methods=['GET', 'POST'])
+@login_required  # Assuming you have a login_required decorator for rider access
+def edit_rider_profile():
+    form = UpdateRiderForm()
+
+    if request.method == 'POST':
         if form.validate_on_submit():
             current_user.email = form.email.data
             current_user.username = form.name.data
@@ -121,11 +128,19 @@ def edit_rider_profile():
 
             db.session.commit()
             flash('Your account has been updated successfully!', 'success')
-            return redirect(url_for('login_rider'))
-        return render_template('edit_rider_profile.html', title='Edit Profile', form=form, user=current_user)
+            return redirect(url_for('profile'))  # Redirect to profile page after successful update
     else:
-        flash('please login to view this page!', 'danger')
-        return redirect(url_for('login'))
+        form.email.data = current_user.email
+        form.name.data = current_user.name
+        form.current_location.data = current_user.current_location
+        form.area_of_operation.data = current_user.area_of_operation
+        form.vehicle_registration.data = current_user.vehicle_registration
+        form.vehicle_type.data = current_user.vehicle_type
+        form.contact_number.data = current_user.contact_number
+
+    return render_template('edit_rider_profile.html', title='Edit Profile', form=form)
+
+
 
 @app.route('/track_parcel')
 def track_parcel():
@@ -286,29 +301,29 @@ def allocate_parcel():
             parcel.rider_id = closest_rider.id
             closest_rider.status = 'unavailable'
             db.session.commit()
-            notify_rider_new_assignment(closest_rider.email, parcel)
+            notify_rider_new_assignment(closest_rider.email, parcel, closest_rider)
             allocated_parcels.append(parcel)
-            closest_rider_details = {
-                    'id': closest_rider.id,
-                    'name': closest_rider.name,
-                    'contact': closest_rider.contact_number,
-                    'vehicle_type': closest_rider.vehicle_type,
-                    'vehicle_registration': closest_rider.vehicle_registration
-                    }
 
-            if allocated_parcels:
-                result = {
-                        'success': True,
-                        'allocated_parcels': allocated_parcels,
-                        'closest_rider': closest_rider_details
-                        }
+    if allocated_parcels:
+        closest_rider_details = {
+            'id': closest_rider.id,
+            'name': closest_rider.name,
+            'contact': closest_rider.contact_number,
+            'vehicle_type': closest_rider.vehicle_type,
+            'vehicle_registration': closest_rider.vehicle_registration
+        }
+        result = {
+            'success': True,
+            'allocated_parcels': allocated_parcels,
+            'closest_rider': closest_rider_details
+        }
     else:
         result = {
-                'success': False,
-                'message': 'No available riders, parcel allocation pending'
-                }
+            'success': False,
+            'message': 'No available riders, parcel allocation pending'
+        }
 
-        return result
+    return result
 
 
 @app.route('/toggle_rider_status/<int:rider_id>', methods=['POST'])
@@ -397,12 +412,12 @@ def track_assignment(id):
         flash('Assignment not found or not assigned to you.', 'error')
         return redirect(url_for('home'))
 
-def notify_rider_new_assignment(rider_email, parcel):
+def notify_rider_new_assignment(rider_email, parcel, rider):
     """
     Trigger notification when assigning a parcel to a rider
     """
     msg = Message('New Delivery Assignment', recipients=[rider_email])
-    html_content = render_template('new_assignment_email.html', parcel=parcel)
+    html_content = render_template('new_assignment_email.html', parcel=parcel, rider=rider)
     msg.html = html_content
     mail.send(msg)
 
@@ -413,42 +428,54 @@ def send_rider_details_email(recipient_email, allocation_result, tracking_number
     mail.send(msg)
 
 
+
+
 @app.route('/support', methods=['GET', 'POST'])
 def support():
     if request.method == 'POST':
-        email = request.form['email']
-        subject = request.form['subject']
-        body = request.form['body']
+        name = request.form.get('name')
+        email = request.form.get('email')
+        comment = request.form.get('comment')
 
-        if not email or not subject or not body:
-            return 'Please fill out all fields.', 400
+        if not name or not email or not comment:
+            flash('Please fill out all fields.', 'error')
+        else:
+            # Create a Message object for sending email to admin
+            msg = Message(subject='User Comment', recipients=['victorcyrus01@gmail.com'])
+            msg.body = f"Name: {name}\nEmail: {email}\nComment: {comment}"
 
-        # Create a Message object
-        msg = Message(subject=subject, recipients=[app.config['MAIL_USERNAME']])
-        msg.body = f"Sender's Email: {email}\n\n{body}"
+            try:
+                # Send the email to admin
+                mail.send(msg)
+                flash('Email sent successfully! Our support team will get back to you shortly', 'success')
+            except Exception as e:
+                flash('Something unexpected happened! Please try again', 'error')
 
-        try:
-            # Send the email
-            mail.send(msg)
-            return 'Email sent successfully!'
-        except Exception as e:
-            print(f'Error sending email: {e}')
-            return f'Error: {str(e)}'
+        # Redirect to the support page after processing the form data
+        return redirect(url_for('support'))
 
     if request.method == 'GET':
         search_query = request.args.get('search_query', '').strip()
 
         if search_query:
-            # If search_query is provided, filter FAQs based on it
-            existing_faqs = FAQ.query.filter(
-                (FAQ.question.ilike(f'%{search_query}%')) |
-                (FAQ.answer.ilike(f'%{search_query}%'))
-            ).all()
-        else:
-            # If search_query is empty, fetch all existing FAQs
-            existing_faqs = FAQ.query.all()
+            search_words = search_query.split()
 
-        return render_template('support.html', existing_faqs=existing_faqs, search_query=search_query)
+            filter_conditions = []
+
+            for word in search_words:
+                question_condition = FAQ.question.ilike(f'%{word}%')
+                answer_condition = FAQ.answer.ilike(f'%{word}%')
+
+                filter_conditions.append(question_condition)
+                filter_conditions.append(answer_condition)
+
+            combined_condition = or_(*filter_conditions)
+
+            existing_faqs = FAQ.query.filter(combined_condition).all()
+
+            faqs_dict = [{'question': faq.question, 'answer': faq.answer} for faq in existing_faqs]
+            existing_faqs = jsonify(faqs_dict)
+            return existing_faqs  # Return JSON response for search query
 
     return render_template('support.html')
 
@@ -471,7 +498,7 @@ def forgot_password():
             message = f"Click the link to reset your password: {reset_url}"
             send_email(user.email, "Password Reset Request", message)
 
-            flash("Instructions to reset your password have been sent to your email.", 'success')
+            flash("Instructions to reset your password have been sent to your email.", "success")
             return redirect(url_for('login'))
         elif rider:
             # Generate a unique token for the rider
@@ -484,7 +511,7 @@ def forgot_password():
             message = f"Click the link to reset your password: {reset_url}"
             send_email(rider.email, "Password Reset Request", message)
 
-            flash("Instructions to reset your password have been sent to your email.")
+            flash("Instructions to reset your password have been sent to your email.", "success")
             return redirect(url_for('login'))
         else:
             flash("Email address not found.", 'danger')
@@ -532,16 +559,12 @@ def reset_password(token):
     flash("Invalid or expired token.", 'danger')
     return redirect(url_for('forgot_password'))
 
-@app.route('/send_email', methods=['POST'])
-def send_email():
-    if request.method == 'POST':
-        name = request.json.get('name')
-        email = request.json.get('email')
-        comment = request.json.get('comment')
 
-        return jsonify({'message': 'Email sent successfully!'})
-    else:
-        return jsonify({'error': 'Invalid request method'}), 405
+def send_email(recipient, subject, html_body):
+    msg = Message(subject, recipients=[recipient])
+    msg.html = html_body
+    mail.send(msg)
+
 
 @app.route('/payment_success', methods=['POST'])
 def payment_success():
@@ -577,6 +600,18 @@ def send_payment_notification_email():
 def view_parcel_history():
     if current_user.is_authenticated:
         parcels = Parcel.query.filter_by(sender_email=current_user.email).all()
+
+        # Separate parcels by status
+        allocated_parcels = [parcel for parcel in parcels if parcel.status == 'allocated']
+        in_progress_parcels = [parcel for parcel in parcels if parcel.status == 'in_progress']
+        shipped_parcels = [parcel for parcel in parcels if parcel.status == 'shipped']
+        arrived_parcels = [parcel for parcel in parcels if parcel.status == 'arrived']
+
+        return render_template('view_parcel_history.html', 
+                               allocated_parcels=allocated_parcels,
+                               in_progress_parcels=in_progress_parcels,
+                               shipped_parcels=shipped_parcels,
+                               arrived_parcels=arrived_parcels)
         return render_template('view_parcel_history.html', parcels=parcels)
     else:
         return render_template('view_parcel_history.html')
@@ -585,11 +620,19 @@ def view_parcel_history():
 @app.route('/view_rider_history', methods=['GET', 'POST'])
 def view_rider_history():
     if current_user.is_authenticated:
-        parcels = Parcel.query.filter_by(sender_email=current_user.email).all()
-        return render_template('view_parcel_history.html', parcels=parcels)
+        # Query parcels for the current rider
+        parcels = Parcel.query.filter_by(rider_id=current_user.id).all()
+
+        # Separate parcels by status
+        open_orders = [parcel for parcel in parcels if parcel.status in ['in_progress', 'shipped']]
+        closed_orders = [parcel for parcel in parcels if parcel.status == 'arrived']
+
+        return render_template('view_rider_history.html',
+                               open_orders=open_orders,
+                               closed_orders=closed_orders)
     else:
-        return render_template('view_parcel_history.html')
         flash('Log in to view your parcels history!', 'danger')
+        return render_template('login_rider.html')
 
 
 @app.route('/rider_dashboard', methods=['GET', 'POST'])
